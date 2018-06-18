@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html>
     <head>
+
+        <!-- Hi i'm paypal and welcome to jackass -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        
         <title><%= title %></title>
         <% include ../partials/stylesheet %>
     </head>
+
     <body>
         <% include ../partials/header %>
 
         <div class="container">
-            <h1><%= title %></h1>
+            <h1><%= title %>
+            </h1>
             <div class="datails">
 
                 <div class="card text-xs-center">
@@ -25,6 +33,62 @@
                 </div>
             </div>
         </div>
+
+        <div id="paypal-button"></div>
+
+        <script>
+                paypal.Button.render({
+                  env: 'sandbox', // Or 'production',
+            
+                  commit: true, // Show a 'Pay Now' button
+            
+                  client: {
+                    sandbox:    'ASgIBpiKYMCrfefR0StH7CQyCHF-f2eOf8oPqQWcHd1Z4-5I0rd9duV-89CYcSoZu1N6ZsqxAbUfU4Jl',
+                    production: 'EHMDSW156-ebLUNz_MP7ZJIPhhHv_y5_L0S7Lt_hfB8zsvduMZIOq19rhVW_H8OX4vm2llexGnyxcL-I'
+                  },
+
+                  style: {
+                    color: 'gold',
+                    size: 'small'
+                  },
+            
+                  payment: function(data, actions) {
+                    // Set up payment here!
+                    // Make a call to the REST api to create the payment
+                    return actions.payment.create({
+                        payment: {
+                            transactions: [
+                                {
+                                    amount: { total: '0.01', currency: 'USD' }
+                                }
+                            ]
+                        }
+                    });
+                  },
+            
+                  onAuthorize: function(data, actions) {
+                    // Execute the payment here
+                    // Make a call to the REST api to execute the payment
+                    return actions.payment.execute().then(function() {
+                        window.alert('Payment Complete!');
+                    });
+                  },
+            
+                  onCancel: function(data, actions) {
+                    /*
+                     * Buyer cancelled the payment
+                     */
+                  },
+            
+                  onError: function(err) {
+                    /*
+                     * An error occurred during the transaction
+                     */
+                    alert('There is an error. You did not email the nigerian prince for approval!')
+                  }
+                }, '#paypal-button');
+              </script>
+
             <% include ../partials/footer %>
             <% include ../partials/javascript %>
     </body>

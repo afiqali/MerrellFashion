@@ -19,6 +19,8 @@ var comments = require('./server/controllers/comments');
 var videos = require('./server/controllers/videos')
 // Import images controller
 var images = require('./server/controllers/images');
+// Import payment controller
+var payment = require('./server/controllers/payment');
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -95,7 +97,7 @@ app.post('/signup', passport.authenticate('local-signup', {
 app.get('/profile', auth.isLoggedIn, auth.profile);
 
 // Route for payment
-app.get('/payment', auth.isLoggedIn, auth.payment);
+app.get('/payment', auth.isLoggedIn, payment.title);
 
 // Logout Page
 app.get('/logout', function (req, res) {
