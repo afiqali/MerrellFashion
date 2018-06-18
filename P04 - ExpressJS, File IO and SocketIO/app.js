@@ -27,6 +27,7 @@ var SessionStore = require('express-session-sequelize')(expressSession.Store);
 var sequelizeSessionStore = new SessionStore({
     db: myDatabase.sequelize,
 });
+
 // Import Passport and Warning flash modules
 var passport = require('passport');
 var flash = require('connect-flash');
