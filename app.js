@@ -97,7 +97,8 @@ app.post('/signup', passport.authenticate('local-signup', {
 app.get('/profile', auth.isLoggedIn, auth.profile);
 
 // Route for payment
-app.get('/payment', auth.isLoggedIn, payment.title);
+app.get('/payment', auth.isLoggedIn, payment.list);
+app.post('/payment', payment.create);
 
 // Logout Page
 app.get('/logout', function (req, res) {

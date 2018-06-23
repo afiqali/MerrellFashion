@@ -7,7 +7,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://www.paypalobjects.com/api/checkout.js"></script>
         
-        <title><%= title %></title>
         <% include ../partials/stylesheet %>
     </head>
 
@@ -15,26 +14,83 @@
         <% include ../partials/header %>
 
         <div class="container">
-            <h1><%= title %>
-            </h1>
-            <div class="datails">
-
-                <div class="card text-xs-center">
-                    <br>
-                    <img class="card-img-top" src="" alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">User Details</h4>
-                        <p class="card-text">
-                            <strong>Name</strong>: <br>
-                            <strong>Email</strong>:
-                        </p>
-                        <a href="/logout" class="btn btn-default">Logout</a>
-                    </div>
-                </div>
-            </div>
+            <h1><%= title %></h1>
         </div>
 
-        <div id="paypal-button"></div>
+        <!-- Modal -->
+        <div class="modal fade" id="createPayment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form action="/payment" method="post">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Create Order</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <fieldset class="form-group">
+                            <label for="totalAmount">Total Amount</label>
+                            <input type="text" id="totalAmount" name="totalAmount" class="form-control" placeholder="Payment Amount" required="">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="credit_card_id">Credit Card ID</label>
+                            <textarea id="credit_card_id" name="credit_card_id" rows="8" cols="40" class="form-control" placeholder="Credit Card ID" required=""></textarea>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="status">Status</label>
+                            <textarea id="status" name="status" rows="8" cols="40" class="form-control" placeholder="Payment Status" required=""></textarea>
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="orderMethod">Order Method</label>
+                            <textarea id="orderMethod" name="orderMethod" rows="8" cols="40" class="form-control" placeholder="Payment Order Method" required=""></textarea>
+                        </fieldset>
+
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+
+
+        <div class="list-group">
+                <% orders.forEach(function(orders){ %>
+                    <a href="#" class="list-group-item">
+                        <div class="Payments">
+                            <form action="/payment" method="delete">
+                                <h4 class="list-group-item-heading">
+                                    <%= orders.totalAmount %>
+            
+                                </h4>
+                                <p class="list-group-item-text">
+                                    <%= orders.credit_card_id %>
+                                </p>
+                                <small class="text-muted">By:
+                                    <%= orders.status %>
+                                </small>
+                                <p>
+                                    <%= orders.orderMethod %>
+                                </p>
+                            </form>
+                        </div>
+                    </a>
+                    <% }); %>
+            </div>
+        
+
+        <div id="paypal-button" style="margin:10px;display:inline"></div>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPayment" style="margin:10px;display:inline">
+                Create Order
+        </button>
+
 
         <script>
                 paypal.Button.render({
