@@ -21,6 +21,8 @@ var videos = require('./server/controllers/videos')
 var images = require('./server/controllers/images');
 // Import payment controller
 var payment = require('./server/controllers/payment');
+// Import display (admin) controller
+var display = require('./server/controllers/display');
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -59,7 +61,7 @@ app.use(require('node-sass-middleware')({
 // Setup public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// required for passport
+// Passport session uses Express session
 // secret for session
 app.use(expressSession({
     secret: 'sometextgohere',
@@ -78,6 +80,7 @@ app.use(flash());
 // Application Routes
 // Index Route
 app.get('/', index.show);
+
 app.get('/login', auth.signin);
 app.post('/login', passport.authenticate('local-login', {
     //Success go to Profile Page / Fail go to login page
@@ -92,6 +95,9 @@ app.post('/signup', passport.authenticate('local-signup', {
     failureRedirect: '/signup',
     failureFlash: true
 }));
+
+// Route for admin - display orders (get from payment)
+app.get('/display', auth.isLoggedIn, display.displayOrder);
 
 // Route for profile
 app.get('/profile', auth.isLoggedIn, auth.profile);

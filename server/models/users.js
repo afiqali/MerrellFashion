@@ -17,18 +17,42 @@ const Users = sequelize.define('Users', {
     },
     password: {
         type: Sequelize.STRING
+    },
+    gender: {
+        type: Sequelize.STRING
+    },
+    dob: {
+        type: Sequelize.DATEONLY
+    },
+    contactNumber: {
+        type: Sequelize.INTEGER
+    },
+    address: {
+        type: Sequelize.STRING
     }
 });
 
 // force: true will drop the table if it already exists
-Users.sync({force: false, logging:console.log}).then(()=>{
+Users.sync({ force: false, logging: console.log }).then(() => {
     console.log("users table synced");
-    return Users.upsert({
+    Users.upsert({
         id: 1,
         name: 'Ben',
         email: 'a@b.com',
-        password: '1234'
-    })
+        password: '1234',
+        gender: "Male",
+        contactNumber: 91234567,
+        address: "1 Holly Road Singapore 123456"
+        // format for DATEONLY?
+    });
+
+    Users.upsert({
+        id: 2,
+        name: 'admin',
+        email: 'admin@b.com',
+        password: '1234',
+        address: "1 Holly Road Singapore 123456"
+    });
 });
 
 module.exports = sequelize.model('Users', Users);

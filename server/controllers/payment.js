@@ -32,7 +32,7 @@ exports.create = function (req, res) {
         totalAmount: req.body.totalAmount,
         credit_card_id: req.body.credit_card_id,
         status: req.body.status,
-        orderMethod: req.body.orderMethod,
+        orderMethod: req.body.orderMethod
         // item_id: req.item.item_id
     }
 

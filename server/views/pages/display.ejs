@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        <%= title %>
+    </title>
+
+    <% include ../partials/stylesheet %>
+    <% include ../partials/javascript %>
+</head>
+
+<body>
+    <% include ../partials/header %>
+
+    <div class="list-group">
+        <% console.log(orders) %>
+        <% orders[0].forEach(function(orders){ %>
+        
+                <div class="Payments order-list">
+                        <h4 class="list-group-item-heading">
+                            <%= orders.totalAmount %>       
+                        </h4>
+                    
+                        <h4 class="list-group-item-heading">
+                            <%= orders.id %>           
+                        </h4>
+
+                        <h4 class="list-group-item-heading">
+                                <%= orders.name %>           
+                        </h4>
+
+                        <p class="list-group-item-text">
+                            <%= orders.credit_card_id %>    <!-- Credit card number --> 
+                        </p>
+
+                        <small class="text-muted">
+                            <%= orders.status %>            <!-- Payment status -->
+                        </small>   
+
+                        <p>                     
+                            <%= orders.orderMethod %>       <!-- Payment method -->
+                        </p>
+                </div>
+            <% }); %> -->
+    </div>
+
+    <% include ../partials/footer %>
+
+</body>
+</html>
