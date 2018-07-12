@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // Import multer
 var multer = require('multer');
-var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 1500000, files:1} });
+var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 150000000000000, files:1} });
 
 // Import home controller
 var index = require('./server/controllers/index');
@@ -16,13 +16,20 @@ var auth = require('./server/controllers/auth');
 // Import comments controller
 var comments = require('./server/controllers/comments');
 // Import videos controller
-var videos = require('./server/controllers/videos')
-// Import images controller
-var images = require('./server/controllers/images');
+var videos = require('./server/controllers/videos');
+//Import Listing controller
+var list = require('./server/controllers/productlist');
 // Import payment controller
-var payment = require('./server/controllers/payment');
+var payment = require('./server/controllers/paymentController');
+// Import Receipt Controller
+var receipt = require('./server/controllers/receiptController');
 // Import display (admin) controller
 var display = require('./server/controllers/display');
+
+// Import transactions controller
+var transactions = require('./server/controllers/transactions')
+// Import offers controller
+var offers = require('./server/controllers/offers');
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -60,6 +67,8 @@ app.use(require('node-sass-middleware')({
 
 // Setup public directory
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public',express.static('public'));
+app.use('/publicPRODUCT',express.static('publicPRODUCT'));
 
 // Passport session uses Express session
 // secret for session
@@ -106,6 +115,10 @@ app.get('/profile', auth.isLoggedIn, auth.profile);
 app.get('/payment', auth.isLoggedIn, payment.list);
 app.post('/payment', payment.create);
 
+// Route for receipt
+app.get('/receipt', receipt.show);
+
+
 // Logout Page
 app.get('/logout', function (req, res) {
     req.logout();
@@ -121,14 +134,33 @@ app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete)
 app.get('/videos', videos.hasAuthorization, videos.show);
 app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
 
-// Setup routes for images
-app.post('/images', images.hasAuthorization, upload.single('image'), images.uploadImage);
-app.get('/images-gallery', images.hasAuthorization, images.show);
+// Setup routes for Transactions
+app.get('/transactions', transactions.list);
+app.get('/')
+// Setup routes for offers
+app.get('/offers', offers.displayButton);
+app.post('/offers', offers.makeOffer);
 
 // Setup chat
+// Setup routes for product listing
+app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
+app.get('/product-dresses', list.hasAuthorization, list.showDress)
+app.get('/product-HighHeels', list.hasAuthorization, list.showHeels)
+app.get('/products-gallery', list.hasAuthorization, list.show);
+app.get("/product-dresses/edit/:id", list.editRecord);
+app.get("/products-gallery/edit/:id", list.editRecord);
+app.get("/product-HighHeels/edit/:id", list.editRecord);
+app.post("/edit/:id", list.update);
+app.delete("/products-gallery/:id", list.delete);
+
+// Setup routes for specific product list
+app.get('/products-gallery/view/:id', list.specificlist);
+
+// Setup Chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
+var Users = require('./server/models/users');
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -136,24 +168,29 @@ io.on('connection', function(socket) {
 
     socket.on('disconnect', function() {
         chatConnections--;
-        console.log("Num of chat users connected: "+ chatConnections);
+        console.log("Num of chat users connected: "+chatConnections);
     });
 })
 
-app.get('/messages',function (req,res) {
+app.get('/messages', function (req, res) {
     ChatMsg.findAll().then((chatMessages) => {
-        res.render('chatMsg', {
-            url: req.protocol + "://" + req.get("host") + req.url,
-            data: chatMessages
-        });
+        Users.findById(req.user.id).then(function(user){
+            // console.log(req.user)
+            res.render('chatMsg', {
+                url: req.protocol + "://" + req.get("host") + req.url,
+                data: chatMessages,
+                user: user
+            });
+        })
     });
 });
-app.post('/messages', function (req,res) {
+app.post('/messages', function (req, res) {
+    Users.findById(req.user.id).then(function(user){
     var chatData = {
-        name: req.body.name,
+        name: user.name,
         message: req.body.message
     }
-    // Save into database
+    //Save into database
     ChatMsg.create(chatData).then((newMessage) => {
         if (!newMessage) {
             sendStatus(500);
@@ -161,6 +198,7 @@ app.post('/messages', function (req,res) {
         io.emit('message', req.body)
         res.sendStatus(200)
     })
+});
 });
 
 // catch 404 and forward to error handler

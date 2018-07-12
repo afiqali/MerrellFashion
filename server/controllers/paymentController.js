@@ -1,7 +1,8 @@
 // get Order model
-var Order = require("../models/payment");
+var Order = require("../models/paymentModel");
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize; 
+
 
 // List Orders & render page
 exports.list = function(req, res) {
@@ -27,10 +28,21 @@ exports.list = function(req, res) {
 exports.create = function (req, res) {
     console.log("creating payment")
 
+    // var orderData = {
+    //     user_id: req.user.id,
+    //     totalAmount: req.body.totalAmount,
+    //     // credit_card_id: req.body.credit_card_id,
+    //     status: req.body.status,
+    //     orderMethod: req.body.orderMethod,
+    //     // item_id: req.item.item_id
+    // }
+
     var orderData = {
+        // payer_id = details.payer_id,
+        payer_id : req.body.payer_id,
         user_id: req.user.id,
+        payment_id: req.body.payment_id,
         totalAmount: req.body.totalAmount,
-        credit_card_id: req.body.credit_card_id,
         status: req.body.status,
         orderMethod: req.body.orderMethod
         // item_id: req.item.item_id
@@ -42,8 +54,9 @@ exports.create = function (req, res) {
                 message: "error"
             });
         }
-
-        res.redirect('/profile');
+        // var url;
+        // url = '/receipt/' + req.body.payer_id;
+        res.redirect('/receipt');
     })
 }
 
