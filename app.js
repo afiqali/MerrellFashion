@@ -20,15 +20,11 @@ var videos = require('./server/controllers/videos');
 // Import images controller
 var images = require('./server/controllers/images');
 // Import payment controller
-<<<<<<< HEAD
 var payment = require('./server/controllers/paymentController');
 // Import Receipt Controller
 var receipt = require('./server/controllers/receiptController');
-=======
-var payment = require('./server/controllers/payment');
 // Import display (admin) controller
 var display = require('./server/controllers/display');
->>>>>>> e7c257880da1019cc0ed605459b7b452ee8a7f00
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
