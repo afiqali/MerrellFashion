@@ -7,13 +7,13 @@ var gravatar = require('gravatar');
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
 var Images = require('../models/images');
+var User = require('../models/users');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 
 // Show images gallery -  function to get all the uploaded images from the database and show it on the page. 
 exports.show = function (req, res) {
-
-    sequelize.query('select i.id, i.title, i.imageName, u.email AS [user_id] from Images i join Users u on i.user_id = u.id'
+    sequelize.query(`select i.id, i.title, i.imageName, u.email AS [user_id] from Images i join Users u on i.user_id = u.id where i.id = ${req.user.id}`
     , { model: Images}).then((images)=> {
 
         res.render('images-gallery', {

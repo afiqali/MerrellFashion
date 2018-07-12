@@ -15,7 +15,7 @@ var sequelize = myDatabase.sequelize;
 
 // List Videos
 exports.show = function (req,res) {
-    sequelize.query('select v.id, v.title, v.videoName, u.email AS [user_id] from Videos v join Users u on v.user_id = u.id'
+    sequelize.query(`select v.id, v.title, v.videoName, u.email AS [user_id] from Videos v join Users u on v.user_id = u.id where v.id = ${req.user.id}`
     , { model: Videos }).then((videos) => {
 
         res.render('videos' , {
