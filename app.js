@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // Import multer
 var multer = require('multer');
-var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 1500000, files:1} });
+var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 150000000000000, files:1} });
 
 // Import home controller
 var index = require('./server/controllers/index');
@@ -17,14 +17,19 @@ var auth = require('./server/controllers/auth');
 var comments = require('./server/controllers/comments');
 // Import videos controller
 var videos = require('./server/controllers/videos');
-// Import images controller
-var images = require('./server/controllers/images');
+//Import Listing controller
+var list = require('./server/controllers/productlist');
 // Import payment controller
 var payment = require('./server/controllers/paymentController');
 // Import Receipt Controller
 var receipt = require('./server/controllers/receiptController');
 // Import display (admin) controller
 var display = require('./server/controllers/display');
+
+// Import transactions controller
+var transactions = require('./server/controllers/transactions')
+// Import offers controller
+var offers = require('./server/controllers/offers');
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -62,6 +67,8 @@ app.use(require('node-sass-middleware')({
 
 // Setup public directory
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public',express.static('public'));
+app.use('/publicPRODUCT',express.static('publicPRODUCT'));
 
 // Passport session uses Express session
 // secret for session
@@ -127,9 +134,27 @@ app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete)
 app.get('/videos', videos.hasAuthorization, videos.show);
 app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
 
-// Setup routes for images
-app.post('/images', images.hasAuthorization, upload.single('image'), images.uploadImage);
-app.get('/images-gallery', images.hasAuthorization, images.show);
+// Setup routes for Transactions
+app.get('/transactions', transactions.list);
+app.get('/')
+// Setup routes for offers
+app.get('/offers', offers.displayButton);
+app.post('/offers', offers.makeOffer);
+
+// Setup chat
+// Setup routes for product listing
+app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
+app.get('/product-dresses', list.hasAuthorization, list.showDress)
+app.get('/product-HighHeels', list.hasAuthorization, list.showHeels)
+app.get('/products-gallery', list.hasAuthorization, list.show);
+app.get("/product-dresses/edit/:id", list.editRecord);
+app.get("/products-gallery/edit/:id", list.editRecord);
+app.get("/product-HighHeels/edit/:id", list.editRecord);
+app.post("/edit/:id", list.update);
+app.delete("/products-gallery/:id", list.delete);
+
+// Setup routes for specific product list
+app.get('/products-gallery/view/:id', list.specificlist);
 
 // Setup Chat
 var io = require('socket.io')(httpServer);
