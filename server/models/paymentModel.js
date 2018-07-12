@@ -4,10 +4,14 @@ var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
 
 const Order = sequelize.define('Order', {
-    order_id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
+    payment_id: {
+        type: Sequelize.STRING,
+        primaryKey: true,
+        allowNull: false
+    },
+    payer_id: {
+        type: Sequelize.STRING,
+        allowNull: false
     },
     user_id:{
         type: Sequelize.INTEGER,
@@ -18,15 +22,15 @@ const Order = sequelize.define('Order', {
         }
     },
     totalAmount: {
-        type: Sequelize.DECIMAL,
+        type: Sequelize.DECIMAL(18,2),
         allowNull: false,
         defaultValue: "1"
     },
-    credit_card_id: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        defaultValue: "A7X"
-    },
+    // credit_card_id: {
+    //     type: Sequelize.STRING,
+    //     allowNull: false,
+    //     defaultValue: "A7X"
+    // },
     orderDate: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW

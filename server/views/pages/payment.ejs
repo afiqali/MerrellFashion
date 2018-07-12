@@ -18,50 +18,54 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="createPayment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <!-- <div class="modal fade" id="createPayment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <form action="/payment" method="post">
-                    <div class="modal-header">
+            <div class="modal-content"> -->
+
+                <form action="/payment" method="post" id="pay">
+                    <!-- <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h4 class="modal-title" id="myModalLabel">Create Order</h4>
-                    </div>
+                    </div> -->
 
                     <div class="modal-body">
 
                         <fieldset class="form-group">
-                            <label for="totalAmount">Total Amount</label>
-                            <input type="text" id="totalAmount" name="totalAmount" class="form-control" placeholder="Payment Amount" required="">
+                            <input id="payer_id" name="payer_id" type="hidden">
+                        </fieldset> 
+                        <fieldset class="form-group">
+                            <input type="hidden" id="totalAmount" name="totalAmount">
                         </fieldset>
                         <fieldset class="form-group">
+                            <input type="hidden" id="payment_id" name="payment_id">
+                        </fieldset>
+                        <!-- <fieldset class="form-group">
                             <label for="credit_card_id">Credit Card ID</label>
                             <textarea id="credit_card_id" name="credit_card_id" rows="8" cols="40" class="form-control" placeholder="Credit Card ID" required=""></textarea>
+                        </fieldset> -->
+                        <fieldset class="form-group">
+                            <input id="status" type="hidden" name="status">
                         </fieldset>
                         <fieldset class="form-group">
-                            <label for="status">Status</label>
-                            <textarea id="status" name="status" rows="8" cols="40" class="form-control" placeholder="Payment Status" required=""></textarea>
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="orderMethod">Order Method</label>
-                            <textarea id="orderMethod" name="orderMethod" rows="8" cols="40" class="form-control" placeholder="Payment Order Method" required=""></textarea>
+                            <input id="orderMethod" type="hidden" name="orderMethod">
                         </fieldset>
 
                     </div>
                     
-                    <div class="modal-footer">
+                    <!-- <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div>
+                    </div> -->
                 </form>
-            </div>
+            <!-- </div>
         </div>
-        </div>
+        </div> -->
 
 
         <div class="list-group">
-                <% orders.forEach(function(orders){ %>
+                <!-- <% orders.forEach(function(orders){ %>
                     <a href="#" class="list-group-item">
                         <div class="Payments">
                             <form action="/payment" method="delete">
@@ -69,10 +73,11 @@
                                     <%= orders.totalAmount %>
             
                                 </h4>
+                                
                                 <p class="list-group-item-text">
                                     <%= orders.credit_card_id %>
                                 </p>
-                                <small class="text-muted">By:
+                                <small class="text-muted">Status:
                                     <%= orders.status %>
                                 </small>
                                 <p>
@@ -81,15 +86,16 @@
                             </form>
                         </div>
                     </a>
-                    <% }); %>
+                    <% }); %> -->
             </div>
-        
 
-        <div id="paypal-button" style="margin:10px;display:inline"></div>
+            <div id="paypal-button" style="margin:10px;display:inline">
 
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPayment" style="margin:10px;display:inline">
+            </div>
+
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPayment" style="margin:10px;display:inline">
                 Create Order
-        </button>
+        </button> -->
 
         <div id="paypal-button-container"></div>
 
@@ -101,12 +107,11 @@
             <button id="confirmButton">Complete Payment</button>
         </div>
 
-        <div id="thanks" class="hidden">
-            Thanks, <span id="thanksname"></span>!
-        </div>
 
         <script>
+
                 paypal.Button.render({
+
                   env: 'sandbox', // Or 'production',
             
                   commit: true, // Show a 'Pay Now' button
@@ -128,71 +133,88 @@
                         payment: {
                             transactions: [
                                 {
-                                    amount: { total: '0.01', currency: 'USD' }
+                                    amount: { total: '100', currency: 'USD' }
                                 }
                             ]
                         }
                     });
                   },
-            
-                //   onAuthorize: function(data, actions) {
-                //     // Execute the payment here
-                //     // Make a call to the REST api to execute the payment
-                //     return actions.payment.get().then(function(payment) {
-                //     window.alert('Payment details:', payment, payment.currency);
-                //     });
+ 
+
+                 onAuthorize: function(data, actions) {
+
+                    // Get the payment details
 
                     
 
-                //     return actions.payment.execute().then(function() {
-                //         window.alert('Payment Complete!');
-                //     });
+                    return actions.payment.get().then(function(data) {
 
-                //   },
 
-                        onAuthorize: function(data, actions) {
+                        // Display the payment details and a confirmation button
 
-                        // Get the payment details
+                        var shipping = data.payer.payer_info.shipping_address;
+    
+                        document.querySelector('#recipient').innerText = shipping.recipient_name;
+                        document.querySelector('#line1').innerText     = shipping.line1;
+                        document.querySelector('#city').innerText      = shipping.city;
+                        document.querySelector('#state').innerText     = shipping.state
+                        document.querySelector('#zip').innerText       = shipping.postal_code;
+                        document.querySelector('#country').innerText   = shipping.country_code;
+                        
 
-                        return actions.payment.get().then(function(data) {
+                        document.querySelector('#paypal-button-container').style.display = 'none';
+                        document.querySelector('#confirm').style.display = 'block';
+                        
+                        var paymentDetails = data.payer;
+                        var payerDetails = data.payer.payer_info;
+                        var transaction = data.transactions;
+                        var payment_id = data.id;
 
-                            // Display the payment details and a confirmation button
+                        var payer_id = payerDetails.payer_id;
+                        // alert(payer_id);
+                        $('#payer_id').val(payer_id);
 
-                            var shipping = data.payer.payer_info.shipping_address;
 
-                            document.querySelector('#recipient').innerText = shipping.recipient_name;
-                            document.querySelector('#line1').innerText     = shipping.line1;
-                            document.querySelector('#city').innerText      = shipping.city;
-                            document.querySelector('#state').innerText     = shipping.state;
-                            document.querySelector('#zip').innerText       = shipping.postal_code;
-                            document.querySelector('#country').innerText   = shipping.country_code;
+                        var payment_method = paymentDetails.payment_method;
+                        // alert(payment_method);
+                        $('#orderMethod').val(payment_method);
 
-                            document.querySelector('#paypal-button-container').style.display = 'none';
-                            document.querySelector('#confirm').style.display = 'block';
+                        var payment_id = payment_id;
+                        $('#payment_id').val(payment_id);
 
-                            // Listen for click on confirm button
+                        var status = paymentDetails.status;
+                        // alert(status);
+                        $('#status').val(status);
 
-                            document.querySelector('#confirmButton').addEventListener('click', function() {
 
-                                // Disable the button and show a loading message
+                        var amount = parseInt(transaction[0].amount.total);
+                        // alert(amount);
+                        $('#totalAmount').val(amount);
+   
 
-                                document.querySelector('#confirm').innerText = 'Loading...';
-                                document.querySelector('#confirm').disabled = true;
+                        
 
-                                // Execute the payment
+                        // Listen for click on confirm button
 
-                                return actions.payment.execute().then(function() {
+                        document.querySelector('#confirmButton').addEventListener('click', function() {
 
-                                    // Show a thank-you note
+                            // Disable the button and show a loading message
 
-                                    document.querySelector('#thanksname').innerText = shipping.recipient_name;
+                            document.querySelector('#confirm').innerText = 'Loading...';
+                            document.querySelector('#confirm').disabled = true;
 
-                                    document.querySelector('#confirm').style.display = 'none';
-                                    document.querySelector('#thanks').style.display = 'block';
-                                });
+                            // Execute the payment
+
+                            return actions.payment.execute().then(function() {
+                                document.querySelector('#confirm').style.display = 'none';
+                                // submit form automatically
+                                $('#pay').submit();
+                        
                             });
                         });
-                        },
+                    });
+                    
+                },
             
                   onCancel: function(data, actions) {
                     /*
@@ -207,6 +229,7 @@
                     alert('There is an error. You did not email the nigerian prince for approval!')
                   }
                 }, '#paypal-button');
+
               </script>
 
             <% include ../partials/footer %>

@@ -16,11 +16,13 @@ var auth = require('./server/controllers/auth');
 // Import comments controller
 var comments = require('./server/controllers/comments');
 // Import videos controller
-var videos = require('./server/controllers/videos')
+var videos = require('./server/controllers/videos');
 // Import images controller
 var images = require('./server/controllers/images');
 // Import payment controller
-var payment = require('./server/controllers/payment');
+var payment = require('./server/controllers/paymentController');
+// Import Receipt Controller
+var receipt = require('./server/controllers/receiptController');
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -99,6 +101,10 @@ app.get('/profile', auth.isLoggedIn, auth.profile);
 // Route for payment
 app.get('/payment', auth.isLoggedIn, payment.list);
 app.post('/payment', payment.create);
+
+// Route for receipt
+app.get('/receipt', receipt.show);
+
 
 // Logout Page
 app.get('/logout', function (req, res) {
