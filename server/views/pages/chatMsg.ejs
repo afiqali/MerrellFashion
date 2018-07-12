@@ -1,47 +1,118 @@
 <!doctype html>
 <html>
-    <head>
-        <script src="/javascripts/socket.io.js"></script>
-        <% include ../partials/javascript %>
-        <% include ../partials/stylesheet %>
-    </head>
-    <body>
-        <% include ../partials/header %>
-    <div class = "container">
-        <br>
-        <div class="jumbotron">
-            <h1 class="display-4"> Send Message </h1>
-            <br>
-            <input id="name" class="form-control" placeholder="Name">
-            <br>
-            <textarea id="message" class="form-control" placeholder="Message"></textarea>
-            <br>
-            <button id="send" class="btn btn-success"> Send </button>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+<script src="/javascripts/socket.io.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<% include ../partials/javascript %>
+<% include ../partials/stylesheet %>
+</head>
+<style>
+    img {
+        height: 100px;
+         width: 150px;
+    }
+
+    #chatroom {
+        background: #DDD;
+        min-width:250px;
+        /* max-width:720px;*/
+        max-height: 260px;
+        margin-bottom: 10px;
+        overflow-y: scroll;
+    }
+
+    #border {
+    border-style: solid;
+    border-color: grey;
+    }
+
+    .chat-message-type {
+    background-color: #F2F4F4;
+    padding-bottom: 0px !important;
+    padding: 20px;
+    }
+</style>
+<body>
+<% include ../partials/header %>
+<div class="container">
+    <br>
+    <div class="panel panel-default">
+        <div class="panel-heading"><h3 style="text-align: center">Messages</h3></div>
+        <div class="panel-body"><img alt="" align="left" src="https://cdn.shopify.com/s/files/1/0407/0829/products/White_t-shirt_front_1024x1024.jpg?v=1511411218"><strong><h3>Plain White Shirt</h3></strong><p>Our T-shirts are made of the most comfortable, highest quality fabric out there today.</p></div>
+    <form class="makeOffer">
+        <div class="moBtn">
+        <div class="input-group u-horizontal-full aC-i">
+        <span class="input-group-addon">S$</span>
+        <input type="number" step="0.01" min="0" id="chatPriceInput" value="135.90" class="form-control u-horizontal-full" required="">
         </div>
-        <div id="messages">
-            <%data.forEach(function(msg) {%>
-                <h4> <%=msg.name%> </h4> <p> <%=msg.message%> </p>
-            <%})%>
-        </div>
+        </div>    
+        <button id="makeOfferButton" class="btn btn-block b-r text-small b-r">
+        <span>Make Offer</span>
+        </button>
+    </form>
     </div>
-    <script>
-        var socket = io()
-        $(() => {
-            $("#send").click(() => {
-                var message = { name: $("#name").val(), message: $("#message").val()}
-                postMessage(message)
-            })
+
+    <div class="col-sm-12" id="border">
+        <br>
+        <h3>Send Message</h3>
+        <br>
+        <div id="chatroom">
+            <div id="messages">
+                    <%data.forEach(function(msg){%>
+                       <h4><%=msg.name%></h4>  <p> <%=msg.message%> </p>
+                    <%})%>
+            </div>
+        </div>
+       
+        <div class="chat-message-type" img>
+        <button id="interested" class="btn btn-primary" style="margin-right:1%">I'm Interested</button><button id="available" class="btn btn-primary" style="margin-right:1%">Is This Still Available?</button>
+        <button id="thankyou" class="btn btn-primary" style="margin-right:1%">Thank You</button><button id="welcome" class="btn btn-primary" style="margin-right:1%">You're Welcome</button>
+        <br>
+        <br>
+        <textarea id="message" class="form-control" placeholder="Message"></textarea>
+        <br>
+        <button id="send" class="btn btn-success">Send</button>
+        <br>
+        <br>
+        </div>
+        <br>
+    </div>
+</div>
+<script>
+    var socket = io()
+    $(() => {
+        $("#send").click(()=>{
+            var message = { name: "<%= user.name %>", message: $("#message").val()}
+            postMessage(message)
         })
+        $("#interested").click(()=>{
+            var message = { name : "<%= user.name %>", message: $("#interested").html()}
+            postMessage(message)
+        })
+        $("#available").click(()=>{
+            var message = { name : "<%= user.name %>", message: $("#available").html()}
+            postMessage(message)
+        })
+        $("#thankyou").click(()=>{
+            var message = { name : "<%= user.name %>", message: $("#thankyou").html()}
+            postMessage(message)
+        })
+        $("#welcome").click(()=>{
+            var message = { name : "<%= user.name %>", message: $("#welcome").html()}
+            postMessage(message)
+        })
+    })
 
-        socket.on('message', addMessage)
+    socket.on('message', addMessage)
 
-        function addMessage(msg) {
-            $("#messages").append(`<h4> ${msg.name} </h4> <p> ${msg.message} </p> `)
-        }
+    function addMessage(msg){
+        $("#messages").append(`<h4> ${msg.name} </h4> <p> ${msg.message} </p>`)
+    }
 
-        function postMessage(message) {
-            $.post('<%-url%>', message)
-        }
-    </script>
-    </body>
+    function postMessage(message) {
+        $.post('<%-url%>', message)
+    }
+</script>
+</body>
 </html>

@@ -125,10 +125,11 @@ app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uplo
 app.post('/images', images.hasAuthorization, upload.single('image'), images.uploadImage);
 app.get('/images-gallery', images.hasAuthorization, images.show);
 
-// Setup chat
+// Setup Chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
+var Users = require('./server/models/users');
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -136,24 +137,29 @@ io.on('connection', function(socket) {
 
     socket.on('disconnect', function() {
         chatConnections--;
-        console.log("Num of chat users connected: "+ chatConnections);
+        console.log("Num of chat users connected: "+chatConnections);
     });
 })
 
-app.get('/messages',function (req,res) {
+app.get('/messages', function (req, res) {
     ChatMsg.findAll().then((chatMessages) => {
-        res.render('chatMsg', {
-            url: req.protocol + "://" + req.get("host") + req.url,
-            data: chatMessages
-        });
+        Users.findById(req.user.id).then(function(user){
+            // console.log(req.user)
+            res.render('chatMsg', {
+                url: req.protocol + "://" + req.get("host") + req.url,
+                data: chatMessages,
+                user: user
+            });
+        })
     });
 });
-app.post('/messages', function (req,res) {
+app.post('/messages', function (req, res) {
+    Users.findById(req.user.id).then(function(user){
     var chatData = {
-        name: req.body.name,
+        name: user.name,
         message: req.body.message
     }
-    // Save into database
+    //Save into database
     ChatMsg.create(chatData).then((newMessage) => {
         if (!newMessage) {
             sendStatus(500);
@@ -161,6 +167,7 @@ app.post('/messages', function (req,res) {
         io.emit('message', req.body)
         res.sendStatus(200)
     })
+});
 });
 
 // catch 404 and forward to error handler
