@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <!-- Hi i'm paypal and welcome to jackass -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        
+        <% include ../partials/stylesheet %>
+    </head>
+
+    <body>
+        <% include ../partials/header %>
+
+        <div class="container">
+            <h1><%= title %></h1>
+        </div>
+
+        
+        <div class="list-group">
+            <% orders.forEach(function(orders){ %>
+                <% if (orders.user_id==user.id){ %>
+                <a href="#" class="list-group-item">
+                    <div class="Payments">
+                        <form action="/payment" method="delete">
+                            <h4 class="list-group-item-heading">
+
+                                <%= orders.totalAmount; %>
+        
+                            </h4>
+                            
+                            <p class="list-group-item-text">
+                                <%= orders.payment_id; %>
+                            </p>
+                            <small class="text-muted">Status:
+                                <%= orders.status; %>
+                            </small>
+                            <p class="list-group-item-text">
+                                <%= orders.orderMethod; %>
+                            </p>
+                            <p class="list-group-item-text">
+                                    <%= user.name; %>
+                            </p>
+                            <p class="list-group-item-text">
+                                    <%= user.email; %>
+                            </p>
+                        </form>
+                    </div>
+                </a>
+                <% } %>
+                <% }); %>
+        </div>
+    </body>
+</html>
