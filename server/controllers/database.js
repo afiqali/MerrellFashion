@@ -6,7 +6,7 @@ const sequelize =new Sequelize({
     dialectModulePath: 'tedious',
     dialectOptions: {
       driver: 'SQL Server Native Client 11.0',
-      instanceName: 'SQLEXPRESS'
+      instanceName: 'SQLEXPRESS03'
     },
     host: 'localhost',
     username: 'p4',
