@@ -45,10 +45,7 @@ exports.create = function (req, res) {
         totalAmount: req.body.totalAmount,
         status: req.body.status,
         orderMethod: req.body.orderMethod
-<<<<<<< HEAD:server/controllers/paymentController.js
-=======
         // item_id: req.item.item_id
->>>>>>> e7c257880da1019cc0ed605459b7b452ee8a7f00:server/controllers/payment.js
     }
 
     Order.create(orderData).then((newOrder, created) => {
