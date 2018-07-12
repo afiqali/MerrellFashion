@@ -20,6 +20,11 @@ var videos = require('./server/controllers/videos')
 // Import images controller
 var images = require('./server/controllers/images');
 
+// Import transactions controller
+var transactions = require('./server/controllers/transactions')
+// Import offers controller
+var offers = require('./server/controllers/offers');
+
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
 var expressSession = require('express-session');
@@ -115,6 +120,13 @@ app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uplo
 // Setup routes for images
 app.post('/images', images.hasAuthorization, upload.single('image'), images.uploadImage);
 app.get('/images-gallery', images.hasAuthorization, images.show);
+
+// Setup routes for Transactions
+app.get('/transactions', transactions.list);
+app.get('/')
+// Setup routes for offers
+app.get('/offers', offers.displayButton);
+app.post('/offers', offers.makeOffer);
 
 // Setup chat
 var io = require('socket.io')(httpServer);
