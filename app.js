@@ -17,18 +17,14 @@ var auth = require('./server/controllers/auth');
 var comments = require('./server/controllers/comments');
 // Import videos controller
 var videos = require('./server/controllers/videos');
-// Import images controller
-var images = require('./server/controllers/images');
+//Import Listing controller
+var list = require('./server/controllers/productlist');
 // Import payment controller
-<<<<<<< HEAD
 var payment = require('./server/controllers/paymentController');
 // Import Receipt Controller
 var receipt = require('./server/controllers/receiptController');
-=======
-var payment = require('./server/controllers/payment');
 // Import display (admin) controller
 var display = require('./server/controllers/display');
->>>>>>> e7c257880da1019cc0ed605459b7b452ee8a7f00
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -66,6 +62,8 @@ app.use(require('node-sass-middleware')({
 
 // Setup public directory
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public',express.static('public'));
+app.use('/publicPRODUCT',express.static('publicPRODUCT'));
 
 // Passport session uses Express session
 // secret for session
@@ -131,9 +129,19 @@ app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete)
 app.get('/videos', videos.hasAuthorization, videos.show);
 app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
 
-// Setup routes for images
-app.post('/images', images.hasAuthorization, upload.single('image'), images.uploadImage);
-app.get('/images-gallery', images.hasAuthorization, images.show);
+// Setup routes for product listing
+app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
+app.get('/product-dresses', list.hasAuthorization, list.showDress)
+app.get('/product-HighHeels', list.hasAuthorization, list.showHeels)
+app.get('/products-gallery', list.hasAuthorization, list.show);
+app.get("/product-dresses/edit/:id", list.editRecord);
+app.get("/products-gallery/edit/:id", list.editRecord);
+app.get("/product-HighHeels/edit/:id", list.editRecord);
+app.post("/edit/:id", list.update);
+app.delete("/products-gallery/:id", list.delete);
+
+// Setup routes for specific product list
+app.get('/products-gallery/view/:id', list.specificlist);
 
 // Setup Chat
 var io = require('socket.io')(httpServer);

@@ -1,4 +1,4 @@
-var Order = require('../models/payment');
+var Order = require('../models/paymentModel');
 var User = require('../models/users');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
