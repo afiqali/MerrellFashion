@@ -1,30 +1,241 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%= title %></title>
+
+        <!-- Hi i'm paypal and welcome to jackass -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        
         <% include ../partials/stylesheet %>
     </head>
+
     <body>
         <% include ../partials/header %>
 
         <div class="container">
             <h1><%= title %></h1>
-            <div class="datails">
-
-                <div class="card text-xs-center">
-                    <br>
-                    <img class="card-img-top" src="" alt="Card image cap">
-                    <div class="card-block">
-                        <h4 class="card-title">User Details</h4>
-                        <p class="card-text">
-                            <strong>Name</strong>: <br>
-                            <strong>Email</strong>:
-                        </p>
-                        <a href="/logout" class="btn btn-default">Logout</a>
-                    </div>
-                </div>
-            </div>
         </div>
+
+        <!-- Modal -->
+        <!-- <div class="modal fade" id="createPayment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content"> -->
+
+                <form action="/payment" method="post" id="pay">
+                    <!-- <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Create Order</h4>
+                    </div> -->
+
+                    <div class="modal-body">
+
+                        <fieldset class="form-group">
+                            <input id="payer_id" name="payer_id" type="hidden">
+                        </fieldset> 
+                        <fieldset class="form-group">
+                            <input type="hidden" id="totalAmount" name="totalAmount">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input type="hidden" id="payment_id" name="payment_id">
+                        </fieldset>
+                        <!-- <fieldset class="form-group">
+                            <label for="credit_card_id">Credit Card ID</label>
+                            <textarea id="credit_card_id" name="credit_card_id" rows="8" cols="40" class="form-control" placeholder="Credit Card ID" required=""></textarea>
+                        </fieldset> -->
+                        <fieldset class="form-group">
+                            <input id="status" type="hidden" name="status">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <input id="orderMethod" type="hidden" name="orderMethod">
+                        </fieldset>
+                        <fieldset class="form-group">
+                            <label for="delieveryFee">Delivery fee</label>
+                            <textarea id="delieveryFee" name="delieveryFee" rows="8" cols="40" class="form-control" placeholder="Delivery Fee" required=""></textarea>
+                        </fieldset>
+
+                    </div>
+                    
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div> -->
+                </form>
+            <!-- </div>
+        </div>
+        </div> -->
+
+
+        <div class="list-group">
+                <!-- <% orders.forEach(function(orders){ %>
+                    <a href="#" class="list-group-item">
+                        <div class="Payments">
+                            <form action="/payment" method="delete">
+                                <h4 class="list-group-item-heading">
+                                    <%= orders.totalAmount %>
+            
+                                </h4>
+                                
+                                <p class="list-group-item-text">
+                                    <%= orders.credit_card_id %>
+                                </p>
+                                <small class="text-muted">Status:
+                                    <%= orders.status %>
+                                </small>
+                                <p>
+                                    <%= orders.orderMethod %>
+                                </p>
+                            </form>
+                        </div>
+                    </a>
+                    <% }); %> -->
+            </div>
+
+            <div id="paypal-button" style="margin:10px;display:inline">
+
+            </div>
+
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPayment" style="margin:10px;display:inline">
+                Create Order
+        </button> -->
+
+        <div id="paypal-button-container"></div>
+
+        <div id="confirm" class="hidden">
+            <div>Ship to:</div>
+            <div><span id="recipient"></span>, <span id="line1"></span>, <span id="city"></span></div>
+            <div><span id="state"></span>, <span id="zip"></span>, <span id="country"></span></div>
+
+            <button id="confirmButton">Complete Payment</button>
+        </div>
+
+
+        <script>
+
+                paypal.Button.render({
+
+                  env: 'sandbox', // Or 'production',
+            
+                  commit: true, // Show a 'Pay Now' button
+            
+                  client: {
+                    sandbox:    'ASgIBpiKYMCrfefR0StH7CQyCHF-f2eOf8oPqQWcHd1Z4-5I0rd9duV-89CYcSoZu1N6ZsqxAbUfU4Jl',
+                    production: 'EHMDSW156-ebLUNz_MP7ZJIPhhHv_y5_L0S7Lt_hfB8zsvduMZIOq19rhVW_H8OX4vm2llexGnyxcL-I'
+                  },
+
+                  style: {
+                    color: 'gold',
+                    size: 'small'
+                  },
+            
+                  payment: function(data, actions) {
+                    // Set up payment here!
+                    // Make a call to the REST api to create the payment
+                    return actions.payment.create({
+                        payment: {
+                            transactions: [
+                                {
+                                    amount: { total: '100', currency: 'USD' }
+                                }
+                            ]
+                        }
+                    });
+                  },
+ 
+
+                 onAuthorize: function(data, actions) {
+
+                    // Get the payment details
+
+                    
+
+                    return actions.payment.get().then(function(data) {
+
+
+                        // Display the payment details and a confirmation button
+
+                        var shipping = data.payer.payer_info.shipping_address;
+    
+                        document.querySelector('#recipient').innerText = shipping.recipient_name;
+                        document.querySelector('#line1').innerText     = shipping.line1;
+                        document.querySelector('#city').innerText      = shipping.city;
+                        document.querySelector('#state').innerText     = shipping.state
+                        document.querySelector('#zip').innerText       = shipping.postal_code;
+                        document.querySelector('#country').innerText   = shipping.country_code;
+                        
+
+                        document.querySelector('#paypal-button-container').style.display = 'none';
+                        document.querySelector('#confirm').style.display = 'block';
+                        
+                        var paymentDetails = data.payer;
+                        var payerDetails = data.payer.payer_info;
+                        var transaction = data.transactions;
+                        var payment_id = data.id;
+
+                        var payer_id = payerDetails.payer_id;
+                        // alert(payer_id);
+                        $('#payer_id').val(payer_id);
+
+
+                        var payment_method = paymentDetails.payment_method;
+                        // alert(payment_method);
+                        $('#orderMethod').val(payment_method);
+
+                        var payment_id = payment_id;
+                        $('#payment_id').val(payment_id);
+
+                        var status = paymentDetails.status;
+                        // alert(status);
+                        $('#status').val(status);
+
+
+                        var amount = parseInt(transaction[0].amount.total);
+                        // alert(amount);
+                        $('#totalAmount').val(amount);
+   
+
+                        
+
+                        // Listen for click on confirm button
+
+                        document.querySelector('#confirmButton').addEventListener('click', function() {
+
+                            // Disable the button and show a loading message
+
+                            document.querySelector('#confirm').innerText = 'Loading...';
+                            document.querySelector('#confirm').disabled = true;
+
+                            // Execute the payment
+
+                            return actions.payment.execute().then(function() {
+                                document.querySelector('#confirm').style.display = 'none';
+                                // submit form automatically
+                                $('#pay').submit();
+                        
+                            });
+                        });
+                    });
+                    
+                },
+            
+                  onCancel: function(data, actions) {
+                    /*
+                     * Buyer cancelled the payment
+                     */
+                  },
+            
+                  onError: function(err) {
+                    /*
+                     * An error occurred during the transaction
+                     */
+                    alert('There is an error. You did not email the nigerian prince for approval!')
+                  }
+                }, '#paypal-button');
+
+              </script>
+
             <% include ../partials/footer %>
             <% include ../partials/javascript %>
     </body>

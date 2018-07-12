@@ -34,8 +34,4 @@ exports.isLoggedIn = function(req, res, next) {
     res.redirect('/login');
 };
 
-// Payment GET 
-exports.payment = function(req, res) {
-    // Get a bunch of horse fucking shite
-    res.render('payment', {title: "Payment Page", user: req.user})
-};
+

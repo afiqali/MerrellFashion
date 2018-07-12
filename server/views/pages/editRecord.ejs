@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <% include ../partials/stylesheetPRODUCT %>
+</head>
+<body>
+    <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Edit Product Details</h4>
+    </div>
+
+    <div class="modal-body">
+        <fieldset class="form-group">
+            <label for="ItemName">Product Name</label>
+            <input type="text" id="ItemName" name="ItemName" class="form-control" placeholder="Product Name" required="true" value="<%=productlists.ItemName%>">
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="price">Pricing</label>
+            <input type="text" id="price" name="price" class="form-control" placeholder="Price" required="true"  value="<%=productlists.price%>">
+        </fieldset>
+
+        <fieldset class="form-group">
+            <label for="Description">Item Description</label>
+            <textarea id="Description" name="Description" rows="8" cols="40" class="form-control" placeholder="Item Description" required="true"  value="<%=productlists.Description%>"></textarea>
+        </fieldset>
+        
+        <div class="radiobuttons-container" >
+            <fieldset class="form-group" required="true">
+                <label for="Dress" class="mdl-radio mdl-js-radio">
+                    <input id="Dress" class="mdl-radio__button" type="radio" name="category" value="Dress"> 
+                    <span class="mdl-radio__label">Dress</span>
+                </label>
+
+                <label for="High Heels" class="mdl-radio mdl-js-radio">
+                    <input id="High Heels" class="mdl-radio__button" type="radio" name="category" value="High Heels" />
+                    <span class="mdl-radio__label">High Heels</span>
+                </label>
+
+                <label for="Skirt" class="mdl-radio mdl-js-radio">
+                    <input id="Skirt" class="mdl-radio__button" type="radio" name="category" value="Skirt" />
+                    <span class="mdl-radio__label">Skirt</span>
+                </label>
+
+                <label for="Tops" class="mdl-radio mdl-js-radio">
+                    <input id="Tops" class="mdl-radio__button" type="radio" name="category" value="Tops" />
+                    <span class="mdl-radio__label">Tops</span>
+                </label>
+
+                <label for="Jeans" class="mdl-radio mdl-js-radio">
+                    <input id="Jeans" class="mdl-radio__button" type="radio" name="category" value="Jeans" />
+                    <span class="mdl-radio__label">Jeans</span>
+                </label>
+
+                <label for="Cardigans" class="mdl-radio mdl-js-radio">
+                    <input id="Cardigans" class="mdl-radio__button" type="radio" name="category" value="Cardigans" />
+                    <span class="mdl-radio__label">Cardigans</span>
+                </label>
+                </fieldset>
+
+            </div>
+
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" onclick=saveChanges()>Save Changes</button>
+        <button type="button" class="btn btn-secondary" onclick=discardChanges()>Cancel</button>
+    </div>
+
+    <% include ../partials/footer %>
+    <% include ../partials/javascript %>
+
+    <script>
+        function saveChanges() {
+            var url = "<%=hostPath%>/edit/<%=productlists.Itemid%>";
+            var newValues = {
+                ItemName: $("#ItemName").val(),
+                price: $("#price").val(),
+                category: $("#category").val(),
+                Description: $("#Description").val()
+            }
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(newValues),
+                dataType: "json",
+                contentType: "application/json",
+                success: function(result){
+                    alert("Item details updated successfully");
+                    location.href = "http://localhost:3000/products-gallery"
+                },
+                error: function(result){
+                    alert("Error updating item details");
+                    discardChanges();
+                }
+            })
+        }
+
+        function discardChanges() {
+            location.href = "<%=hostPath%>"
+        }
+    </script>
+
+</body>
+</html>

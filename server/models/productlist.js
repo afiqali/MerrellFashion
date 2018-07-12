@@ -3,8 +3,8 @@ var myDatabase = require('../controllers/database');
 var sequelize = myDatabase.sequelize;
 var Sequelize = myDatabase.Sequelize;
 
-const Images = sequelize.define('Images', {
-    id: {
+const productlist = sequelize.define('productlist', {
+    Itemid: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
@@ -13,7 +13,7 @@ const Images = sequelize.define('Images', {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW
     },
-    title: {
+    ItemName: {
         type: Sequelize.STRING,
         allowNull: false,
         defaultValue: '',
@@ -29,13 +29,33 @@ const Images = sequelize.define('Images', {
             model: 'Users',
             key: 'id'
         }
+    },
+    price: {
+        type: Sequelize.DECIMAL(10,2),
+        allowNull: false
+    },
+    category: {
+        type: Sequelize.STRING
+    },
+    visible: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
+    },
+    Description: {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
+    PickUpLocation: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: "Nanyang Polytechnic"
     }
 });
 
 // force: true will drop the table if it already exists
-Images.sync({ force: true, logging: console.log}).then(() => {
+productlist.sync({ force: false, logging: console.log}).then(() => {
     // Table created
-    console.log("images table synced");
+    console.log("product table synced");
 });
 
-module.exports = sequelize.model('Images', Images);
+module.exports = sequelize.model('productlist', productlist);

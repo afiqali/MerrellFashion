@@ -22,20 +22,21 @@ module.exports = function (passport) {
     // using local strategy
     passport.use('local-login', new LocalStrategy({
         // change default username and password, to email and password
-        usernameField: 'email',
-        passwordField: 'password',
-        passReqToCallback: true
+        usernameField: 'email',            // tells passport set its usernameField to form input name/id="email"
+        passwordField: 'password',         // tells passport set its passwordField to form input name/id="password"
+        passReqToCallback: true            // pass the HTML request to the callback - next function
     },
-        function (req, email, password, done) {
-            if (email)
-                // format to lower-case
-                email = email.toLowerCase();
+        function (req, email, password, done) {     // function (req, usernameField, passwordField, done)
 
-            var isValidPassword = function (userpass, password) {
+            // format to lower-case
+            email = email.toLowerCase();
+
+            var isValidPassword = function (userpass, password) {       // function (db_password, passwordField)
                 return userpass === password;
             }
             // process asynchronous
             process.nextTick(function () {
+            
                 User.findOne({ where: { email: email } }).then((user) => {
                     // check errors and bring the mess  ages
                     if (!user)
@@ -52,6 +53,7 @@ module.exports = function (passport) {
                 });
             });
         }));
+
     // Signup local strategy
     passport.use('local-signup', new LocalStrategy({
         // change default username and password, to email and password
@@ -60,15 +62,16 @@ module.exports = function (passport) {
         passReqToCallback: true
     },
         function (req, email, password, done) {
-            if (email)
-                // format to lower-case
-                email = email.toLowerCase();
+
+            // format to lower-case
+            email = email.toLowerCase();
+
             // asynchronous
             process.nextTick(function () {
                 // if the user is not already logged in:
                 if (!req.user) {
+                    // check if email is already taken by another user in db
                     User.findOne({ where: { email: email } }).then((user) => {
-                        // check email
                         if (user) {
                             return done(null, false, req.flash('signupMessage', 'Wohh! the email is already taken.'));
                         } else {
@@ -76,12 +79,16 @@ module.exports = function (passport) {
                             var userData = {
                                 name: req.body.name,
                                 email: email,
-                                password: password
+                                password: password,
+                                gender: req.body.gender,
+                                dob: req.body.dob,
+                                contactNumber: req.body.contactNumber,
+                                address: req.body.address
                             }
 
                             // save data
-                            User.create(userData).then((newUser, created) => {
-                                if (!newUser) {
+                            User.create(userData).then((newUser, created) => {  // If user is created, true is returned (newUser), else false (!newUser). User may not be created due to incompatible info.
+                                if (!newUser) {                 
                                     return done(null, false);
                                 }
                                 if (newUser) {
