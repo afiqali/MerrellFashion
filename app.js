@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // Import multer
 var multer = require('multer');
-var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 1500000, files:1} });
+var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 150000000000000, files:1} });
 
 // Import home controller
 var index = require('./server/controllers/index');

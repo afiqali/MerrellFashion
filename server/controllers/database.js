@@ -9,8 +9,8 @@ const sequelize =new Sequelize({
       instanceName: 'SQLEXPRESS'
     },
     host: 'localhost',
-    username: 'p41',
-    password: 'p4pw',
+    username: 'p4',
+    password: '1234',
     database: 'p4db',
     pool: {
         min: 0,
