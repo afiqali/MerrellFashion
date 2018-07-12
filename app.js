@@ -20,9 +20,15 @@ var videos = require('./server/controllers/videos');
 // Import images controller
 var images = require('./server/controllers/images');
 // Import payment controller
+<<<<<<< HEAD
 var payment = require('./server/controllers/paymentController');
 // Import Receipt Controller
 var receipt = require('./server/controllers/receiptController');
+=======
+var payment = require('./server/controllers/payment');
+// Import display (admin) controller
+var display = require('./server/controllers/display');
+>>>>>>> e7c257880da1019cc0ed605459b7b452ee8a7f00
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -61,7 +67,7 @@ app.use(require('node-sass-middleware')({
 // Setup public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-// required for passport
+// Passport session uses Express session
 // secret for session
 app.use(expressSession({
     secret: 'sometextgohere',
@@ -80,6 +86,7 @@ app.use(flash());
 // Application Routes
 // Index Route
 app.get('/', index.show);
+
 app.get('/login', auth.signin);
 app.post('/login', passport.authenticate('local-login', {
     //Success go to Profile Page / Fail go to login page
@@ -94,6 +101,9 @@ app.post('/signup', passport.authenticate('local-signup', {
     failureRedirect: '/signup',
     failureFlash: true
 }));
+
+// Route for admin - display orders (get from payment)
+app.get('/display', auth.isLoggedIn, display.displayOrder);
 
 // Route for profile
 app.get('/profile', auth.isLoggedIn, auth.profile);
@@ -125,10 +135,11 @@ app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uplo
 app.post('/images', images.hasAuthorization, upload.single('image'), images.uploadImage);
 app.get('/images-gallery', images.hasAuthorization, images.show);
 
-// Setup chat
+// Setup Chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
+var Users = require('./server/models/users');
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -136,24 +147,29 @@ io.on('connection', function(socket) {
 
     socket.on('disconnect', function() {
         chatConnections--;
-        console.log("Num of chat users connected: "+ chatConnections);
+        console.log("Num of chat users connected: "+chatConnections);
     });
 })
 
-app.get('/messages',function (req,res) {
+app.get('/messages', function (req, res) {
     ChatMsg.findAll().then((chatMessages) => {
-        res.render('chatMsg', {
-            url: req.protocol + "://" + req.get("host") + req.url,
-            data: chatMessages
-        });
+        Users.findById(req.user.id).then(function(user){
+            // console.log(req.user)
+            res.render('chatMsg', {
+                url: req.protocol + "://" + req.get("host") + req.url,
+                data: chatMessages,
+                user: user
+            });
+        })
     });
 });
-app.post('/messages', function (req,res) {
+app.post('/messages', function (req, res) {
+    Users.findById(req.user.id).then(function(user){
     var chatData = {
-        name: req.body.name,
+        name: user.name,
         message: req.body.message
     }
-    // Save into database
+    //Save into database
     ChatMsg.create(chatData).then((newMessage) => {
         if (!newMessage) {
             sendStatus(500);
@@ -161,6 +177,7 @@ app.post('/messages', function (req,res) {
         io.emit('message', req.body)
         res.sendStatus(200)
     })
+});
 });
 
 // catch 404 and forward to error handler

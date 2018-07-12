@@ -46,7 +46,8 @@ const Order = sequelize.define('Order', {
         allowNull: false,
         defaultValue: 'NETS',
         trim: true
-    },
+    }
+
     // item_id: {
     //     type: Sequelize.INTEGER,
     //     allowNull: false,
@@ -55,12 +56,20 @@ const Order = sequelize.define('Order', {
     //         key: 'id'
     //     }
     // }
-
 });
+
 // force: true will drop the table if it already exists
 Order.sync({ force: false, logging: console.log}).then(() => {
-    // Table created
     console.log("Order table synced");
+    Order.upsert({
+        order_id: 1,
+        user_id: 1,
+        totalAmount: 20,
+        credit_card_id: '1234',
+        orderDate: "2018-06-28 11:10:11.3160000 +00:00",
+        status: "Buyer paid",
+        orderMethod: "Paypal"
+    });
 });
 
 module.exports = sequelize.model('Order', Order);
