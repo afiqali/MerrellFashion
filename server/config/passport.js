@@ -11,11 +11,11 @@ module.exports = function (passport) {
     });
     // deserialize the user
     passport.deserializeUser(function (id, done) {
-        User.findById(id).then(function (user) {
+        User.findById(id).then(function (user) {        // promise syntax
             if (user) {
-                done(null, user.get());
+                done(null, user.get());                 // 1st param: err, 2nd param:
             } else {
-                done(user.errors, null);
+                done(user.errors, null);                // 1st param: err, 2nd param:
             }
         });
     });
