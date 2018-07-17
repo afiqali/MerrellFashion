@@ -1,27 +1,25 @@
 // get Order model
 var Order = require("../models/paymentModel");
+var itemModel = require("../models/productlist");
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize; 
 
-
-// List Orders & render page
-exports.list = function(req, res) {
-    // List all orders and sort by Date
-    // Select * from order o left join orderitems oi on o.orderid = oi.orderid
-    // select o.order_id, o.totalAmount, o.credit_card_id, o.orderDate, o.status, o.orderMethod, u.id from Order o join Users u on o.user_id = u.id
-    sequelize.query("select * from Orders"
-    , {model:Order}).then((orders) => {
-
+var itemID;
+exports.getItem = function(req,res) {
+    itemID = req.params.id;
+    itemModel.findById(itemID).then(function (item) {
         res.render('payment', {
             title: 'Payment Page',
             user: req.user,
-            orders: orders,
-        })
-    }).catch((err)=>{
+            item: item,
+            hostPath: req.protocol + "://" + req.get("host")
+        });
+    }).catch((err) => {
         return res.status(400).send({
-            message: err
+            message:err
         });
     });
+
 };
 
 // Create Order
@@ -55,8 +53,8 @@ exports.create = function (req, res) {
             });
         }
         // var url;
-        // url = '/receipt/' + req.body.payer_id;
-        res.redirect('/receipt');
+        url = '/receipt/' + itemID.toString();
+        res.redirect(url);
     })
 }
 
