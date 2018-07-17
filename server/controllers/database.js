@@ -10,7 +10,7 @@ const sequelize =new Sequelize({
     },
     host: 'localhost',
     username: 'p4',
-    password: 'p4pw',
+    password: '1234',
     database: 'p4db',
     pool: {
         min: 0,
