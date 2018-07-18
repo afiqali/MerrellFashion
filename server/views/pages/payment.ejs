@@ -46,35 +46,31 @@
                         </fieldset>
 
                     </div>
-                    
-                    <!-- <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div> -->
-                </form>
-            <!-- </div>
-        </div>
-        </div> -->
 
+                </form>
 
         <div class="list-group">
 
                     <a href="#" class="list-group-item">
                         <div class="Payments">
-                            <form action="/payment" method="delete">
-                                <h4 class="list-group-item-heading" id="price">
-                                    <%= item.price %>
-            
+                            <form action="/payment/:id" >
+                                <h4 class="list-group-item-heading">
+                                    <%= item.ItemName %>
                                 </h4>
-                                
-                                <p class="list-group-item-text">
+                                <p class="list-group-item-text text-muted" id="price">
+                                    <%= item.price %>
+                                </p>
+                                <p class="list-group-item-text text-muted">
                                     <%= item.category %>
                                 </p>
-                                <small class="text-muted">Status:
+                                <small class="list-group-item-text text-muted">
                                     <%= item.description %>
                                 </small>
-                                <p>
+                                <p class="list-group-item-text text-muted">
                                     <%= item.user_id %>
+                                </p>
+                                <p class="list-group-item-text text-muted">
+                                    <%= item.PickUpLocation %>
                                 </p>
                             </form>
                         </div>
@@ -220,7 +216,7 @@
                     /*
                      * An error occurred during the transaction
                      */
-                    alert('There is an error. You did not email the nigerian prince for approval!')
+                    alert(err)
                   }
                 }, '#paypal-button');
 

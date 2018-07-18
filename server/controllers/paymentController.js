@@ -39,6 +39,7 @@ exports.create = function (req, res) {
         // payer_id = details.payer_id,
         payer_id : req.body.payer_id,
         user_id: req.user.id,
+        Itemid: itemID,
         payment_id: req.body.payment_id,
         totalAmount: req.body.totalAmount,
         status: req.body.status,

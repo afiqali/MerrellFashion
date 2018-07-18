@@ -8,17 +8,30 @@ var sequelize = myDatabase.sequelize;
 // List Orders & render page
 exports.getItem = function(req,res) {
     var itemID = req.params.id;
-    itemModel.findById(itemID).then(function (item) {
+    sequelize.query('SELECT * FROM productlists',{model:itemModel}).then((receipt) => {
         res.render('receipt', {
             title: 'Your receipt',
             user: req.user,
-            item: item,
+            receipt: receipt,
             hostPath: req.protocol + "://" + req.get("host")
-        });
+        })
     }).catch((err) => {
         return res.status(400).send({
             message:err
         });
     });
+
+    // itemModel.findById(itemID).then(function (item) {
+    //     res.render('receipt', {
+    //         title: 'Your receipt',
+    //         user: req.user,
+    //         item: item,
+    //         hostPath: req.protocol + "://" + req.get("host")
+    //     });
+    // }).catch((err) => {
+    //     return res.status(400).send({
+    //         message:err
+    //     });
+    // });
 
 };

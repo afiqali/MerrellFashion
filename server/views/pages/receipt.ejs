@@ -22,22 +22,25 @@
 
             <a href="#" class="list-group-item">
                 <div class="Payments">
-                    <form action="/payment" method="delete">
+                    <% receipt.forEach(function(receipt) { %>
                         <h4 class="list-group-item-heading">
-                            <%= item.price %>
-    
+                            <%= receipt.ItemName %>
                         </h4>
-                        
-                        <p class="list-group-item-text">
-                            <%= item.category %>
+                        <p class="list-group-item-text text-muted" id="price">
+                            <%= receipt.price %>
                         </p>
-                        <small class="text-muted">Status:
-                            <%= item.description %>
-                        </small>
-                        <p>
-                            <%= item.user_id %>
+                        <p class="list-group-item-text text-muted">
                         </p>
-                    </form>
+                        <small class="list-group-item-text text-muted">
+                            <%= receipt.Description %>
+                        </small> 
+                        <p class="list-group-item-text text-muted">
+                            <%= receipt.user_id %>
+                        </p>
+                        <p class="list-group-item-text text-muted">
+                            <%= receipt.PickUpLocation %>
+                        </p>
+                    <% }); %>
                 </div>
             </a>
 

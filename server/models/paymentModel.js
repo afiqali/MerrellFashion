@@ -21,6 +21,14 @@ const Order = sequelize.define('Order', {
             key: 'id'
         }
     },
+    Itemid: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+            model: 'productlist',
+            key: 'Itemid'
+        }
+    },
     totalAmount: {
         type: Sequelize.DECIMAL(18,2),
         allowNull: false,
@@ -59,7 +67,7 @@ const Order = sequelize.define('Order', {
 });
 
 // force: true will drop the table if it already exists
-Order.sync({ force: false, logging: console.log}).then(() => {
+Order.sync({ force: true, logging: console.log}).then(() => {
     console.log("Order table synced");
     Order.upsert({
         order_id: 1,
