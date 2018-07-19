@@ -25,7 +25,8 @@ var payment = require('./server/controllers/paymentController');
 var receipt = require('./server/controllers/receiptController');
 // Import display (admin) controller
 var display = require('./server/controllers/display');
-
+// Import account controller
+var account = require('./server/controllers/account');
 // Import transactions controller
 var transactions = require('./server/controllers/transactions')
 // Import offers controller
@@ -111,6 +112,9 @@ app.get('/display', auth.isLoggedIn, display.displayOrder);
 // Route for profile
 app.get('/profile', auth.isLoggedIn, auth.profile);
 
+// Route for account
+app.get('/account', account.display_account);
+
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
 app.post('/payment/:id', payment.create);
@@ -162,6 +166,7 @@ var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var Users = require('./server/models/users');
 var itemModel = require("./server/models/productlist");
+var ProductDetails = require('./server/models/productlist');
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -173,22 +178,51 @@ io.on('connection', function(socket) {
     });
 })
 
+<<<<<<< HEAD
 app.get('/messages/:itemid', function (req, res) {
     ChatMsg.findAll().then((chatMessages) => {
         Users.findById(req.user.id).then(function(user){
             itemModel.findById(req.params.itemid).then(function(item) {
+=======
+app.get('/messages/:id', function (req, res) {
+    ChatMsg.findAll().then((chatMessages) => {
+        Users.findById(req.user.id).then(function(user){
+            ProductDetails.findById(req.params.id).then(function(productlist){
+>>>>>>> 21931fdb534681b2ce76bafdb734a068b6ec1995
             // console.log(req.user)
             res.render('chatMsg', {
                 url: req.protocol + "://" + req.get("host") + req.url,
                 data: chatMessages,
                 user: user,
+<<<<<<< HEAD
                 item:item
+=======
+                productlist: productlist
+>>>>>>> 21931fdb534681b2ce76bafdb734a068b6ec1995
             });
             })
         })
+    })
     });
 });
+app.get('/messages', function (req, res) {
+    ChatMsg.findAll().then((chatMessages) => {
+        Users.findById(req.user.id).then(function(user){
+            // console.log(req.user)
+            res.render('chatMsg', {
+                url: req.protocol + "://" + req.get("host") + req.url,
+                data: chatMessages,
+                user: user,
+                productlist: ""
+            });
+    })
+    });
+});
+<<<<<<< HEAD
 app.post('/messages/:itemid', function (req, res) {
+=======
+app.post('/messages/:id', function (req, res) {
+>>>>>>> 21931fdb534681b2ce76bafdb734a068b6ec1995
     Users.findById(req.user.id).then(function(user){
     var chatData = {
         name: user.name,
