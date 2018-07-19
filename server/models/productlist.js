@@ -37,9 +37,9 @@ const productlist = sequelize.define('productlist', {
     category: {
         type: Sequelize.STRING
     },
-    visible: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: true
+    status: {
+        type: Sequelize.STRING,
+        defaultValue: 'a'
     },
     Description: {
         type: Sequelize.STRING,

@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // Import multer
 var multer = require('multer');
-var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 1500000, files:1} });
+var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 15000000000000, files:1} });
 
 // Import home controller
 var index = require('./server/controllers/index');
@@ -131,14 +131,16 @@ app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uplo
 
 // Setup routes for product listing
 app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
-app.get('/product-dresses', list.hasAuthorization, list.showDress)
-app.get('/product-HighHeels', list.hasAuthorization, list.showHeels)
+// app.get('/products-dresses', list.hasAuthorization, list.showDress)
+// app.get('/products-HighHeels', list.hasAuthorization, list.showHeels)
+app.get('/products-gallery/:category',list.hasAuthorization, list.showCategory)
 app.get('/products-gallery', list.hasAuthorization, list.show);
-app.get("/product-dresses/edit/:id", list.editRecord);
-app.get("/products-gallery/edit/:id", list.editRecord);
-app.get("/product-HighHeels/edit/:id", list.editRecord);
-app.post("/edit/:id", list.update);
-app.delete("/products-gallery/:id", list.delete);
+app.get("/products-gallery/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/:category/edit/:id",list.hasAuthorization, list.editRecord);
+app.post("/edit/:id",list.hasAuthorization, upload.single('image'), list.updatetest);
+app.delete("/products-gallery/:category/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/:id",list.hasAuthorization, list.delete);
+
 
 // Setup routes for specific product list
 app.get('/products-gallery/view/:id', list.specificlist);
