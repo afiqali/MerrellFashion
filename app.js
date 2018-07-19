@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 // Import multer
 var multer = require('multer');
-var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 1500000, files:1} });
+var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 150000000000000, files:1} });
 
 // Import home controller
 var index = require('./server/controllers/index');
@@ -161,6 +161,7 @@ var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var Users = require('./server/models/users');
+var ProductDetails = require('./server/models/productlist');
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -172,6 +173,21 @@ io.on('connection', function(socket) {
     });
 })
 
+app.get('/messages/:id', function (req, res) {
+    ChatMsg.findAll().then((chatMessages) => {
+        Users.findById(req.user.id).then(function(user){
+            ProductDetails.findById(req.params.id).then(function(productlist){
+            // console.log(req.user)
+            res.render('chatMsg', {
+                url: req.protocol + "://" + req.get("host") + req.url,
+                data: chatMessages,
+                user: user,
+                productlist: productlist
+            });
+        })
+    })
+    });
+});
 app.get('/messages', function (req, res) {
     ChatMsg.findAll().then((chatMessages) => {
         Users.findById(req.user.id).then(function(user){
@@ -179,12 +195,13 @@ app.get('/messages', function (req, res) {
             res.render('chatMsg', {
                 url: req.protocol + "://" + req.get("host") + req.url,
                 data: chatMessages,
-                user: user
+                user: user,
+                productlist: ""
             });
-        })
+    })
     });
 });
-app.post('/messages', function (req, res) {
+app.post('/messages/:id', function (req, res) {
     Users.findById(req.user.id).then(function(user){
     var chatData = {
         name: user.name,
