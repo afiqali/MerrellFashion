@@ -178,51 +178,36 @@ io.on('connection', function(socket) {
     });
 })
 
-<<<<<<< HEAD
-app.get('/messages/:itemid', function (req, res) {
-    ChatMsg.findAll().then((chatMessages) => {
-        Users.findById(req.user.id).then(function(user){
-            itemModel.findById(req.params.itemid).then(function(item) {
-=======
 app.get('/messages/:id', function (req, res) {
     ChatMsg.findAll().then((chatMessages) => {
         Users.findById(req.user.id).then(function(user){
             ProductDetails.findById(req.params.id).then(function(productlist){
->>>>>>> 21931fdb534681b2ce76bafdb734a068b6ec1995
             // console.log(req.user)
             res.render('chatMsg', {
                 url: req.protocol + "://" + req.get("host") + req.url,
                 data: chatMessages,
                 user: user,
-<<<<<<< HEAD
-                item:item
-=======
                 productlist: productlist
->>>>>>> 21931fdb534681b2ce76bafdb734a068b6ec1995
             });
             })
         })
     })
     });
-});
-app.get('/messages', function (req, res) {
-    ChatMsg.findAll().then((chatMessages) => {
-        Users.findById(req.user.id).then(function(user){
-            // console.log(req.user)
-            res.render('chatMsg', {
-                url: req.protocol + "://" + req.get("host") + req.url,
-                data: chatMessages,
-                user: user,
-                productlist: ""
-            });
-    })
-    });
-});
-<<<<<<< HEAD
-app.post('/messages/:itemid', function (req, res) {
-=======
+
+// app.get('/messages', function (req, res) {
+//     ChatMsg.findAll().then((chatMessages) => {
+//         Users.findById(req.user.id).then(function(user){
+//             // console.log(req.user)
+//             res.render('chatMsg', {
+//                 url: req.protocol + "://" + req.get("host") + req.url,
+//                 data: chatMessages,
+//                 user: user,
+//                 productlist: ""
+//             });
+//     })
+//     });
+// });
 app.post('/messages/:id', function (req, res) {
->>>>>>> 21931fdb534681b2ce76bafdb734a068b6ec1995
     Users.findById(req.user.id).then(function(user){
     var chatData = {
         name: user.name,
