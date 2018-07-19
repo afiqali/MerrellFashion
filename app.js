@@ -25,7 +25,8 @@ var payment = require('./server/controllers/paymentController');
 var receipt = require('./server/controllers/receiptController');
 // Import display (admin) controller
 var display = require('./server/controllers/display');
-
+// Import account controller
+var account = require('./server/controllers/account');
 // Import transactions controller
 var transactions = require('./server/controllers/transactions')
 // Import offers controller
@@ -111,12 +112,15 @@ app.get('/display', auth.isLoggedIn, display.displayOrder);
 // Route for profile
 app.get('/profile', auth.isLoggedIn, auth.profile);
 
+// Route for account
+app.get('/account', account.display_account);
+
 // Route for payment
-app.get('/payment', auth.isLoggedIn, payment.list);
-app.post('/payment', payment.create);
+app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
+app.post('/payment/:id', payment.create);
 
 // Route for receipt
-app.get('/receipt', receipt.show);
+app.get('/receipt/:id', receipt.getItem);
 
 
 // Logout Page
