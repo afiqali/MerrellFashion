@@ -48,7 +48,9 @@
         </div>
         </div>    
         <button id="makeOfferButton" class="btn btn-block b-r text-small b-r">
-        <span>Make Offer</span>
+        
+        <span><a href="http://localhost:3000/payment/<%= item.Itemid%>" id="#offer">Make Offer</a></span>
+
         </button>
     </form>
     </div>
@@ -113,6 +115,7 @@
     function postMessage(message) {
         $.post('<%-url%>', message)
     }
+
 </script>
 </body>
 </html>

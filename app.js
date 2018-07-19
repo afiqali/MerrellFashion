@@ -116,7 +116,7 @@ app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
 app.post('/payment/:id', payment.create);
 
 // Route for receipt
-app.get('/receipt/:id', receipt.getItem);
+app.get('/receipt/:id/:payment_id', receipt.getItem);
 
 
 // Logout Page
@@ -161,6 +161,7 @@ var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var Users = require('./server/models/users');
+var itemModel = require("./server/models/productlist");
 
 io.on('connection', function(socket) {
     chatConnections++;
@@ -172,19 +173,22 @@ io.on('connection', function(socket) {
     });
 })
 
-app.get('/messages', function (req, res) {
+app.get('/messages/:itemid', function (req, res) {
     ChatMsg.findAll().then((chatMessages) => {
         Users.findById(req.user.id).then(function(user){
+            itemModel.findById(req.params.itemid).then(function(item) {
             // console.log(req.user)
             res.render('chatMsg', {
                 url: req.protocol + "://" + req.get("host") + req.url,
                 data: chatMessages,
-                user: user
+                user: user,
+                item:item
             });
+            })
         })
     });
 });
-app.post('/messages', function (req, res) {
+app.post('/messages/:itemid', function (req, res) {
     Users.findById(req.user.id).then(function(user){
     var chatData = {
         name: user.name,

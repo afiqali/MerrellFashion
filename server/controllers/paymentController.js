@@ -5,6 +5,7 @@ var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize; 
 
 var itemID;
+var payment_id;
 exports.getItem = function(req,res) {
     itemID = req.params.id;
     itemModel.findById(itemID).then(function (item) {
@@ -25,7 +26,7 @@ exports.getItem = function(req,res) {
 // Create Order
 exports.create = function (req, res) {
     console.log("creating payment")
-
+    payment_id = req.body.payment_id;
     // var orderData = {
     //     user_id: req.user.id,
     //     totalAmount: req.body.totalAmount,
@@ -39,7 +40,6 @@ exports.create = function (req, res) {
         // payer_id = details.payer_id,
         payer_id : req.body.payer_id,
         user_id: req.user.id,
-        Itemid: itemID,
         payment_id: req.body.payment_id,
         totalAmount: req.body.totalAmount,
         status: req.body.status,
@@ -54,7 +54,7 @@ exports.create = function (req, res) {
             });
         }
         // var url;
-        url = '/receipt/' + itemID.toString();
+        url = '/receipt/' + itemID.toString() + '/' + payment_id;
         res.redirect(url);
     })
 }
