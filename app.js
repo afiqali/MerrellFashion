@@ -148,14 +148,16 @@ app.post('/offers', offers.makeOffer);
 // Setup chat
 // Setup routes for product listing
 app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
-app.get('/product-dresses', list.hasAuthorization, list.showDress)
-app.get('/product-HighHeels', list.hasAuthorization, list.showHeels)
+// app.get('/products-dresses', list.hasAuthorization, list.showDress)
+// app.get('/products-HighHeels', list.hasAuthorization, list.showHeels)
+app.get('/products-gallery/:category',list.hasAuthorization, list.showCategory)
 app.get('/products-gallery', list.hasAuthorization, list.show);
-app.get("/product-dresses/edit/:id", list.editRecord);
-app.get("/products-gallery/edit/:id", list.editRecord);
-app.get("/product-HighHeels/edit/:id", list.editRecord);
-app.post("/edit/:id", list.update);
-app.delete("/products-gallery/:id", list.delete);
+app.get("/products-gallery/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/:category/edit/:id",list.hasAuthorization, list.editRecord);
+app.post("/edit/:id",list.hasAuthorization, upload.single('image'), list.updatetest);
+app.delete("/products-gallery/:category/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/:id",list.hasAuthorization, list.delete);
+
 
 // Setup routes for specific product list
 app.get('/products-gallery/view/:id', list.specificlist);
@@ -192,21 +194,21 @@ app.get('/messages/:id', function (req, res) {
             })
         })
     })
-    });
+});
 
-// app.get('/messages', function (req, res) {
-//     ChatMsg.findAll().then((chatMessages) => {
-//         Users.findById(req.user.id).then(function(user){
-//             // console.log(req.user)
-//             res.render('chatMsg', {
-//                 url: req.protocol + "://" + req.get("host") + req.url,
-//                 data: chatMessages,
-//                 user: user,
-//                 productlist: ""
-//             });
-//     })
-//     });
-// });
+app.get('/messages', function (req, res) {
+    ChatMsg.findAll().then((chatMessages) => {
+        Users.findById(req.user.id).then(function(user){
+            // console.log(req.user)
+            res.render('chatMsg', {
+                url: req.protocol + "://" + req.get("host") + req.url,
+                data: chatMessages,
+                user: user,
+                productlist: ""
+            });
+    })
+    });
+});
 app.post('/messages/:id', function (req, res) {
     Users.findById(req.user.id).then(function(user){
     var chatData = {
