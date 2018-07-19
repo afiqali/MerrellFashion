@@ -54,5 +54,4 @@ Users.sync({ force: false, logging: console.log }).then(() => {
         address: "1 Holly Road Singapore 123456"
     });
 });
-
 module.exports = sequelize.model('Users', Users);

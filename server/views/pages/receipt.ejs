@@ -11,45 +11,61 @@
     </head>
 
     <body>
-        <% include ../partials/header %>
 
-        <div class="container">
-            <h1><%= title %></h1>
-        </div>
+            <div class="container" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
+                    <h1 style="margin:auto;text-align: center;padding:5px"><a href="http://localhost:3000/products-gallery/" style="text-decoration: none;color:darkmagenta;"> Merrell Fashion </a></h1>
+                    <h5 style="margin:auto;text-align:center;padding:5px"><%= title %></h5>
+                </div>
 
         
         <div class="list-group">
-            <% orders.forEach(function(orders){ %>
-                <% if (orders.user_id==user.id){ %>
-                <a href="#" class="list-group-item">
-                    <div class="Payments">
-                        <form action="/payment" method="delete">
-                            <h4 class="list-group-item-heading">
 
-                                <%= orders.totalAmount; %>
-        
-                            </h4>
-                            
-                            <p class="list-group-item-text">
-                                <%= orders.payment_id; %>
+            <a href="#" class="list-group-item">
+                <div class="Payments">
+                    <form action="/payment">
+
+                        <h4 class="list-group-item-heading">
+                            Your Item:
+    
+                        </h4>
+                        <p class="list-group-item-text">
+                                <%= item.price %>
+                        </p>
+                        <p class="list-group-item-text">
+                            <%= item.category %>
+                        </p>
+                        <small class="text-muted">Status:
+                            <%= item.description %>
+                        </small>
+                        <p>
+                            <%= item.user_id %>
+                        </p>
+
+
+                        <h4 class="list-group-item-heading">
+                            Your Receipt:
+                        </h4>
+                        <p class="list-group-item-text">
+                            <%= order.payment_id %>
                             </p>
-                            <small class="text-muted">Status:
-                                <%= orders.status; %>
-                            </small>
-                            <p class="list-group-item-text">
-                                <%= orders.orderMethod; %>
-                            </p>
-                            <p class="list-group-item-text">
-                                    <%= user.name; %>
-                            </p>
-                            <p class="list-group-item-text">
-                                    <%= user.email; %>
-                            </p>
-                        </form>
-                    </div>
-                </a>
-                <% } %>
-                <% }); %>
-        </div>
+                        <p class="list-group-item-text">
+                            <%= order.payer_id %>
+                        </p>
+                        <small class="text-muted">Status:
+                            <%= order.status %>
+                        </small>
+                        <p>
+                            <%=  order.orderMethod %>
+                        </p>
+
+                        <h5> Your payment has been made. Please proceed to place your order details.</h5>
+
+                    </form>
+                </div>
+            </a>
+    </div>
+    <div class="container" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
+    <button class="btn btn-large"style="background-color:darkmagenta;"> <a href="http://localhost:3000/profile" style="color:white;text-decoration: none;margin-left:50px;margin:30px;"> Back to Profile</a></button>
+    </div>
     </body>
 </html>

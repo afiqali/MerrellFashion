@@ -9,6 +9,7 @@ const ChatMsg = sequelize.define('ChatMsg', {
         autoIncrement: true,
         primaryKey: true
     },
+    
     name: {
         type: Sequelize.STRING
     },
@@ -17,11 +18,17 @@ const ChatMsg = sequelize.define('ChatMsg', {
         allowNull: false,
         defaultValue: '',
         trim: true
+    },
+    offerPrice: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: 0,
+        trim: true
     }
 });
 
 // force: true will drop the table if it already exists
-ChatMsg.sync({ force:false, logging: console.log}).then(() => {
+ChatMsg.sync({ force:true, logging: console.log}).then(() => {
     // Table created
     console.log("ChatMsgs table synced");
 });

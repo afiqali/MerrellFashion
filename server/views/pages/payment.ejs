@@ -11,109 +11,93 @@
     </head>
 
     <body>
-        <% include ../partials/header %>
 
-        <div class="container">
-            <h1><%= title %></h1>
+        
+        <div class="container" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
+            <h1 style="margin:auto;text-align: center;padding:5px"><a href="http://localhost:3000/products-gallery/" style="text-decoration: none;color:darkmagenta;"> Merrell Fashion </a></h1>
+            <h5 style="margin:auto;text-align:center;padding:5px"><%= title %></h5>
         </div>
-
-        <!-- Modal -->
-        <!-- <div class="modal fade" id="createPayment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content"> -->
-
-                <form action="/payment" method="post" id="pay">
-                    <!-- <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel">Create Order</h4>
-                    </div> -->
-
-                    <div class="modal-body">
-
-                        <fieldset class="form-group">
-                            <input id="payer_id" name="payer_id" type="hidden">
-                        </fieldset> 
-                        <fieldset class="form-group">
-                            <input type="hidden" id="totalAmount" name="totalAmount">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input type="hidden" id="payment_id" name="payment_id">
-                        </fieldset>
-                        <!-- <fieldset class="form-group">
-                            <label for="credit_card_id">Credit Card ID</label>
-                            <textarea id="credit_card_id" name="credit_card_id" rows="8" cols="40" class="form-control" placeholder="Credit Card ID" required=""></textarea>
-                        </fieldset> -->
-                        <fieldset class="form-group">
-                            <input id="status" type="hidden" name="status">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input id="orderMethod" type="hidden" name="orderMethod">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="delieveryFee">Delivery fee</label>
-                            <textarea id="delieveryFee" name="delieveryFee" rows="8" cols="40" class="form-control" placeholder="Delivery Fee" required=""></textarea>
-                        </fieldset>
-
-                    </div>
-                    
-                    <!-- <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div> -->
-                </form>
-            <!-- </div>
-        </div>
-        </div> -->
 
 
         <div class="list-group">
-                <!-- <% orders.forEach(function(orders){ %>
+
                     <a href="#" class="list-group-item">
                         <div class="Payments">
-                            <form action="/payment" method="delete">
+                            <form action="/payment/:id" >
                                 <h4 class="list-group-item-heading">
-                                    <%= orders.totalAmount %>
-            
+                                    <%= item.ItemName %>
                                 </h4>
-                                
-                                <p class="list-group-item-text">
-                                    <%= orders.credit_card_id %>
+                                <p class="list-group-item-text text-muted" id="price">
+                                    <%= item.price %>
                                 </p>
-                                <small class="text-muted">Status:
-                                    <%= orders.status %>
+                                <p class="list-group-item-text text-muted">
+                                    <%= item.category %>
+                                </p>
+                                <small class="list-group-item-text text-muted">
+                                    <%= item.description %>
                                 </small>
-                                <p>
-                                    <%= orders.orderMethod %>
+                                <p class="list-group-item-text text-muted">
+                                    <%= item.user_id %>
+                                </p>
+                                <p class="list-group-item-text text-muted">
+                                    <%= item.PickUpLocation %>
                                 </p>
                             </form>
                         </div>
                     </a>
-                    <% }); %> -->
+
             </div>
-
+            <div id="paypal-button-container" class="container" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
             <div id="paypal-button" style="margin:10px;display:inline">
-
+                </div>
             </div>
 
         <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPayment" style="margin:10px;display:inline">
                 Create Order
         </button> -->
+        
 
-        <div id="paypal-button-container"></div>
-
-        <div id="confirm" class="hidden">
+        
+        <div id="confirm" visibility="hidden" display="none" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
             <div>Ship to:</div>
             <div><span id="recipient"></span>, <span id="line1"></span>, <span id="city"></span></div>
             <div><span id="state"></span>, <span id="zip"></span>, <span id="country"></span></div>
-
-            <button id="confirmButton">Complete Payment</button>
+            <button id="confirmButton" class="btn btn-medium"style="background-color:darkmagenta;color:white">Complete Payment</button>
         </div>
 
+        
+        <form action="/payment/:id" method="post" id="pay" >
 
+
+            <div class="modal-body">
+
+                <fieldset class="form-group">
+                    <input id="payer_id" name="payer_id" type="hidden">
+                </fieldset> 
+                <fieldset class="form-group">
+                    <input type="hidden" id="totalAmount" name="totalAmount">
+                </fieldset>
+                <fieldset class="form-group">
+                    <input type="hidden" id="payment_id" name="payment_id">
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <input id="status" type="hidden" name="status">
+                </fieldset>
+                <fieldset class="form-group">
+                    <input id="orderMethod" type="hidden" name="orderMethod">
+                </fieldset>
+                <!-- <fieldset class="form-group">
+                    <label for="delieveryFee">Delivery fee</label>
+                    <textarea id="delieveryFee" name="delieveryFee" rows="8" cols="40" class="form-control" placeholder="Delivery Fee" required=""></textarea>
+                </fieldset> -->
+
+            </div>
+
+        </form>
         <script>
-
+                document.getElementById('confirm').visibility = 'hidden';
+                var price = document.getElementById('price').innerText;
                 paypal.Button.render({
 
                   env: 'sandbox', // Or 'production',
@@ -137,7 +121,7 @@
                         payment: {
                             transactions: [
                                 {
-                                    amount: { total: '100', currency: 'USD' }
+                                    amount: { total: price, currency: 'USD' }
                                 }
                             ]
                         }
@@ -153,7 +137,7 @@
 
                     return actions.payment.get().then(function(data) {
 
-
+                        document.getElementById('confirm').visibility = 'visibility';
                         // Display the payment details and a confirmation button
 
                         var shipping = data.payer.payer_info.shipping_address;
@@ -212,6 +196,7 @@
                             return actions.payment.execute().then(function() {
                                 document.querySelector('#confirm').style.display = 'none';
                                 // submit form automatically
+                                
                                 $('#pay').submit();
                         
                             });
@@ -230,7 +215,7 @@
                     /*
                      * An error occurred during the transaction
                      */
-                    alert('There is an error. You did not email the nigerian prince for approval!')
+                    alert(err)
                   }
                 }, '#paypal-button');
 
