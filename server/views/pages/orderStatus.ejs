@@ -32,21 +32,18 @@
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="/">Home
+                        <a class="nav-link" href="#">Home
                             <span class="sr-only">(current)</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/account">Profile</a>
+                        <a class="nav-link" href="/">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/comments">Comments</a>
+                        <a class="nav-link" href="#">Services</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/products-gallery">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/messages">Chat</a>
+                        <a class="nav-link" href="#">Contact</a>
                     </li>
                 </ul>
             </div>
@@ -111,7 +108,7 @@
         <div id="page-content-wrapper">
             <div class="container-fluid">
                 <div class="row justify-content-center">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12 bg-primary">
 
                         <% users.forEach(function(user){ %>
 
@@ -189,10 +186,10 @@
 
                                 <% }); %>
 
-                                <button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
+                                    <button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
                             </form>
 
-                            <button onclick="window.location.href='/changePassword'" class="changePassword btn btn-lg btn-primary btn-block">Change password</button>
+                            <button class="changePassword btn btn-lg btn-primary btn-block">Change password</button>
 
                             <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
                     </div>
@@ -212,7 +209,6 @@
         //     e.preventDefault();
         //     $("#wrapper").toggleClass("toggled");
         // });
-
         </script>
 
 </body>

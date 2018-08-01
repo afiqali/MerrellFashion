@@ -118,7 +118,8 @@ app.get('/display', auth.isLoggedIn, display.displayOrder);
 app.get('/profile', auth.isLoggedIn, auth.profile);
 
 // Route for account
-app.get('/account', account.display_account);
+app.get('/account', auth.isLoggedIn, account.displayAccount);
+app.post('/account', auth.isLoggedIn, account.editAccount);
 
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
@@ -136,6 +137,11 @@ app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
 });
+
+// Change password
+app.get('/changepassword', auth.isLoggedIn, account.displayAccount
+);
+
 
 // Setup routes for comments
 app.get('/comments', comments.hasAuthorization, comments.list);
