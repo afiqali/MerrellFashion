@@ -56,6 +56,7 @@ const productlist = sequelize.define('productlist', {
 productlist.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("product table synced");
+
 });
 
 module.exports = sequelize.model('productlist', productlist);

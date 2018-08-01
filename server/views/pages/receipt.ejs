@@ -26,36 +26,33 @@
 
                         <h4 class="list-group-item-heading">
                             Your Item:
-    
                         </h4>
                         <p class="list-group-item-text">
-                                <%= item.price %>
+                              Price: <%= item.price %>
                         </p>
                         <p class="list-group-item-text">
-                            <%= item.category %>
+                            Category: <%= item.category %>
                         </p>
-                        <small class="text-muted">Status:
-                            <%= item.description %>
-                        </small>
-                        <p>
-                            <%= item.user_id %>
-                        </p>
+                        <p class="list-group-item-text">
+                            Description: <%= item.Description %>
+                        </p> <br>
+
 
 
                         <h4 class="list-group-item-heading">
                             Your Receipt:
                         </h4>
                         <p class="list-group-item-text">
-                            <%= order.payment_id %>
+                            Payment ID (Keep this for future reference): <%= order.payment_id %>
                             </p>
                         <p class="list-group-item-text">
-                            <%= order.payer_id %>
+                            Payer id: <%= order.payer_id %>
                         </p>
-                        <small class="text-muted">Status:
-                            <%= order.status %>
-                        </small>
+                        <p class="list-group-item-text">
+                            Status: <%= order.status %>
+                        </p>
                         <p>
-                            <%=  order.orderMethod %>
+                            Order Method: <%=  order.orderMethod %>
                         </p>
 
                         <h5> Your payment has been made. Please proceed to place your order details.</h5>
