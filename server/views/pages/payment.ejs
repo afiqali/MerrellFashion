@@ -1,11 +1,135 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
+        #confirm {
+            margin: auto;
+            display: flex;
 
+        }
+
+        #stripeForm {
+            padding: 0px;
+            margin: 0 auto;
+            position: relative;
+            text-align: center;
+            display: block;
+        }
+        #cards {
+            display: block;
+            margin: 0 auto;
+            text-align:center;
+
+        }
+        #paypal-button {
+            padding: auto;
+            margin:0 auto;
+            position: relative;
+            text-align: center;
+            display: block;
+        }
+        #paypal-button-container {
+            width: 100%;
+            padding:0px;
+            margin:0 auto;
+            position: relative;
+            display:block;
+        }
+        .row {
+        display: -ms-flexbox; /* IE10 */
+        display: flex;
+        -ms-flex-wrap: wrap; /* IE10 */
+        flex-wrap: wrap;
+        margin: 0 -16px;
+        }
+
+        .col-25 {
+        -ms-flex: 25%; /* IE10 */
+        flex: 25%;
+        }
+
+        .col-50 {
+        -ms-flex: 50%; /* IE10 */
+        flex: 50%;
+        }
+
+        .col-75 {
+        -ms-flex: 75%; /* IE10 */
+        flex: 75%;
+        }
+
+        .col-25,
+        .col-50,
+        .col-75 {
+        padding: 0 16px;
+        }
+
+        .container {
+        background-color: #f2f2f2;
+        padding: 5px 20px 15px 20px;
+
+        }
+
+        .container-fluid {
+            
+        }
+
+        input[type=text] {
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        }
+
+        label {
+        margin-bottom: 10px;
+        display: block;
+        }
+
+        .icon-container {
+        margin-bottom: 20px;
+        padding: 7px 0;
+        font-size: 24px;
+        }
+
+        .btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        width: 100%;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 17px;
+        }
+
+        .btn:hover {
+        background-color: #45a049;
+        }
+
+        span.price {
+        float: right;
+        color: grey;
+        }
+
+        /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
+        @media (max-width: 800px) {
+        .row {
+            flex-direction: column-reverse;
+        }
+        .col-25 {
+            margin-bottom: 20px;
+        }
+        }
+        </style>
         <!-- Hi i'm paypal and welcome to jackass -->
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+
         
         <% include ../partials/stylesheet %>
     </head>
@@ -18,57 +142,99 @@
             <h5 style="margin:auto;text-align:center;padding:5px"><%= title %></h5>
         </div>
 
-
-        <div class="list-group">
-
-                    <a href="#" class="list-group-item">
-                        <div class="Payments">
-                            <form action="/payment/:id" >
-                                <h4 class="list-group-item-heading">
-                                    <%= item.ItemName %>
-                                </h4>
-                                <p class="list-group-item-text text-muted" id="price">
-                                    <%= item.price %>
-                                </p>
-                                <p class="list-group-item-text text-muted">
-                                    <%= item.category %>
-                                </p>
-                                <small class="list-group-item-text text-muted">
-                                    <%= item.description %>
-                                </small>
-                                <p class="list-group-item-text text-muted">
-                                    <%= item.user_id %>
-                                </p>
-                                <p class="list-group-item-text text-muted">
-                                    <%= item.PickUpLocation %>
-                                </p>
-                            </form>
+        <!-- Paypal Form -->
+        <div class="row">
+                <div class="col-75">
+                  <div class="container">
+                    <form >
+              
+                      <div class="row">
+                        <div class="col-50">
+                          <h3>Billing Address and Details </h3>
+                          <div style="padding-left:20px;">
+                          <h5><i class="fa fa-user"></i> Name:  <%= user.name %></h5> 
+                          <h5><i class="fa fa-envelope"></i> Email: <%= user.email %></h5> 
+                          <h5><i class="fa fa-address-card-o"></i> Address: <%= user.address %></h5> 
                         </div>
-                    </a>
+                        </div>
+              
+                        <div class="col-50">
+                          <h3>Item</h3>
+                          <div style="padding-left:20px;">
+                          <h5>Item: <%= item.ItemName %></h5>
+                          <h5>Price: <%= item.price %></h5>
+                          <h5>Category: <%= item.category %></h5> 
+                          <p style="display:none;visibility: hidden" id="price"><%= item.price %></p>  
+                          </div>                
+                        </div>
+                      </div>
+                    <br>
+                      <div id="paypal-button-container" class="container-fluid" style="margin:auto; ">
+                        <div id="paypal-button" style="">
+                        </div>
+                      </div>
 
-            </div>
-            <div id="paypal-button-container" class="container" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
-            <div id="paypal-button" style="margin:10px;display:inline">
+                    </form>
+                    
+                  </div>
                 </div>
-            </div>
-
-        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPayment" style="margin:10px;display:inline">
-                Create Order
-        </button> -->
+              </div>
         
 
-        
-        <div id="confirm" visibility="hidden" display="none" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
-            <div>Ship to:</div>
-            <div><span id="recipient"></span>, <span id="line1"></span>, <span id="city"></span></div>
-            <div><span id="state"></span>, <span id="zip"></span>, <span id="country"></span></div>
-            <button id="confirmButton" class="btn btn-medium"style="background-color:darkmagenta;color:white">Complete Payment</button>
+        <!-- Stripe Form -->
+        <div class="container" style="padding:0px;" >
+        <form action="/payment/stripe" method="POST" id="stripeForm">
+                <script
+                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="pk_test_GasPdW35Y0J14wRCw9fzeDtI"
+                    data-amount="<%= item.price %>00"
+                    data-name="tanqinyong"
+                    data-description="Example charge"
+                    data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                    data-locale="auto"
+                    data-currency="sgd"
+                    id="doStripe">
+                </script>
+                <input id="price1" name="price1" type="hidden" value="<%= item.price %>00">
+        </form>
+        <br>
+        <img src="/images/cards.png" style="height:5em;width:25em;text-align:center" id="cards">
+
+    </div>
+
+
+        <div class="container" style="visibility:hidden">
+                <div class="row" style="visibility:hidden">
+
+                        <div class="col-50">
+                          <h3>Billing Address and Details </h3>
+                          <div style="padding-left:20px;">
+                          <h5><i class="fa fa-user"></i> Name:  <%= user.name %></h5> 
+                          <h5><i class="fa fa-envelope"></i> Email: <%= user.email %></h5> 
+                          <h5><i class="fa fa-address-card-o"></i> Address: <%= user.address %></h5> 
+                        </div>
+                        </div>
+              
+                        <div class="col-50">
+                          <h3>Item</h3>
+                          <div style="padding-left:20px;">
+                          <h5>Item: <%= item.ItemName %></h5>
+                          <h5>Price: <%= item.price %></h5>
+                          <h5>Category: <%= item.category %></h5> 
+                          <p style="display:none;visibility: hidden" id="price"><%= item.price %></p>  
+                          </div>                
+                        </div>
+                </div>
         </div>
 
+
         
-        <form action="/payment/:id" method="post" id="pay" >
-
-
+        <div id="confirm"  class="container"style="text-align:center;border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:auto;visibility:hidden; ">
+            <button id="confirmButton" class="btn btn-medium"style="background-color:darkmagenta;color:white">Complete Payment</button>
+        </div>
+        
+        
+        <form action="/payment/paypal" method="POST" id="pay" >
             <div class="modal-body">
 
                 <fieldset class="form-group">
@@ -91,13 +257,40 @@
                     <label for="delieveryFee">Delivery fee</label>
                     <textarea id="delieveryFee" name="delieveryFee" rows="8" cols="40" class="form-control" placeholder="Delivery Fee" required=""></textarea>
                 </fieldset> -->
-
             </div>
-
         </form>
         <script>
+                // stripe shit
+                var price = parseFloat(document.getElementById('price').innerText);
+                // $("#paypal-button").click(function () {
+                //     $.ajax({
+                //         url: 'http://localhost:3000/paypal/:id',
+                //         type: 'POST',
+                //     });
+                //     $("#pay").submit(function() {
+                //         $.ajax({
+                //         url: 'http://localhost:3000/paypal/:id',
+                //         type: 'POST',
+                //     });
+                //     })
+                // });
+
+                // $("#stripeForm").click(function () {
+                //     $.ajax({
+                //         url: 'http://localhost:3000/stripe/:id',
+                //         type: 'POST',
+                //     });
+                //     $("#pay").submit(function() {
+                //         $.ajax({
+                //         url: 'http://localhost:3000/paypal/:id',
+                //         type: 'POST',
+                //     });
+                //     })
+                // });
+
+                // paypal shit
                 document.getElementById('confirm').visibility = 'hidden';
-                var price = document.getElementById('price').innerText;
+                
                 paypal.Button.render({
 
                   env: 'sandbox', // Or 'production',
@@ -132,26 +325,22 @@
                  onAuthorize: function(data, actions) {
 
                     // Get the payment details
-
-                    
-
                     return actions.payment.get().then(function(data) {
 
-                        document.getElementById('confirm').visibility = 'visibility';
+                        document.getElementById('confirm').style.visibility = 'visible';
                         // Display the payment details and a confirmation button
 
                         var shipping = data.payer.payer_info.shipping_address;
     
-                        document.querySelector('#recipient').innerText = shipping.recipient_name;
-                        document.querySelector('#line1').innerText     = shipping.line1;
-                        document.querySelector('#city').innerText      = shipping.city;
-                        document.querySelector('#state').innerText     = shipping.state
-                        document.querySelector('#zip').innerText       = shipping.postal_code;
-                        document.querySelector('#country').innerText   = shipping.country_code;
+                        // document.querySelector('#recipient').innerText = shipping.recipient_name;
+                        // document.querySelector('#line1').innerText     = shipping.line1;
+                        // document.querySelector('#city').innerText      = shipping.city;
+                        // document.querySelector('#state').innerText     = shipping.state
+                        // document.querySelector('#zip').innerText       = shipping.postal_code;
+                        // document.querySelector('#country').innerText   = shipping.country_code;
                         
 
                         document.querySelector('#paypal-button-container').style.display = 'none';
-                        document.querySelector('#confirm').style.display = 'block';
                         
                         var paymentDetails = data.payer;
                         var payerDetails = data.payer.payer_info;
@@ -161,7 +350,6 @@
                         var payer_id = payerDetails.payer_id;
                         // alert(payer_id);
                         $('#payer_id').val(payer_id);
-
 
                         var payment_method = paymentDetails.payment_method;
                         // alert(payment_method);
@@ -179,9 +367,6 @@
                         // alert(amount);
                         $('#totalAmount').val(amount);
    
-
-                        
-
                         // Listen for click on confirm button
 
                         document.querySelector('#confirmButton').addEventListener('click', function() {
@@ -220,8 +405,6 @@
                 }, '#paypal-button');
 
               </script>
-
-            <% include ../partials/footer %>
             <% include ../partials/javascript %>
     </body>
 </html>

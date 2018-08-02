@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <!-- Hi i'm paypal and welcome to jackass -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        
+        <% include ../partials/stylesheet %>
+    </head>
+
+    <body>
+
+            <div class="container" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
+                    <h1 style="margin:auto;text-align: center;padding:5px"><a href="http://localhost:3000/products-gallery/" style="text-decoration: none;color:darkmagenta;"> Merrell Fashion </a></h1>
+                    <h5 style="margin:auto;text-align:center;padding:5px"><%= title %></h5>
+                </div>
+
+        <% receipt.forEach(function(receipt){ %>
+        <div class="list-group">
+
+            <a href="#" class="list-group-item">
+                <div class="Payments">
+                    <form action="/payment">
+                        
+                        <h4 class="list-group-item-heading">
+                            Your Item:
+                        </h4>
+                        
+                        <p class="list-group-item-text">
+                              Price: <%= receipt.price %>
+                        </p>
+                        <p class="list-group-item-text">
+                            Category: <%= receipt.category %>
+                        </p>
+                        <p class="list-group-item-text">
+                            Description: <%= receipt.Description %>
+                        </p> <br>
+                       
+
+
+
+                        <h4 class="list-group-item-heading">
+                            Your Receipt:
+                        </h4>
+                        <p class="list-group-item-text">
+                            Payment ID (Keep this for future reference): 
+                            </p>
+                        <p class="list-group-item-text">
+                            Payer id: 
+                        </p>
+                        <p class="list-group-item-text">
+                            Status: 
+                        </p>
+                        <p>
+                            Order Method: 
+                        </p>
+
+                        <h5> Your payment has been made. Please proceed to place your order details.</h5>
+
+                    </form>
+                </div>
+            </a>
+    </div>
+    <% }); %>
+    <div class="container" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
+    <button class="btn btn-large"style="background-color:darkmagenta;"> <a href="http://localhost:3000/profile" style="color:white;text-decoration: none;margin-left:50px;margin:30px;"> Back to Profile</a></button>
+    </div>
+    </body>
+</html>

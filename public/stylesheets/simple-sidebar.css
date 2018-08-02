@@ -4,9 +4,11 @@
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-simple-sidebar/blob/master/LICENSE)
  */
 
-body {
+ body {
   overflow-x: hidden;
 }
+
+/* Toggle Styles */
 
 #wrapper {
   padding-left: 0;
@@ -50,7 +52,6 @@ body {
   margin-right: -250px;
 }
 
-
 /* Sidebar Styles */
 
 .sidebar-nav {
@@ -76,47 +77,53 @@ body {
 .sidebar-nav li a:hover {
   text-decoration: none;
   color: #fff;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255,255,255,0.2);
 }
 
-.sidebar-nav li a:active, .sidebar-nav li a:focus {
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
   text-decoration: none;
 }
 
-.sidebar-nav>.sidebar-brand {
+.sidebar-nav > .sidebar-brand {
   height: 65px;
   font-size: 18px;
   line-height: 60px;
 }
 
-.sidebar-nav>.sidebar-brand a {
+.sidebar-nav > .sidebar-brand a {
   color: #999999;
 }
 
-.sidebar-nav>.sidebar-brand a:hover {
+.sidebar-nav > .sidebar-brand a:hover {
   color: #fff;
   background: none;
 }
 
 @media(min-width:768px) {
   #wrapper {
-    padding-left: 0;
+      padding-left: 250px;
   }
+
   #wrapper.toggled {
-    padding-left: 250px;
+      padding-left: 0;
   }
+
   #sidebar-wrapper {
-    width: 0;
+      width: 250px;
   }
+
   #wrapper.toggled #sidebar-wrapper {
-    width: 250px;
+      width: 0;
   }
+
   #page-content-wrapper {
-    padding: 20px;
-    position: relative;
+      padding: 20px;
+      position: relative;
   }
+
   #wrapper.toggled #page-content-wrapper {
-    position: relative;
-    margin-right: 0;
+      position: relative;
+      margin-right: 0;
   }
 }

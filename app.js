@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+
 // Import multer
 var multer = require('multer');
 var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 150000000000000, files:1} });
@@ -21,6 +22,8 @@ var videos = require('./server/controllers/videos');
 var list = require('./server/controllers/productlist');
 // Import payment controller
 var payment = require('./server/controllers/paymentController');
+var stripe = require('stripe')('sk_test_RS2ZwJbELQPZS0aUxODCdZC9');
+const exphbs = require('express-handlebars');
 // Import Receipt Controller
 var receipt = require('./server/controllers/receiptController');
 // Import display (admin) controller
@@ -31,6 +34,8 @@ var account = require('./server/controllers/account');
 var transactions = require('./server/controllers/transactions')
 // Import offers controller
 var offers = require('./server/controllers/offers');
+// Import listPayments controller
+var listPayments = require('./server/controllers/listPaymentsController')
 
 // Modules to store session
 var myDatabase = require('./server/controllers/database');
@@ -113,11 +118,15 @@ app.get('/display', auth.isLoggedIn, display.displayOrder);
 app.get('/profile', auth.isLoggedIn, list.profileItems);
 
 // Route for account
-app.get('/account', account.display_account);
+app.get('/account', auth.isLoggedIn, account.displayAccount);
+app.post('/account', auth.isLoggedIn, account.editAccount);
 
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
-app.post('/payment/:id', payment.create);
+app.post('/payment/stripe/',  payment.doStripe);
+app.post('/payment/paypal/',  payment.create);
+
+app.get('/listPayments', auth.isLoggedIn, listPayments.getItem);
 
 // Route for receipt
 app.get('/receipt/:id/:payment_id', receipt.getItem);
@@ -128,6 +137,11 @@ app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
 });
+
+// Change password
+app.get('/changepassword', auth.isLoggedIn, account.displayAccount
+);
+
 
 // Setup routes for comments
 app.get('/comments', comments.hasAuthorization, comments.list);
