@@ -48,8 +48,7 @@ const productlist = sequelize.define('productlist', {
     PickUpLocation: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: "Nanyang Polytechnic"
-    }
+    },
 });
 
 // force: true will drop the table if it already exists

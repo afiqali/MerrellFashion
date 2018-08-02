@@ -12,8 +12,8 @@ var sequelize = myDatabase.sequelize;
 
 // Show images gallery -  function to get all the uploaded images from the database and show it on the page. 
 exports.show = function (req, res) {
-
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a'"
+    var currentuser = req.user.id
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <>'" +currentuser+"'"
     , { model: productlist}).then((productlists)=> {
 
         res.render('products-gallery', {
@@ -32,9 +32,9 @@ exports.show = function (req, res) {
 };
 
 exports.showCategory = function (req, res) {
-
+    var currentuser = req.user.id
     var Itemcategory = req.params.category;
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.category ='" +Itemcategory+"'"
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.category ='" +Itemcategory+"' and i.user_id <>'" +currentuser+"'"
     , { model: productlist}).then((productlists)=> {
 
         res.render('products-gallery', {
@@ -94,7 +94,7 @@ exports.uploadImage = function (req, res) {
             price: req.body.price,
             category: req.body.category,
             Description: req.body.Description,
-            PickUpLocation: req.PickUpLocation,
+            PickUpLocation: req.body.PickUpLocation,
             created: req.created,
             status: req.status
         }
@@ -105,7 +105,7 @@ exports.uploadImage = function (req, res) {
                     message: "error"
                 });
             }
-            res.redirect('products-gallery');
+            res.redirect('profile');
         })
 
          // remove from temp folder
@@ -114,7 +114,7 @@ exports.uploadImage = function (req, res) {
                 return res.status(500).send('Something bad happened here');
             }
             // Redirect to gallery's page
-            res.redirect('products-gallery');
+            res.redirect('profile');
         });
     });
 };
@@ -152,25 +152,6 @@ exports.specificlist = function(req, res) {
     });
 }
 
-// Update student record in database
-exports.update = function(req, res) {
-    var record_num = req.params.id;
-    var updateData = {
-        ItemName: req.body.ItemName,
-        price: req.body.price,
-        category: req.body.category,
-        Description: req.body.Description,
-        imageName: req.file.originalname,
-    }
-    productlist.update(updateData, { where: {Itemid: record_num} }).then((updatedRecord) => {
-        if (!updatedRecord || updatedRecord ==0) {
-            return res.send(400, {
-                message: "error"
-            });
-        }
-        res.status(200).send({ message: "Updated item details:" + record_num});
-    })
-}
 
 // Update/Editing listing record in database
 exports.updatetest = function (req, res) {
@@ -261,6 +242,68 @@ exports.delete = function(req, res) {
         
     });
 }
+
+// exports.SortHighToLow = function (req, res) {
+//     var search = req.params.search;
+//     console.log(search)
+//     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.ItemName like '%"+search+"%' and i.user_id <>'" +currentuser+"'"
+//     , { model: productlist}).then((productlists)=> { 
+
+//         res.render('products-gallery', {
+//             title: 'Product For Sale',
+//             productlists: productlists,
+//             user: req.user,
+//             urlPath: req.protocol + "://" + req.get("host") + req.url
+//         });
+
+//     }).catch((err) => {
+//         return res.status(400).send({
+//             message: err
+//         });
+//     });
+// };
+
+exports.searchfunction = function (req, res) {
+    var search = req.params.search;
+    var currentuser = req.user.id
+    console.log(search)
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.ItemName like '%" +search+"%' and i.user_id <> '"+ currentuser+"'"
+    , { model: productlist}).then((productlists)=> {
+
+        res.render('products-gallery', {
+            title: 'Product For Sale',
+            productlists: productlists,
+            user: req.user,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
+
+exports.profileItems = function (req, res) {
+    currentuser = req.user.id
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id where i.user_id ='"+currentuser+"' and status <> 'd'"
+    , { model: productlist}).then((productlists)=> {
+
+        res.render('profile', {
+            title: 'Profile Page', 
+            user : req.user, 
+            avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true),
+            productlists: productlists,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
+
 
 // Images authorization middleware
 exports.hasAuthorization = function(req, res, next) {
