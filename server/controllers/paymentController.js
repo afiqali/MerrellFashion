@@ -18,11 +18,12 @@ exports.getItem = function(req,res) {
             title: 'Payment Page',
             user: req.user,
             item: item,
+            
             hostPath: req.protocol + "://" + req.get("host")
         });
     }).catch((err) => {
         return res.status(400).send({
-            message:err
+                        message:err
         });
     });
 
@@ -32,13 +33,13 @@ exports.getItem = function(req,res) {
 exports.create = function (req, res) {
     console.log("creating payment");
     payment_id = req.body.payment_id;
-
+    console.log(req.body.totalAmount)
 
     var orderData = {
         payment_id: req.body.payment_id,
         payer_id : req.body.payer_id,
         user_id: req.user.id,
-        totalAmount: req.body.totalAmount,
+        totalAmount: parseFloat(req.body.totalAmount),
         status: req.body.status,
         orderMethod: req.body.orderMethod
     }
@@ -60,10 +61,7 @@ exports.doStripe = function (req,res) {
         
         const token = req.body.stripeToken; // Using Express
         var amount1 = req.body.price1;
-        console.log(amount1);
-        amount1 = parseFloat(req.body.price1);
-        console.log("Post is working");
-        console.log(amount1);
+        amount1 = parseFloat(req.body.price1)*100;
         var charge = stripe.charges.create({
             amount: amount1,
             currency: 'sgd',
@@ -76,8 +74,8 @@ exports.doStripe = function (req,res) {
                 payment_id: charge.id,
                 payer_id : charge.source.id,
                 user_id: req.user.id,
-                totalAmount: req.body.totalAmount,
-                status: req.body.status,
+                totalAmount: req.body.price1,
+                status: req.body.status1,
                 orderMethod: charge.source.brand
             }
         
