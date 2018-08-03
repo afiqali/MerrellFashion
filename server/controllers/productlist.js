@@ -15,6 +15,7 @@ exports.show = function (req, res) {
     var currentuser = req.user.id
     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <>'" +currentuser+"'"
     , { model: productlist}).then((productlists)=> {
+        
 
         res.render('products-gallery', {
             title: 'Product For Sale',
