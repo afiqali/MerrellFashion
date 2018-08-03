@@ -30,9 +30,9 @@ const Users = sequelize.define('Users', {
     address: {
         type: Sequelize.STRING
     },
-    profilePicture: {
-        type: Sequelize.STRING
-    }
+    // profilePicture: {
+    //     type: Sequelize.STRING
+    // }
 });
 
 // force: true will drop the table if it already exists
