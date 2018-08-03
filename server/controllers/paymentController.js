@@ -33,10 +33,11 @@ exports.getItem = function(req,res) {
 exports.create = function (req, res) {
     console.log("creating payment");
     payment_id = req.body.payment_id;
-    console.log(req.body.totalAmount)
+    console.log((req.body.item_id).toString())
 
     var orderData = {
         payment_id: req.body.payment_id,
+        Itemid: req.params.id,
         payer_id : req.body.payer_id,
         user_id: req.user.id,
         totalAmount: parseFloat(req.body.totalAmount),
@@ -50,10 +51,24 @@ exports.create = function (req, res) {
                 message: "error"
             });
         }
+        var updateData = {
+            status: 'c'
+        }
+    
+        itemModel.update(updateData, { where: {Itemid: itemID} }).then((updatedRecord) => {
+            if (!updatedRecord || updatedRecord ==0) {
+                return res.send(400, {
+                    message: "error"
+                });
+            }
+
+        })
         // var url;
         url = '/receipt/' + itemID.toString() + '/' + payment_id;
         res.redirect(url);
     })
+
+
 }
 
 // Do Stripe things - POST
@@ -69,9 +84,11 @@ exports.doStripe = function (req,res) {
             source: token,
         }).then(function(charge){
             console.log(JSON.stringify(charge))
+            console.log(req.body.item_id1)
             console.log("did it even create")
             var stripeData = {
                 payment_id: charge.id,
+                Itemid: req.params.id,
                 payer_id : charge.source.id,
                 user_id: req.user.id,
                 totalAmount: req.body.price1,
@@ -86,6 +103,18 @@ exports.doStripe = function (req,res) {
                     });
                 }
                 // var url;
+                var updateData = {
+                    status: 'c'
+                }
+            
+                itemModel.update(updateData, { where: {Itemid: itemID} }).then((updatedRecord) => {
+                    if (!updatedRecord || updatedRecord ==0) {
+                        return res.send(400, {
+                            message: "error"
+                        });
+                    }
+        
+                })
                 url = '/receipt/' + itemID.toString() + '/' + charge.id;
                 res.redirect(url);
             })
@@ -94,5 +123,7 @@ exports.doStripe = function (req,res) {
             message:err
         });
         });
+
+
 }
 
