@@ -123,8 +123,8 @@ app.post('/account', auth.isLoggedIn, account.editAccount);
 
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
-app.post('/payment/stripe/',  payment.doStripe);
-app.post('/payment/paypal/',  payment.create);
+app.post('/payment/stripe/:id',  payment.doStripe);
+app.post('/payment/paypal/:id',  payment.create);
 
 app.get('/listPayments', auth.isLoggedIn, listPayments.getItem);
 
@@ -156,8 +156,7 @@ app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uplo
 app.get('/transactions', transactions.list);
 app.get('/')
 // Setup routes for offers
-app.get('/offers', offers.displayButton);
-app.post('/offers', offers.makeOffer);
+app.post('/messages/:id', offers.makeOffer);
 
 // Setup chat
 

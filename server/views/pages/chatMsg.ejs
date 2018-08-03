@@ -112,21 +112,20 @@ img {
         <div class="panel-body"><img alt="" align="left" src="/publicPRODUCT/images/<%= productlist.imageName %>">
         <strong><h3><%= productlist.ItemName%></h3></strong>
         <p><%= productlist.Description%></p></div>
-        <form action="/messages" class="makeOffer" method="post">
+        <form action="/messages/<%= productlist.Itemid%>" class="makeOffer" method="POST">
         <div class="moBtn">
         <div class="input-group u-horizontal-full aC-i">
         <span class="input-group-addon">S$</span>
-        <input type="number" step="1" min="0" id="chatPriceInput" value=<%= productlist.price%> name="chatPriceInput" class="form-control u-horizontal-full" required="">
+        <input type="number" step="0.01" min="0" name="offerAmount" class="form-control u-horizontal-full" required="" value=<%= productlist.price%>>
         </div>
         </div>    
-        <!-- <button id="makeOfferButton" class="btn btn-block b-r text-small b-r"> -->
-        
-        <span><a href="http://localhost:3000/payment/<%= productlist.Itemid%>" id="#offer">Make Offer</a></span>
-<!-- 
-        <button type="submit" id="makeOfferButton" class="btn btn-block b-r text-small b-r"> -->
+        <button type="submit" id="makeOfferButton" class="btn btn-block b-r text-small b-r">
         <span>Make Offer</span>
         </button>
     </form>
+        <button id="makeOfferButton" class="btn btn-block b-r text-small b-r">
+            <span><a href="http://localhost:3000/payment/<%= productlist.Itemid%>" id="#offer">Make Offer</a></span>
+        </button>
     </div>
 
     <div class="chat" id="border">

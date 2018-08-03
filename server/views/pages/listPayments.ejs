@@ -8,16 +8,25 @@
         <script src="https://www.paypalobjects.com/api/checkout.js"></script>
         
         <% include ../partials/stylesheet %>
+
+        <style>
+            .responsive {
+            width: 25%;
+            height: auto;
+            border-radius:10px;
+            margin: 1em;
+        }
+        </style>
     </head>
 
     <body>
 
-            <div class="container" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
-                    <h1 style="margin:auto;text-align: center;padding:5px"><a href="http://localhost:3000/products-gallery/" style="text-decoration: none;color:darkmagenta;"> Merrell Fashion </a></h1>
-                    <h5 style="margin:auto;text-align:center;padding:5px"><%= title %></h5>
-                </div>
+        <div class="responsive" style="display: block;margin:auto 0;position: relative;margin:2em;width:40%">
+            <h1 ><a href="http://localhost:3000/products-gallery/" style="text-decoration: none"> Merrell Fashion </a></h1>
+            <h5 style=""><%= title %></h5>
+        </div>
 
-        <% receipt.forEach(function(receipt){ %>
+        <% for(i=0;i<receipt.length;i++) { %>
         <div class="list-group">
 
             <a href="#" class="list-group-item">
@@ -29,13 +38,16 @@
                         </h4>
                         
                         <p class="list-group-item-text">
-                              Price: <%= receipt.price %>
+                            Name: <%= item[i].ItemName %>
                         </p>
                         <p class="list-group-item-text">
-                            Category: <%= receipt.category %>
+                              Price: <%= (receipt[i].totalAmount).toFixed(2) %>
                         </p>
                         <p class="list-group-item-text">
-                            Description: <%= receipt.Description %>
+                            Category: <%= item[i].category %>
+                        </p>
+                        <p class="list-group-item-text">
+                            Description: <%= item[i].Description %>
                         </p> <br>
                        
 
@@ -45,27 +57,32 @@
                             Your Receipt:
                         </h4>
                         <p class="list-group-item-text">
-                            Payment ID (Keep this for future reference): 
+                            Payment ID (Keep this for future reference):  <%= receipt[i].payment_id %>
                             </p>
                         <p class="list-group-item-text">
-                            Payer id: 
+                            Payer id: <%= receipt[i].payer_id %>
                         </p>
                         <p class="list-group-item-text">
-                            Status: 
+                            
+                            <% if (receipt[i].status="c") {  %>
+                                Status: Payment Completed
+                            <% } %>
+
+
+
                         </p>
                         <p>
-                            Order Method: 
+                            Order Method: <%= receipt[i].orderMethod %>
                         </p>
 
-                        <h5> Your payment has been made. Please proceed to place your order details.</h5>
 
                     </form>
                 </div>
             </a>
     </div>
-    <% }); %>
-    <div class="container" style="border:1px; border-radius:20px;border-color: darkmagenta;background-color:#FBFBF9; padding:0px;width:300px;margin-left:50px;margin:30px; ">
-    <button class="btn btn-large"style="background-color:darkmagenta;"> <a href="http://localhost:3000/profile" style="color:white;text-decoration: none;margin-left:50px;margin:30px;"> Back to Profile</a></button>
-    </div>
+    <% } %>
+    <div class="responsive" style="display: block;margin:auto 0;position: relative;margin:2em;width:40%;" >
+        <button class="btn btn-large btn-primary"style=""> <a href="http://localhost:3000/profile" style="color:white;text-decoration: none"> Back to Profile</a></button>
+        </div>
     </body>
 </html>

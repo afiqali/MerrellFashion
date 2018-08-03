@@ -163,7 +163,7 @@
                           <div style="padding-left:20px;">
                           <h5><i class="fa fa-user"></i> Name:  <%= user.name %></h5> 
                           <h5><i class="fa fa-envelope"></i> Email: <%= user.email %></h5> 
-                          <h5><i class="fa fa-address-card-o"></i> Pick-Up Address: <%= item.PickUpLocation%></h5> 
+                          <h5><i class="fa fa-address-card-o"></i> Pick-Up Address: <%= user.address %></h5> 
                         </div>
                         </div>
                         <br><br>
@@ -184,7 +184,7 @@
                           <h6> Subtotal : S$<%= item.price.toFixed(2) %> </h6>
                           <h6> GST (7%) : S$<%= (item.price*0.07).toFixed(2)%></h6>
                           <h6> Delivery Tax (10%) : S$<%= (item.price*0.1).toFixed(2)%></h6>
-                          <h5><strong> Total : <u>S$<%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%></u> </strong></h5>
+                          <h5><strong> Total : <u>S$<%= (parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))).toFixed(2)%></u> </strong></h5>
                       </div>
                       <hr>
                       <br>
@@ -201,7 +201,7 @@
 
         <!-- Stripe Form -->
         <div class="container" style="padding:0px;border-radius:10px" >
-        <form action="/payment/stripe" method="POST" id="stripeForm">
+        <form action="/payment/stripe/<%=item.Itemid%>" method="POST" id="stripeForm">
                 <script
                     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                     data-key="pk_test_GasPdW35Y0J14wRCw9fzeDtI"
@@ -215,6 +215,7 @@
                 </script>
                 <input id="price1" name="price1" type="hidden" value="<%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%>">
                 <input id="status1" name="status1" type="hidden" value="VERIFIED">
+                <input id="item_id1" name="item_id1" type="hidden" value"<%= item.Itemid %>">
         </form>
         <br>
         <p style="font-size: 11px;text-align: center"> * We accept these cards * </p>
@@ -249,7 +250,7 @@
         </div>
 
         
-        <form action="/payment/paypal" method="POST" id="pay" >
+        <form action="/payment/paypal/<%=item.Itemid%>" method="POST" id="pay" >
             <div class="modal-body">
 
                 <fieldset class="form-group">
@@ -261,7 +262,10 @@
                 <fieldset class="form-group">
                     <input type="hidden" id="payment_id" name="payment_id">
                 </fieldset>
-
+                
+                <fieldset class="form-group">
+                    <input id="item_id" name="item_id" type="hidden" value="<%= item.Itemid %>">
+                </fieldset> 
                 <fieldset class="form-group">
                     <input id="status" type="hidden" name="status">
                 </fieldset>
