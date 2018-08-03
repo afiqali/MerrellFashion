@@ -243,28 +243,87 @@ exports.delete = function(req, res) {
     });
 }
 
-// exports.SortHighToLow = function (req, res) {
-//     var search = req.params.search;
-//     console.log(search)
-//     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.ItemName like '%"+search+"%' and i.user_id <>'" +currentuser+"'"
-//     , { model: productlist}).then((productlists)=> { 
+exports.SortHighToLow = function (req, res) {
+    var currentuser = req.user.id
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <>'" +currentuser+"' order by i.price desc"
+    , { model: productlist}).then((productlists)=> { 
 
-//         res.render('products-gallery', {
-//             title: 'Product For Sale',
-//             productlists: productlists,
-//             user: req.user,
-//             urlPath: req.protocol + "://" + req.get("host") + req.url
-//         });
+        res.render('products-gallery', {
+            title: 'Product For Sale',
+            productlists: productlists,
+            user: req.user,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
 
-//     }).catch((err) => {
-//         return res.status(400).send({
-//             message: err
-//         });
-//     });
-// };
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
+
+exports.SortLowToHigh = function (req, res) {
+    var currentuser = req.user.id
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '"+currentuser+"' order by i.price asc"
+    , { model: productlist}).then((productlists)=> { 
+
+        res.render('products-gallery', {
+            title: 'Product For Sale',
+            productlists: productlists,
+            user: req.user,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
+
+exports.SortPriceRange = function (req, res) {
+    var min = req.params.min
+    var max = req.params.max
+    var currentuser = req.user.id
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '"+currentuser+"' and i.price BETWEEN "+min+" AND "+max 
+    , { model: productlist}).then((productlists)=> { 
+
+        res.render('products-gallery', {
+            title: 'Product For Sale',
+            productlists: productlists,
+            user: req.user,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
+
+exports.SortRecent = function (req, res) {
+    var currentuser = req.user.id
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '"+currentuser+"' order by i.created"
+    , { model: productlist}).then((productlists)=> { 
+
+        res.render('products-gallery', {
+            title: 'Product For Sale',
+            productlists: productlists,
+            user: req.user,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
 
 exports.searchfunction = function (req, res) {
     var search = req.params.search;
+    
     var currentuser = req.user.id
     console.log(search)
     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.ItemName like '%" +search+"%' and i.user_id <> '"+ currentuser+"'"

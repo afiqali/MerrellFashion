@@ -6,22 +6,29 @@
     <% include ../partials/stylesheetPRODUCT %>
     <% include ../partials/stylesheetSlick %>
     <style>
+        p .descriptioncss{
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 10%;
+        }
+        
     
-    .carousel-inner .carousel-item-right.active,
-    .carousel-inner .carousel-item-next {
-      transform: translateX(25%);
-    }
+        .carousel-inner .carousel-item-right.active,
+        .carousel-inner .carousel-item-next {
+        transform: translateX(25%);
+        }
 
-    .carousel-inner .carousel-item-left.active, 
-    .carousel-inner .carousel-item-prev {
-      transform: translateX(-25%)
-    }
-      
-    .carousel-inner .carousel-item-right,
-    .carousel-inner .carousel-item-left{ 
-      transform: translateX(0);
-    }
-</style>
+        .carousel-inner .carousel-item-left.active, 
+        .carousel-inner .carousel-item-prev {
+        transform: translateX(-25%)
+        }
+        
+        .carousel-inner .carousel-item-right,
+        .carousel-inner .carousel-item-left{ 
+        transform: translateX(0);
+        }
+    </style>
   
 </head>
 <body>
@@ -92,22 +99,25 @@
                               
                                 <div class="col-lg mb-4" data-id="<%= productlists.Itemid %>">
                                   <div class="card h-100" data-id ="<%= productlists.Itemid%>" >
-                                  <img src="/publicPRODUCT/images/<%= productlists.imageName %>" class="figure-img img-fluid img-rounded specific" alt="<%= productlists.imageName %>"  style="max-width: 100%; height:250px;">
-                                    <div class="card-body" style="min-height:164px;">
-                                      <h4 class="card-title">
-                                        <a href="#"><%= productlists.ItemName %></a>
-                                      </h4>
-                                      <hr>
-                                      <h5>
-                                        Price: $<%= productlists.price %> 
-                                        <br>
-                                        Category: <%= productlists.category %>
-                                      </h5>
+                                  <img src="/publicPRODUCT/images/<%= productlists.imageName %>" class="figure-img img-fluid img-rounded specific" alt="<%= productlists.imageName %>"  style="max-width: 100%; height:250px; margin:15px">
+                                    <div class="card-body" style="min-height:164px; max-height: 164px">
+                                            <p class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 95%; font-size: 24px" >
+                                                    <a href="<%-urlPath %>/view/<%= productlists.Itemid%>" %>>
+                                                        <%= productlists.ItemName %>
+                                                    </a>
+                                                </p>
+                                                <hr>
+                                                <p>
+                                                    Price: $<%= productlists.price %> 
+                                                </p>
+                                                <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;" >
+                                                    <%= productlists.Description %>
+                                                </p>
                                       <p class="card-text"></p>
                                     </div>
                                     <div class="card-footer" data-id="<%= productlists.Itemid %>">
-                                        <input type="button" class="editBtn" value="Edit">
-                                        <input type="button" class="deleteBtn"  value="Delete">
+                                        <input type="button" class="btn btn-primary editBtn" value="Edit">
+                                        <input type="button" class="btn btn-danger deleteBtn"  value="Delete">
                   
                                     </div>
                                   </div>
@@ -142,7 +152,9 @@
             $('.your-class').slick({
                 infinite: true,
                 slidesToShow: 3,
-                slidesToScroll: 3
+                slidesToScroll: 3,
+                autoplay: true,
+                autoplaySpeed: 2000,
             });
             
 
