@@ -115,10 +115,11 @@ app.post('/signup', passport.authenticate('local-signup', {
 app.get('/display', auth.isLoggedIn, display.displayOrder);
 
 // Route for profile
-app.get('/profile', auth.isLoggedIn, auth.profile);
+app.get('/profile', auth.isLoggedIn, list.profileItems);
 
 // Route for account
-app.get('/account', account.display_account);
+app.get('/account', auth.isLoggedIn, account.displayAccount);
+app.post('/account', auth.isLoggedIn, account.editAccount);
 
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
@@ -137,6 +138,11 @@ app.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
+// Change password
+app.get('/changepassword', auth.isLoggedIn, account.displayAccount
+);
+
+
 // Setup routes for comments
 app.get('/comments', comments.hasAuthorization, comments.list);
 app.post('/comments', comments.hasAuthorization, comments.create);
@@ -154,21 +160,29 @@ app.get('/offers', offers.displayButton);
 app.post('/offers', offers.makeOffer);
 
 // Setup chat
-// Setup routes for product listing
-app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
-// app.get('/products-dresses', list.hasAuthorization, list.showDress)
-// app.get('/products-HighHeels', list.hasAuthorization, list.showHeels)
-app.get('/products-gallery/:category',list.hasAuthorization, list.showCategory)
-app.get('/products-gallery', list.hasAuthorization, list.show);
-app.get("/products-gallery/edit/:id",list.hasAuthorization, list.editRecord);
-app.get("/products-gallery/:category/edit/:id",list.hasAuthorization, list.editRecord);
-app.post("/edit/:id",list.hasAuthorization, upload.single('image'), list.updatetest);
-app.delete("/products-gallery/:category/:id",list.hasAuthorization, list.delete);
-app.delete("/products-gallery/:id",list.hasAuthorization, list.delete);
 
+// Setup routes for product listing general
+app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
+app.get('/products-gallery', list.hasAuthorization, list.show);
+app.get('/products-gallery/:category',list.hasAuthorization, list.showCategory)
+
+
+//Setup routes for product editing
+app.get("/profile/edit/:id",list.hasAuthorization, list.editRecord);
+app.post("/edit/:id",list.hasAuthorization, upload.single('image'), list.updatetest);
+
+//Setup routes for product delete
+app.delete("/profile/:id",list.hasAuthorization, list.delete);
+
+//Setup routes for product searching
+app.get('/products-gallery/search/:search', list.searchfunction);
 
 // Setup routes for specific product list
+app.get('/products-gallery/:category/view/:id', list.hasAuthorization, list.specificlist)
 app.get('/products-gallery/view/:id', list.specificlist);
+app.get('/products-gallery/search/:search/view/:id', list.specificlist);
+app.get('/profile/view/:id', list.specificlist);
+
 
 // Setup Chat
 var io = require('socket.io')(httpServer);

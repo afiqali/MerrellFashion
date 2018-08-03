@@ -29,6 +29,9 @@ const Users = sequelize.define('Users', {
     },
     address: {
         type: Sequelize.STRING
+    },
+    profilePicture: {
+        type: Sequelize.STRING
     }
 });
 
