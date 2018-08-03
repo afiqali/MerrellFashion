@@ -37,7 +37,7 @@
                             Your Item:
                         </h4>
                         <p class="list-group-item-text">
-                              Price:  <%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%>
+                              Price:  <%= (parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))).toFixed(2)%>
                         </p>
                         <p class="list-group-item-text">
                             Category: <%= item.category %>
