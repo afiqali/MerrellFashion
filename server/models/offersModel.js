@@ -12,6 +12,10 @@ const offers = sequelize.define('offers', {
         type: Sequelize.STRING,
         allowNULL: false,
     },
+    itemID: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
     acceptOffer: {
         type: Sequelize.BOOLEAN,
         allowNULL: false,

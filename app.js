@@ -156,8 +156,7 @@ app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uplo
 app.get('/transactions', transactions.list);
 app.get('/')
 // Setup routes for offers
-app.get('/offers', offers.displayButton);
-app.post('/offers', offers.makeOffer);
+app.post('/messages/:id', offers.makeOffer);
 
 // Setup chat
 
