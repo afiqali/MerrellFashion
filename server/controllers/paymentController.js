@@ -50,10 +50,24 @@ exports.create = function (req, res) {
                 message: "error"
             });
         }
+        var updateData = {
+            status: 'c'
+        }
+    
+        itemModel.update(updateData, { where: {Itemid: itemID} }).then((updatedRecord) => {
+            if (!updatedRecord || updatedRecord ==0) {
+                return res.send(400, {
+                    message: "error"
+                });
+            }
+
+        })
         // var url;
         url = '/receipt/' + itemID.toString() + '/' + payment_id;
         res.redirect(url);
     })
+
+
 }
 
 // Do Stripe things - POST
@@ -86,6 +100,18 @@ exports.doStripe = function (req,res) {
                     });
                 }
                 // var url;
+                var updateData = {
+                    status: 'c'
+                }
+            
+                itemModel.update(updateData, { where: {Itemid: itemID} }).then((updatedRecord) => {
+                    if (!updatedRecord || updatedRecord ==0) {
+                        return res.send(400, {
+                            message: "error"
+                        });
+                    }
+        
+                })
                 url = '/receipt/' + itemID.toString() + '/' + charge.id;
                 res.redirect(url);
             })
@@ -94,5 +120,7 @@ exports.doStripe = function (req,res) {
             message:err
         });
         });
+
+
 }
 
