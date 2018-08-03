@@ -1,17 +1,16 @@
 var offersModel = require("../models/offersModel");
 var myDatabase = require("../controllers/database");
 var Sequelize = myDatabase.Sequelize;
-
-exports.displayButton = function(req, res) {
-    res.render("offers")
-}
+var itemModel =  require("../models/productlist");
 
 exports.makeOffer = function( req, res) {
     console.log("making offer")
+    var itemID = parseInt(req.params.id);
 
     var offerData = {
         offerAmount: req.body.offerAmount,
         userID: req.user.id,
+        itemID: itemID
     }
 
     offersModel.create(offerData).then((newOffer, created) => {
@@ -20,6 +19,15 @@ exports.makeOffer = function( req, res) {
                 message: "error"
             });
         }
-        res.redirect("/offers")
+        url = '/messages/' + itemID.toString() + '/';
+        res.redirect(url);
     })
+}
+
+exports.displayOffers = function( req, res) {
+    console.log("offers displayed")
+
+    userSeller = req.user.id
+    Sequelize.Query("select *, u.id from offers o join productslist pd on o.userID = pd.UserID")
+    
 }
