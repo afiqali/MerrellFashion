@@ -226,6 +226,7 @@ exports.updatetest = function (req, res) {
 
     }
 
+
 // Delete a student record from database
 exports.delete = function(req, res) {
     var record_num = req.params.id;
@@ -283,9 +284,9 @@ exports.SortLowToHigh = function (req, res) {
 };
 
 exports.SortPriceRange = function (req, res) {
-    var min = req.params.min
-    var max = req.params.max
-    var currentuser = req.user.id
+    var min = req.params.min;
+    var max = req.params.max;
+    var currentuser = req.user.id;
     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '"+currentuser+"' and i.price BETWEEN "+min+" AND "+max 
     , { model: productlist}).then((productlists)=> { 
 
@@ -324,7 +325,6 @@ exports.SortRecent = function (req, res) {
 
 exports.searchfunction = function (req, res) {
     var search = req.params.search;
-    
     var currentuser = req.user.id
     console.log(search)
     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.ItemName like '%" +search+"%' and i.user_id <> '"+ currentuser+"'"

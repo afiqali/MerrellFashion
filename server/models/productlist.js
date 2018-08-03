@@ -11,7 +11,7 @@ const productlist = sequelize.define('productlist', {
     },
     created: {
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        defaultValue: sequelize.now
     },
     ItemName: {
         type: Sequelize.STRING,
