@@ -95,7 +95,7 @@
                   <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-dollar-sign"></i>
                      <%= productspecific.price%> </p>
                   <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="far fa-clock"></i>
-                       <%= productspecific.created%> </p>
+                       <text id="datetimeformatting"></text> </p>
                   <% if (productspecific.status == 'a') { %>
                     <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-check"></i></i>
                      Available</p>  
@@ -131,7 +131,22 @@
       <!-- /.container -->
     </footer>
 
+    
     <!-- Bootstrap core JavaScript -->
+    <script>
+      function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [day, month, year].join('-');
+    }
+    document.getElementById('datetimeformatting').innerHTML =  formatDate("<%= productspecific.created%>") ;
+</script>
     <% include ../partials/JavascriptPRODUCT %>
 
   </body>
