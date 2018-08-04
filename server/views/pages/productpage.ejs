@@ -8,106 +8,146 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Shop Item </title>
+    <title>Product Details</title>
+
+    <!-- Bootstrap core CSS -->
     <% include ../partials/stylesheetPRODUCT %>
     <!-- Custom styles for this template -->
-    <link href="/publicPRODUCT/stylesheets/shop-item.css" rel="stylesheet">
+    <link href="/publicPRODUCT/stylesheets/blog-home.css" rel="stylesheet">
 
   </head>
 
   <body>
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="/">Merell Fashion</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="/">Home
-                <span class="sr-only">(current)</span>
-              </a>
+        <div class="container">
+          <a class="navbar-brand" href="/">Merell Fashion</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="/">Home
+                  <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Sign in</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/login">Sign in</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="/signup">Sign up</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="/profile">Profile</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="/comments">Comments</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="/videos">Videos</a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="/products-gallery">Products</a>
-          </li>
-          
-          </ul>
+                <a class="nav-link" href="/signup">Sign up</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/profile">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/comments">Comments</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/videos">Videos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/products-gallery">Products</a>
+            </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </nav>
+      </nav>
 
     <!-- Page Content -->
     <div class="container">
 
       <div class="row">
 
-        <div class="col-lg-9">
+        <!-- Blog Entries Column -->
+        <div class="col-md-7" style="top:30px">
 
-          <div class="card mt-4">
-            <img src="/publicPRODUCT/images/<%= productspecific.imageName %>" class="figure-img img-fluid img-rounded specific" alt="<%= productspecific.imageName %>">
+          <!-- Blog Post -->
+          <div class="card mb-4">
+            <img class="card-img-top" src="/publicPRODUCT/images/<%= productspecific.imageName %>" alt="<%= productspecific.imageName %>" style="max-width: fit-content; align-self: center; ">
             <div class="card-body">
-              <h3 class="card-title"><%= productspecific.ItemName%></h3>
-              <h4>Price: $<%=productspecific.price%></h4>
-              <p class="card-text"><%= productspecific.Description%></p>
-              <p class="card-text"><%= productspecific.user%></p>
-              <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
-              4.0 stars
-              <br>
-              <br>
-              <a href="/messages/<%= productspecific.Itemid%>" class="btn btn-success">Chat now to make offer</a>
-            </div>
+                <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-portrait"></i>
+                <%= productspecific.user_id%></p>
+                <hr>
+                <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-check"></i></i>
+                 <%= productspecific.price%></p>
+                
+                </div>
+            
+          
           </div>
-          <!-- /.card -->
-
-          <div class="card card-outline-secondary my-4">
-            <div class="card-header">
-              Product Reviews
-            </div>
-            <div class="card-body">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-              <small class="text-muted">Posted by Anonymous on 3/1/17</small>
-             
-            </div>
-          </div>
-          <!-- /.card -->
 
         </div>
-        <!-- /.col-lg-9 -->
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-5">
+
+            <!-- Search Widget -->
+            <div class="card my-4">
+              <h5 class="card-header">Item Details</h5>
+              <div class="card-body">
+                  <h2 class="card-title" style="font-family:system-ui ;font-size:24px ;color: #222222;"><%= productspecific.ItemName %></h2>
+                  <hr>
+                  <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-info-circle"></i>
+                     <%= productspecific.Description%> </p>
+                  <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-dollar-sign"></i>
+                     <%= productspecific.price%> </p>
+                  <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="far fa-clock"></i>
+                       <text id="datetimeformatting"></text> </p>
+                  <% if (productspecific.status == 'a') { %>
+                    <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-check"></i></i>
+                     Available</p>  
+                  <% }else if (productspecific.status == 'd') { %>
+                    <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-check"></i></i>
+                     DELETED-Not Available</p>
+                  <% }else if (productspecific.status == 'c') { %>
+                    <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-check"></i></i>
+                     Completed Transaction</p>
+                  <% } %>
+                  <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-bars"></i>
+                      <a href="/products-gallery/<%= productspecific.category%>"><%= productspecific.category%></a></p>
+                      
+                  <a href="/messages/<%= productspecific.Itemid%>" class="btn btn-secondary" style="min-width: 100%">Chat now to make offer</a>
+                  </div>
+              </div>
+            </div>
+            </div>
+  
+            
 
       </div>
+      <!-- /.row -->
 
     </div>
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer class="py-5 bg-dark">
+    <footer class="py-5 bg-dark" style ="position: absolute; bottom: 0; width: 100%;">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
       </div>
       <!-- /.container -->
     </footer>
 
-     <!-- Bootstrap core JavaScript -->
-     <% include ../partials/JavascriptPRODUCT %>
+    
+    <!-- Bootstrap core JavaScript -->
+    <script>
+      function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [day, month, year].join('-');
+    }
+    document.getElementById('datetimeformatting').innerHTML =  formatDate("<%= productspecific.created%>") ;
+</script>
+    <% include ../partials/JavascriptPRODUCT %>
 
   </body>
 

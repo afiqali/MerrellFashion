@@ -1,49 +1,51 @@
-// load passport module
+// Import passport-local module
 var LocalStrategy = require('passport-local').Strategy;
-// load up the user model
+// Import User model
 var User = require('../models/users');
 
+// Setup Passport
 module.exports = function (passport) {
-    // passport init setup
-    // serialize the user for the session
+    // Serialize the user in a session by their user.id (key)
     passport.serializeUser(function (user, done) {
         done(null, user.id);
     });
-    // deserialize the user
+
+    // Deserialize the user (get matched data from User model using key, user.id)
     passport.deserializeUser(function (id, done) {
-        User.findById(id).then(function (user) {        // promise syntax
+        User.findById(id).then(function (user) {      
             if (user) {
-                done(null, user.get());                 // 1st param: err, 2nd param:
+                done(null, user.get());                
             } else {
-                done(user.errors, null);                // 1st param: err, 2nd param:
+                done(user.errors, null);                
             }
         });
     });
-    // using local strategy
-    passport.use('local-login', new LocalStrategy({
-        // change default username and password, to email and password
-        usernameField: 'email',            // tells passport set its usernameField to form input id="email"
-        passwordField: 'password',         // tells passport set its passwordField to form input id="password"
-        passReqToCallback: true            // pass the HTML request to the callback - next function
-    },
-        function (req, email, password, done) {     // function (req, usernameField, passwordField, done)
 
-            // format to lower-case
+    // Login local strategy (passport-local module)
+    passport.use('local-login', new LocalStrategy({
+        // Change default username and password
+        usernameField: 'email',            // tell Passport to set its usernameField to form input id="email"
+        passwordField: 'password',         // tell Passport to set its passwordField to form input id="password"
+        passReqToCallback: true            // Pass the HTML request to the callback - next()
+    },
+        function (req, email, password, done) {         // Clearer definition: function (req, usernameField, passwordField, done)
+            // Format to lower-case
             email = email.toLowerCase();
 
-            var isValidPassword = function (userpass, password) {       // function (db_password, passwordField)
+            var isValidPassword = function (userpass, password) {       // Clearer definition: function (db_password, passwordField)
                 return userpass === password;
             }
-            // process asynchronous
+
+            // Asynchronous process
             process.nextTick(function () {
-            
+                // Check if user exists in User db, using email (usernameField)
                 User.findOne({ where: { email: email } }).then((user) => {
-                    // check errors and bring the mess  ages
                     if (!user)
                         return done(null, false, req.flash('loginMessage', 'No such user found.'));
+                    // Check if password exists in User db, using password (passwordField)
                     if (!isValidPassword(user.password, password))
                         return done(null, false, req.flash('loginMessage', 'Wrong password!'));
-                    // everything ok, get user
+                    // Everything ok, get matched user
                     else {
                         return done(null, user.get());
                     }
@@ -54,28 +56,27 @@ module.exports = function (passport) {
             });
         }));
 
-    // Signup local strategy
+    // Signup local strategy (passport-local module)
     passport.use('local-signup', new LocalStrategy({
-        // change default username and password, to email and password
-        usernameField: 'email',
-        passwordField: 'password',
-        passReqToCallback: true
+        // Change default username and password, to email and password
+        usernameField: 'email',         // tell Passport to set its usernameField to form input id="email"
+        passwordField: 'password',      // tell Passport to set its passwordField to form input id="password"
+        passReqToCallback: true         // Pass the HTML request to the callback - next()
     },
         function (req, email, password, done) {
-
-            // format to lower-case
+            // Format to lower-case
             email = email.toLowerCase();
 
-            // asynchronous
+            // Asynchronous process
             process.nextTick(function () {
-                // if the user is not already logged in:
+                // If the user is not already logged in:
                 if (!req.user) {
-                    // check if email is already taken by another user in db
+                    // Check if email is already taken by another user in db
                     User.findOne({ where: { email: email } }).then((user) => {
                         if (user) {
-                            return done(null, false, req.flash('signupMessage', 'Wohh! the email is already taken.'));
+                            return done(null, false, req.flash('signupMessage', 'Woah! the email is already taken.'));
                         } else {
-                            // create the user
+                            // Create the user
                             var userData = {
                                 name: req.body.name,
                                 email: email,
@@ -86,8 +87,8 @@ module.exports = function (passport) {
                                 address: req.body.address
                             }
 
-                            // save data
-                            User.create(userData).then((newUser, created) => {  // If user is created, true is returned (newUser), else false (!newUser). User may not be created due to incompatible info.
+                            // Save data
+                            User.create(userData).then((newUser, created) => {      // If user is created, true is returned (newUser), else false (!newUser). User may not be created due to incompatible info.
                                 if (!newUser) {                 
                                     return done(null, false);
                                 }
@@ -104,5 +105,6 @@ module.exports = function (passport) {
                     return done(null, req.user);
                 }
             });
-        }));
+        }
+    ));
 };
