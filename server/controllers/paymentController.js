@@ -1,6 +1,7 @@
 // get Order model
 var Order = require("../models/paymentModel");
 var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
+var nodemailer = require('nodemailer');
 var itemModel = require("../models/productlist");
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize; 
@@ -63,6 +64,30 @@ exports.create = function (req, res) {
             }
 
         })
+
+        var transporter = nodemailer.createTransport({
+            service: 'yahoo',
+            auth: {
+              user: req.user.email,
+              pass: req.user.password
+            }
+          });
+          
+          var mailOptions = {
+            from: 'tqinyong@yahoo.com.sg',
+            to: req.user.email,
+            subject: 'Sending Email using Node.js',
+            text: 'That was easy!'
+          };
+          
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+
         // var url;
         url = '/receipt/' + itemID.toString() + '/' + payment_id;
         res.redirect(url);
@@ -115,6 +140,30 @@ exports.doStripe = function (req,res) {
                     }
         
                 })
+
+                var transporter = nodemailer.createTransport({
+                    service: 'yahoo',
+                    auth: {
+                      user: req.user.email,
+                      pass: req.user.password
+                    }
+                  });
+                  
+                  var mailOptions = {
+                    from: 'tqinyong@yahoo.com.sg',
+                    to: req.user.email,
+                    subject: 'Sending Email using Node.js',
+                    text: 'That was easy!'
+                  };
+                  
+                  transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                    }
+                  });
+
                 url = '/receipt/' + itemID.toString() + '/' + charge.id;
                 res.redirect(url);
             })

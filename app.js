@@ -10,6 +10,9 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 150000000000000, files:1} });
 
+// Import nodemailer
+var nodemailer = require('nodemailer');
+
 // Import home controller
 var index = require('./server/controllers/index');
 // Import login controller
