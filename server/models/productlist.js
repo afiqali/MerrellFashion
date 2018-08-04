@@ -56,6 +56,15 @@ productlist.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("product table synced");
 
+    // Testing upsert
+    productlist.upsert({
+        Itemid: 1,
+        user_id: 1,
+        ItemName: "Blue dress",
+        price: 10.50,
+        PickUpLocation: "Admiralty St"
+    });
+
 });
 
 module.exports = sequelize.model('productlist', productlist);
