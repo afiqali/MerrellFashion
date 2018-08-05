@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
+    <title>
+        <%= title %>
+    </title>
+
     <% include ../partials/stylesheet %>
+    <% include ../partials/stylesheetPRODUCT %>
+    <% include ../partials/stylesheetSlick %>
 </head>
 <body>
-    <% include ../partials/header %>
+    <% include ../partials/navbar %>
 
     <div class="container">
         <% if (message.length > 0) { %>
@@ -37,7 +42,8 @@
         </form>
     </div>
 
-    <% include ../partials/footer %>
+    <% include ../partials/footer2 %>
+    
     <% include ../partials/javascript %>
 </body>
 </html>
