@@ -11,7 +11,7 @@ exports.getItem = function(req,res) {
     sequelize.query('SELECT * FROM Orders o INNER JOIN productlists p on o.Itemid = p.Itemid WHERE o.user_id =' + user_id  ,{model:Order}).then((receipt) =>{
         sequelize.query('SELECT * FROM Orders o INNER JOIN productlists p on o.Itemid = p.Itemid WHERE o.user_id =' + user_id  ,{model:itemModel}).then((item) =>{
             res.render('listPayments', {
-                title: 'Previous payments.',
+                title: 'Your previous payments.',
                 user: req.user,
                 receipt: receipt,
                 item: item,

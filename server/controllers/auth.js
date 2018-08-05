@@ -1,14 +1,14 @@
-// Import modules
+// get gravatar icon from email
 var gravatar = require('gravatar');
 var passport = require('passport');
 
-// Render Login page
+// Signin GET
 exports.signin = function(req, res) {
     // List all Users and sort by Date
     res.render('login', { title: 'Login Page', message: req.flash('loginMessage') });
 };
 
-// Render Signup page
+// Signup GET
 exports.signup = function(req, res) {
     // List all Users and sort by Date
     res.render('signup', { title: 'Signup Page', message: req.flash('signupMessage') });
@@ -40,5 +40,4 @@ exports.profile = function(req, res) {
     // List all Users and sort by Date
     res.render('profile', { title: 'Profile Page', user : req.user, avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true) });
 };
-
 

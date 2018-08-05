@@ -10,9 +10,6 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 150000000000000, files:1} });
 
-// Import nodemailer
-var nodemailer = require('nodemailer');
-
 // Import home controller
 var index = require('./server/controllers/index');
 // Import login controller
@@ -95,8 +92,8 @@ app.use(passport.session());
 // flash messages
 app.use(flash());
 
-// Routes to pages
-// Route for Index
+// Application Routes
+// Index Route
 app.get('/', index.show);
 
 // Route for Login
@@ -117,19 +114,13 @@ app.post('/signup', passport.authenticate('local-signup', {
     failureFlash: true
 }));
 
-// Logout Page
-app.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-});
-
-// Route for Admin - display orders (get from payment)
+// Route for admin - display orders (get from payment)
 app.get('/display', auth.isLoggedIn, display.displayOrder);
 
 // Route for profile
 app.get('/profile', auth.isLoggedIn, list.profileItems);
 
-// Route for Account
+// Route for account
 app.get('/account', auth.isLoggedIn, account.displayAccount);
 app.post('/account', account.editAccount);
 
@@ -147,6 +138,18 @@ app.get('/listPayments', auth.isLoggedIn, listPayments.getItem);
 // Route for receipt
 app.get('/receipt/:id/:payment_id', receipt.getItem);
 
+
+// Logout Page
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+// Change password
+app.get('/changepassword', auth.isLoggedIn, account.displayAccount
+);
+
+
 // Setup routes for comments
 app.get('/comments', comments.hasAuthorization, comments.list);
 app.post('/comments', comments.hasAuthorization, comments.create);
@@ -159,7 +162,6 @@ app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uplo
 // Setup routes for Transactions
 app.get('/transactions', transactions.list);
 app.get('/')
-
 // Setup routes for offers
 app.post('/messages/:id', offers.makeOffer);
 
@@ -288,5 +290,3 @@ app.set('port', serverPort);
 var server = httpServer.listen(app.get('port'), function () {
     console.log('http server listening on port ' + server.address().port);
 });
-
-
