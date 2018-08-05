@@ -12,7 +12,6 @@ exports.signin = function(req, res) {
 exports.signup = function(req, res) {
     // List all Users and sort by Date
     res.render('signup', { title: 'Signup Page', message: req.flash('signupMessage') });
-
 };
 
 
@@ -22,11 +21,18 @@ exports.logout = function () {
     res.redirect('/');
 };
 
-// Check if user is logged in: Yes - continue, No - redirect to Login page
+// Ensure user is logged in before proceeding. Check if user is logged in: Yes - continue, No - redirect to Login page
 exports.isLoggedIn = function(req, res, next) {
     if (req.isAuthenticated())
         return next();
     res.redirect('/login');
+};
+
+// For login/signup. Check if user is logged in: Yes - redirect to Profile page, No - continue
+exports.notLoggedIn = function(req, res, next) {
+    if (req.isAuthenticated())
+        res.redirect('/profile');
+    return next();
 };
 
 // Render Profile page & get gravatar icon

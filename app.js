@@ -100,7 +100,7 @@ app.use(flash());
 app.get('/', index.show);
 
 // Route for Login
-app.get('/login', auth.signin);
+app.get('/login', auth.notLoggedIn, auth.signin);
 app.post('/login', passport.authenticate('local-login', {
     //Success go to Profile Page / Fail go to login page
     successRedirect: '/profile',
@@ -109,7 +109,7 @@ app.post('/login', passport.authenticate('local-login', {
 }));
 
 // Route for signup
-app.get('/signup', auth.signup);
+app.get('/signup', auth.notLoggedIn, auth.signup);
 app.post('/signup', passport.authenticate('local-signup', {
     //Success go to Profile Page / Fail go to Signup page
     successRedirect: '/profile',
@@ -131,11 +131,11 @@ app.get('/profile', auth.isLoggedIn, list.profileItems);
 
 // Route for Account
 app.get('/account', auth.isLoggedIn, account.displayAccount);
-app.post('/account', auth.isLoggedIn, account.editAccount);
+app.post('/account', account.editAccount);
 
 // Route for Change password
-app.get('/changepassword', auth.isLoggedIn, account.displayAccount
-);
+app.get('/changepassword', auth.isLoggedIn, account.getPassword);
+app.post('/changepassword', account.editPassword);
 
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);

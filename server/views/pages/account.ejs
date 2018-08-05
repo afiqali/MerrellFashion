@@ -10,15 +10,14 @@
     <title>
         <%= title %>
     </title>
-    <% include ../partials/stylesheetPRODUCT %>
 
-        <!-- Custom styles for this template -->
-        <link href="/public/stylesheets/logo-nav.css" rel="stylesheet">
-        <link href="/public/stylesheets/simple-sidebar.css" rel="stylesheet">
+    <% include ../partials/stylesheetPRODUCT %>
+    <!-- Custom styles for this template -->
+    <link href="/public/stylesheets/logo-nav.css" rel="stylesheet">
+    <link href="/public/stylesheets/simple-sidebar.css" rel="stylesheet">
 </head>
 
 <body>
-
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
@@ -110,6 +109,16 @@
         <!-- Page Content -->
         <div id="page-content-wrapper">
             <div class="container-fluid">
+
+                <% if (message.length > 0) { %>
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <%= message %>.  
+                    </div>
+                <% } %>
+
                 <div class="row justify-content-center">
                     <div class="col-sm-12">
 
@@ -154,12 +163,12 @@
 
                                 <div class="form-group">
                                     <label for="inputName">Name</label>
-                                    <input type="text" id="name" name="name" class="form-control" value=<%=user.name %> required="">
+                                    <input type="text" required id="name" name="name" class="form-control"value=<%=user.name %>>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="inputEmail">Email address</label>
-                                    <input type="email" id="email" name="email" class="form-control" value=<%=user.email %> required="">
+                                    <input type="email" required pattern=".*[@].*[.].*" oninvalid="setCustomValidity('name@domain')" oninput="setCustomValidity('')" id="email" name="email" class="form-control" value=<%=user.email %>>
                                 </div>
 
                                 <div class="form-group">
@@ -178,21 +187,20 @@
 
                                 <div class="form-group">
                                     <label for="inputContactNum">Contact number</label>
-                                    <input type="text" required pattern="[98][0-9]{7}" id="contactNumber" name="contactNumber" class="form-control" value=<%=user.contactNumber
-                                        %> >
+                                    <input type="text" required pattern="[98][0-9]{7}" oninvalid="setCustomValidity('8 digit number with \'9\'/\'8\' as the first digit')" oninput="setCustomValidity('')" id="contactNumber" name="contactNumber" class="form-control" value=<%=user.contactNumber%> >
                                 </div>
 
                                 <div class="form-group">
                                     <label for="inputAddress">Address</label>
-                                    <input type="text" id="address" name="address" class="form-control" value=<%=user.address %> required="">
+                                    <input type="text" id="address" name="address" class="form-control" required value=<%=user.address %>>
                                 </div>
 
                                 <% }); %>
 
                                 <button class="btn btn-lg btn-primary btn-block" type="submit">Save</button>
                             </form>
-
-                            <button onclick="window.location.href='/changePassword'" class="changePassword btn btn-lg btn-primary btn-block">Change password</button>
+                            
+                            <a href="/changepassword" class="btn btn-lg btn-primary btn-block">Change password</a>
 
                             <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
                     </div>
@@ -202,17 +210,10 @@
     </div>
 
     <% include ../partials/javascript %>
-
-        <script> 
-                // function uploadProfilePicture() {
-                //     $("#createImage").css("display", "block");
-                // }
-
+    <script> 
         // $("#menu-toggle").click(function (e) {
         //     e.preventDefault();
         //     $("#wrapper").toggleClass("toggled");
         // });
-
-        </script>
-
+    </script>
 </body>
