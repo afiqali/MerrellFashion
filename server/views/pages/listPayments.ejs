@@ -7,7 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://www.paypalobjects.com/api/checkout.js"></script>
         
-        <% include ../partials/stylesheet %>
+        <% include ../partials/stylesheetPRODUCT %>
+        <link href="/publicPRODUCT/stylesheets/shop-item.css" rel="stylesheet">
 
         <style>
             .responsive {
@@ -16,27 +17,74 @@
             border-radius:10px;
             margin: 1em;
         }
+        .list-group-item {
+            color:black;
+        }
+        .list-group-item-text {
+            margin:0 auto;
+            font-size: 1em;
+        }
+        .jumbotron {
+            padding:1em;
+        }
         </style>
     </head>
 
     <body>
 
-        <div class="responsive" style="display: block;margin:auto 0;position: relative;margin:2em;width:40%">
-            <h1 ><a href="http://localhost:3000/products-gallery/" style="text-decoration: none"> Merrell Fashion </a></h1>
-            <h5 style=""><%= title %></h5>
+         <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container">
+              <a class="navbar-brand" href="/">Merrell Fashion</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/">Home
+                      <span class="sr-only">(current)</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/login">Sign in</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/signup">Sign up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/comments">Comments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/videos">Videos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products-gallery">Products</a>
+                </li>
+                
+                </ul>
+              </div>
+            </div>
+          </nav>
+
+        
+
+        <div class="responsive" style="display: block;margin:auto 0;position: relative;margin:1em;width:40%">
+            <h3 style=""><%= title %></h3>
         </div>
 
         <% for(i=0;i<receipt.length;i++) { %>
         <div class="list-group">
 
-            <a href="#" class="list-group-item">
                 <div class="Payments">
-                    <form action="/payment">
+                    <div class="jumbotron jumbotron-fluid">
                         
-                        <h4 class="list-group-item-heading">
+                        <h5 class="list-group-item-heading">
                             Your Item:
-                        </h4>
-                        
+                        </h5>
                         <p class="list-group-item-text">
                             Name: <%= item[i].ItemName %>
                         </p>
@@ -53,9 +101,9 @@
 
 
 
-                        <h4 class="list-group-item-heading">
+                        <h5 class="list-group-item-heading">
                             Your Receipt:
-                        </h4>
+                        </h5>
                         <p class="list-group-item-text">
                             Payment ID (Keep this for future reference):  <%= receipt[i].payment_id %>
                             </p>
@@ -76,9 +124,8 @@
                         </p>
 
 
-                    </form>
+                    </div>
                 </div>
-            </a>
     </div>
     <% } %>
     <div class="responsive" style="display: block;margin:auto 0;position: relative;margin:2em;width:40%;" >

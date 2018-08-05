@@ -13,43 +13,43 @@ var sequelize = myDatabase.sequelize;
 // Show images gallery -  function to get all the uploaded images from the database and show it on the page. 
 exports.show = function (req, res) {
     var currentuser = req.user.id
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <>'" +currentuser+"'"
-    , { model: productlist}).then((productlists)=> {
-        
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <>'" + currentuser + "'"
+        , { model: productlist }).then((productlists) => {
 
-        res.render('products-gallery', {
-            title: 'Product For Sale',
-            productlists: productlists,
-            user: req.user,
-            address: req.address,
-            urlPath: req.protocol + "://" + req.get("host") + req.url
-        });
 
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+            res.render('products-gallery', {
+                title: 'Product For Sale',
+                productlists: productlists,
+                user: req.user,
+                address: req.address,
+                urlPath: req.protocol + "://" + req.get("host") + req.url
+            });
+
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
-    });
 };
 
 exports.showCategory = function (req, res) {
     var currentuser = req.user.id
     var Itemcategory = req.params.category;
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.category ='" +Itemcategory+"' and i.user_id <>'" +currentuser+"'"
-    , { model: productlist}).then((productlists)=> {
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.category ='" + Itemcategory + "' and i.user_id <>'" + currentuser + "'"
+        , { model: productlist }).then((productlists) => {
 
-        res.render('products-gallery', {
-            title: 'Product For Sale',
-            productlists: productlists,
-            user: req.user,
-            urlPath: req.protocol + "://" + req.get("host") + req.url
-        });
+            res.render('products-gallery', {
+                title: 'Product For Sale',
+                productlists: productlists,
+                user: req.user,
+                urlPath: req.protocol + "://" + req.get("host") + req.url
+            });
 
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
-    });
 };
 
 
@@ -77,7 +77,7 @@ exports.uploadImage = function (req, res) {
     dest = fs.createWriteStream(targetPath);
     src.pipe(dest);
     // Show error
-    src.on('error', function(err) {
+    src.on('error', function (err) {
         if (err) {
             return res.status(500).send({
                 message: error
@@ -85,7 +85,7 @@ exports.uploadImage = function (req, res) {
         }
     });
     // Save file process
-    src.on('end', function() {
+    src.on('end', function () {
         // create a new instance of the Images model with request body
         var ProductData = {
             ItemName: req.body.ItemName.replace(/[&\/\\#,+()$~%.'":*?<>{};]/g, ''),
@@ -109,8 +109,8 @@ exports.uploadImage = function (req, res) {
             res.redirect('profile');
         })
 
-         // remove from temp folder
-         fs.unlink(tempPath, function (err) {
+        // remove from temp folder
+        fs.unlink(tempPath, function (err) {
             if (err) {
                 return res.status(500).send('Something bad happened here');
             }
@@ -121,7 +121,7 @@ exports.uploadImage = function (req, res) {
 };
 
 // List one specific student record from database
-exports.editRecord = function(req, res) {
+exports.editRecord = function (req, res) {
     var Itemidentity = req.params.id;
     productlist.findById(Itemidentity).then(function (ItemDetails) {
         res.render('editRecord', {
@@ -168,7 +168,7 @@ exports.updatetest = function (req, res) {
     var dest;
     var targetPath;
     var targetName;
-    try{
+    try {
         var tempPath = req.file.path;
         console.log('GOOD MORNING BITCHES');
         // get the mime type of the file
@@ -187,7 +187,7 @@ exports.updatetest = function (req, res) {
         dest = fs.createWriteStream(targetPath);
         src.pipe(dest);
         // Show error
-        src.on('error', function(err) {
+        src.on('error', function (err) {
             if (err) {
                 return res.status(500).send({
                     message: error
@@ -203,17 +203,17 @@ exports.updatetest = function (req, res) {
             Description: req.body.Description,
             imageName: req.file.originalname,
         }
-        productlist.update(updateData, { where: {Itemid: record_num} }).then((updatedRecord) => {
-            console.log("RECORD " +updatedRecord);
-            if (!updatedRecord || updatedRecord ==0) {
+        productlist.update(updateData, { where: { Itemid: record_num } }).then((updatedRecord) => {
+            console.log("RECORD " + updatedRecord);
+            if (!updatedRecord || updatedRecord == 0) {
                 return res.send(400, {
                     message: "error"
                 });
             }
-            res.status(200).send({ message: "Updated item details:" + record_num});
+            res.status(200).send({ message: "Updated item details:" + record_num });
         })
-        
-    }catch(err) {
+
+    } catch (err) {
         var record_num = req.params.id;
         var updateData = {
             ItemName: req.body.ItemName.replace(/[&\/\\#,+()$~%.'":*?<>{};]/g, ''),
@@ -221,9 +221,9 @@ exports.updatetest = function (req, res) {
             category: req.body.category,
             Description: req.body.Description,
         }
-        productlist.update(updateData, { where: {Itemid: record_num} }).then((updatedRecord) => {
-            console.log("RECORD " +updatedRecord);
-            if (!updatedRecord || updatedRecord ==0) {
+        productlist.update(updateData, { where: { Itemid: record_num } }).then((updatedRecord) => {
+            console.log("RECORD " + updatedRecord);
+            if (!updatedRecord || updatedRecord == 0) {
                 return res.send(400, {
                     message: "error"
                 });
@@ -235,120 +235,120 @@ exports.updatetest = function (req, res) {
 
 
 // Delete a student record from database
-exports.delete = function(req, res) {
+exports.delete = function (req, res) {
     var record_num = req.params.id;
     console.log("deleting " + record_num);
     var softdelete = {
-       status: 'd'
+        status: 'd'
     }
-    productlist.update(softdelete, { where: {Itemid: record_num} }).then((updatedRecord) => {
-        if (!updatedRecord || updatedRecord ==0) {
+    productlist.update(softdelete, { where: { Itemid: record_num } }).then((updatedRecord) => {
+        if (!updatedRecord || updatedRecord == 0) {
             return res.send(400, {
                 message: "error"
             });
         }
-        res.status(200).send({ message: "Deleted item details:" + record_num});
-        
+        res.status(200).send({ message: "Deleted item details:" + record_num });
+
     });
 }
 
 exports.SortHighToLow = function (req, res) {
     var currentuser = req.user.id
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <>'" +currentuser+"' order by i.price desc"
-    , { model: productlist}).then((productlists)=> { 
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <>'" + currentuser + "' order by i.price desc"
+        , { model: productlist }).then((productlists) => {
 
-        res.render('products-gallery', {
-            title: 'Product For Sale',
-            productlists: productlists,
-            user: req.user,
-            urlPath: req.protocol + "://" + req.get("host") + req.url
-        });
+            res.render('products-gallery', {
+                title: 'Product For Sale',
+                productlists: productlists,
+                user: req.user,
+                urlPath: req.protocol + "://" + req.get("host") + req.url
+            });
 
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
-    });
 };
 
 exports.SortLowToHigh = function (req, res) {
     var currentuser = req.user.id
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '"+currentuser+"' order by i.price asc"
-    , { model: productlist}).then((productlists)=> { 
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '" + currentuser + "' order by i.price asc"
+        , { model: productlist }).then((productlists) => {
 
-        res.render('products-gallery', {
-            title: 'Product For Sale',
-            productlists: productlists,
-            user: req.user,
-            urlPath: req.protocol + "://" + req.get("host") + req.url
-        });
+            res.render('products-gallery', {
+                title: 'Product For Sale',
+                productlists: productlists,
+                user: req.user,
+                urlPath: req.protocol + "://" + req.get("host") + req.url
+            });
 
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
-    });
 };
 
 exports.SortPriceRange = function (req, res) {
     var min = req.params.min;
     var max = req.params.max;
     var currentuser = req.user.id;
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '"+currentuser+"' and i.price BETWEEN "+min+" AND "+max 
-    , { model: productlist}).then((productlists)=> { 
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '" + currentuser + "' and i.price BETWEEN " + min + " AND " + max
+        , { model: productlist }).then((productlists) => {
 
-        res.render('products-gallery', {
-            title: 'Product For Sale',
-            productlists: productlists,
-            user: req.user,
-            urlPath: req.protocol + "://" + req.get("host") + req.url
-        });
+            res.render('products-gallery', {
+                title: 'Product For Sale',
+                productlists: productlists,
+                user: req.user,
+                urlPath: req.protocol + "://" + req.get("host") + req.url
+            });
 
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
-    });
 };
 
 exports.SortRecent = function (req, res) {
     var currentuser = req.user.id
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '"+currentuser+"' order by i.created"
-    , { model: productlist}).then((productlists)=> { 
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <> '" + currentuser + "' order by i.created"
+        , { model: productlist }).then((productlists) => {
 
-        res.render('products-gallery', {
-            title: 'Product For Sale',
-            productlists: productlists,
-            user: req.user,
-            urlPath: req.protocol + "://" + req.get("host") + req.url
-        });
+            res.render('products-gallery', {
+                title: 'Product For Sale',
+                productlists: productlists,
+                user: req.user,
+                urlPath: req.protocol + "://" + req.get("host") + req.url
+            });
 
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
-    });
 };
 
 exports.searchfunction = function (req, res) {
     var search = req.params.search;
     var currentuser = req.user.id
     console.log(search)
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.ItemName like '%" +search+"%' and i.user_id <> '"+ currentuser+"'"
-    , { model: productlist}).then((productlists)=> {
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.ItemName like '%" + search + "%' and i.user_id <> '" + currentuser + "'"
+        , { model: productlist }).then((productlists) => {
 
-        res.render('products-gallery', {
-            title: 'Product For Sale',
-            productlists: productlists,
-            user: req.user,
-            urlPath: req.protocol + "://" + req.get("host") + req.url
-        });
+            res.render('products-gallery', {
+                title: 'Product For Sale',
+                productlists: productlists,
+                user: req.user,
+                urlPath: req.protocol + "://" + req.get("host") + req.url
+            });
 
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
-    });
 };
 
 exports.profileItems = function (req, res) {
@@ -364,11 +364,11 @@ exports.profileItems = function (req, res) {
             urlPath: req.protocol + "://" + req.get("host") + req.url
         });
 
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
+        }).catch((err) => {
+            return res.status(400).send({
+                message: err
+            });
         });
-    });
 };
 
 exports.OtherProfileItems = function (req, res) {
@@ -396,7 +396,7 @@ exports.OtherProfileItems = function (req, res) {
 }
 
 // Images authorization middleware
-exports.hasAuthorization = function(req, res, next) {
+exports.hasAuthorization = function (req, res, next) {
     if (req.isAuthenticated())
         return next();
     res.redirect('/login');
