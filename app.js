@@ -189,6 +189,9 @@ app.get('/products-gallery/Sort/PriceLow/view/:id', list.hasAuthorization, list.
 app.get("/products-gallery/Sort/:min/:max/view/:id", list.hasAuthorization, list.specificlist);
 app.get("/products-gallery/Sort/Recent/view/:id", list.hasAuthorization, list.specificlist);
 
+//Setup routes for view Other Profiles
+app.get("/OtherProfile/:ProfileOwner",list.hasAuthorization, list.OtherProfileItems);
+
 
 
 // Setup Chat

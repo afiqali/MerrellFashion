@@ -15,11 +15,6 @@ exports.signup = function(req, res) {
 
 };
 
-// Profile GET
-exports.profile = function(req, res) {
-    // List all Users and sort by Date
-    res.render('profile', { title: 'Profile Page', user : req.user, avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true) });
-};
 
 // Logout function
 exports.logout = function () {

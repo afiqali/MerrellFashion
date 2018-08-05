@@ -109,8 +109,8 @@
                 <div class="modal-content">
                     <form action="/products" method="post" enctype="multipart/form-data">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button"class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><i class="fas fa-times"></i></span>
                             </button>
                             <h4 class="modal-title" id="myModalLabel">Create New Product Listing</h4>
                         </div>
@@ -183,6 +183,22 @@
                         </div>
                     </div>
 
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
+                          Categories
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width:100%">
+                          <a class="dropdown-item" href="/products-gallery/Dress">Dress</a>
+                          <a class="dropdown-item" href="/products-gallery/High Heels">High Heels</a>
+                          <a class="dropdown-item" href="/products-gallery/Jeans">Jeans</a>
+                          <a class="dropdown-item" href="/products-gallery/Cardigans">Cardigans</a>
+                          <a class="dropdown-item" href="/products-gallery/Skirt">Skirts</a>
+                          <a class="dropdown-item" href="/products-gallery/Tops">Tops</a>
+                          <a class="dropdown-item" href="/products-gallery">No filter</a>
+                        </div>
+                      </div>
+                      <br>
+
                     <h6>Sort</h6>
                     <div class="list-group">
                             <a href="/products-gallery/Sort/PriceHigh" class="list-group-item list-group-item-action">Price - High To Low</a>
@@ -199,21 +215,8 @@
                              <button class="btn btn-outline-secondary pr" id="searchpr" type="button"><i class="fas fa-search"></i></button>
                         </div>
                     </form>
-                    <br>
-                    <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
-                              Categories
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width:100%">
-                              <a class="dropdown-item" href="/products-gallery/Dress">Dress</a>
-                              <a class="dropdown-item" href="/products-gallery/High Heels">High Heels</a>
-                              <a class="dropdown-item" href="/products-gallery/Jeans">Jeans</a>
-                              <a class="dropdown-item" href="/products-gallery/Cardigans">Cardigans</a>
-                              <a class="dropdown-item" href="/products-gallery/Skirt">Skirts</a>
-                              <a class="dropdown-item" href="/products-gallery">No filter</a>
-                            </div>
-                          </div>
-
+                  
+                    
                 </div>
                 <!-- /.col-lg-3 -->
 

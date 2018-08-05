@@ -88,7 +88,7 @@ exports.uploadImage = function (req, res) {
     src.on('end', function() {
         // create a new instance of the Images model with request body
         var ProductData = {
-            ItemName: req.body.ItemName,
+            ItemName: req.body.ItemName.replace(/[&\/\\#,+()$~%.'":*?<>{};]/g, ''),
             imageName: req.file.originalname,
             Itemid: req.Itemid,
             user_id: req.user.id,
@@ -138,22 +138,30 @@ exports.editRecord = function(req, res) {
 };
 
 exports.specificlist = function(req, res) {
+    var currentuser = req.user.id;
     var Itemspecific = req.params.id;
-    productlist.findById(Itemspecific).then(function (ItemDetails) {
-        res.render('productpage', {
-            title: "Specific Record Of Product",
-            productspecific: ItemDetails,
-            hostPath: req.protocol + "://" + req.get("host"),
-            urlPath: req.protocol + "://" + req.get("host") + req.url
+    sequelize.query("select p.imageName, p.price, p.Description, p.ItemName, p.status, p.category, p.Itemid, p.user_id, p.createdAt, u.name from productlists p join Users u on p.user_id = u.id where p.Itemid ='" + Itemspecific + "'"
+    , { model: productlist }).then((RawItemDetails) => { 
+        var ItemDetails = RawItemDetails[0]['dataValues'];
+        sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.category ='" +ItemDetails.category+"' and i.user_id <>'" +currentuser+"' and i.Itemid <> '"+ ItemDetails.Itemid+"' ORDER BY NEWID()"
+        , { model: productlist}).then((productlists) => {
+            res.render('productpage', {
+                title: "Specific Record Of Product",
+                productspecific: ItemDetails,
+                productlists: productlists,
+                user: req.user,
+                hostPath: req.protocol + "://" + req.get("host"),
+                urlPath: req.protocol + "://" + req.get("host") + req.url
+            });
+        }).catch((err) => {6
+            return res.status(400).send({
+                message: err
+            });
         });
-    }).catch((err) => {
-        return res.status(400).send({
-            message: err
-        });
-    });
-}
 
-
+        })
+    }
+        
 // Update/Editing listing record in database
 exports.updatetest = function (req, res) {
     var src;
@@ -189,7 +197,7 @@ exports.updatetest = function (req, res) {
 
         var record_num = req.params.id;
         var updateData = {
-            ItemName: req.body.ItemName,
+            ItemName: req.body.ItemName.replace(/[&\/\\#,+()$~%.'":*?<>{};]/g, ''),
             price: req.body.price,
             category: req.body.category,
             Description: req.body.Description,
@@ -208,7 +216,7 @@ exports.updatetest = function (req, res) {
     }catch(err) {
         var record_num = req.params.id;
         var updateData = {
-            ItemName: req.body.ItemName,
+            ItemName: req.body.ItemName.replace(/[&\/\\#,+()$~%.'":*?<>{};]/g, ''),
             price: req.body.price,
             category: req.body.category,
             Description: req.body.Description,
@@ -221,9 +229,8 @@ exports.updatetest = function (req, res) {
                 });
             }
             res.status(200).send({ message: "Updated item details:" + record_num});
-        })
-    }
-
+            })
+        }
     }
 
 
@@ -346,7 +353,7 @@ exports.searchfunction = function (req, res) {
 
 exports.profileItems = function (req, res) {
     currentuser = req.user.id
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id where i.user_id ='"+currentuser+"' and status <> 'd'"
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id where i.user_id ='"+currentuser+"' and status <> 'd' order by i.status"
     , { model: productlist}).then((productlists)=> {
 
         res.render('profile', {
@@ -364,6 +371,29 @@ exports.profileItems = function (req, res) {
     });
 };
 
+exports.OtherProfileItems = function (req, res) {
+    ProfileOwner = req.params.ProfileOwner
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id where i.user_id ='"+ProfileOwner+"' and status <> 'd' order by i.status"
+    , { model: productlist}).then((productlists)=> {
+        sequelize.query("select p.imageName, p.price, p.Description, p.ItemName, p.status, p.category, p.Itemid, p.user_id, p.createdAt, u.name, u.email from productlists p join Users u on p.user_id = u.id where p.user_id ='" + ProfileOwner + "'"
+    , { model: productlist }).then((RawItemDetails) => { 
+        var UserDetails = RawItemDetails[0]['dataValues'];
+
+        res.render('OtherProfilePage', {
+            title: 'Profile Page', 
+            user : UserDetails, 
+            avatar: gravatar.url(UserDetails.email ,  {s: '100', r: 'x', d: 'retro'}, true),
+            productlists: productlists,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+    
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+});
+}
 
 // Images authorization middleware
 exports.hasAuthorization = function(req, res, next) {

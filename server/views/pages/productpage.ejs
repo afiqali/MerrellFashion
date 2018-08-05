@@ -12,6 +12,7 @@
 
     <!-- Bootstrap core CSS -->
     <% include ../partials/stylesheetPRODUCT %>
+    <% include ../partials/stylesheetSlick %>
     <!-- Custom styles for this template -->
     <link href="/publicPRODUCT/stylesheets/blog-home.css" rel="stylesheet">
 
@@ -66,15 +67,22 @@
 
           <!-- Blog Post -->
           <div class="card mb-4">
-            <img class="card-img-top" src="/publicPRODUCT/images/<%= productspecific.imageName %>" alt="<%= productspecific.imageName %>" style="max-width: fit-content; align-self: center; ">
+            <img class="card-img-top" src="/publicPRODUCT/images/<%= productspecific.imageName %>" alt="<%= productspecific.imageName %>" style="max-width: fit-content; align-self: center; height:400px">
+            <% if (productspecific.status == 'c') { %>
+              <div style="position: absolute; bottom: 16.6%; right: 0;;" class="btn btn-danger">Item Sold</div>
+              <% } %>
             <div class="card-body">
+              <% if (user.id != productspecific.user_id) { %>
                 <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-portrait"></i>
-                <%= productspecific.user_id%></p>
-                <hr>
-                <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-check"></i></i>
-                 <%= productspecific.price%></p>
-                
+                Posted by: <a href="/OtherProfile/<%= productspecific.user_id %>"> <%= productspecific.name%></a></p>
+              <% }else if (user.id == productspecific.user_id) { %>
+                <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-portrait"></i>
+                  Posted by: <a href="/profile"><%= productspecific.name%></a></p>
+
+              <% } %>
                 </div>
+
+            
             
           
           </div>
@@ -104,27 +112,64 @@
                      DELETED-Not Available</p>
                   <% }else if (productspecific.status == 'c') { %>
                     <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-check"></i></i>
-                     Completed Transaction</p>
+                     Sold!</p>
                   <% } %>
                   <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-bars"></i>
                       <a href="/products-gallery/<%= productspecific.category%>"><%= productspecific.category%></a></p>
-                      
-                  <a href="/messages/<%= productspecific.Itemid%>" class="btn btn-secondary" style="min-width: 100%">Chat now to make offer</a>
-                  </div>
+
+                  <% if (productspecific.status == 'a') { %>
+
+                    <% if ( user.id == productspecific.user_id ){ %>
+                      <a class="btn btn-secondary" style="min-width: 100%">Offer Button Disabled - Same User</a>
+                    <% }else { %>
+                      <a href="/messages/<%= productspecific.Itemid%>" class="btn btn-secondary" style="min-width: 100%">Chat now to make offer</a>
+                    <% } %>
+
+                  <% }else if (productspecific.status == 'c') { %>  
+                    <a class="btn btn-danger" style="min-width: 100%">Already Sold!</a>
+                  <% } %>
+
+            </div>
+          </div>
+        </div>  
+      </div>
+      <hr>
+      <h6 style="text-align:center">Related Items</h6>
+      <div class="your-class">
+                            
+        <% productlists.forEach(function(productlists){ %>
+          
+            <div class="col-lg mb-4" data-id="<%= productlists.Itemid %>">
+              <div class="card h-100" data-id ="<%= productlists.Itemid%>" >
+              <img src="/publicPRODUCT/images/<%= productlists.imageName %>" class="figure-img img-fluid img-rounded specific" alt="<%= productlists.imageName %>"  style="max-width: 100%; height:250px; margin:15px">
+                <div class="card-body" style="height:100%; max-height: 100%">
+                        <p class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 95%; font-size: 24px" >
+                                <a href="<%-urlPath %>/view/<%= productlists.Itemid%>" %>>
+                                    <%= productlists.ItemName %>
+                                </a>
+                            </p>
+                            <hr>
+                            <p>
+                                Price: $<%= (productlists.price).toFixed(2) %> 
+                            </p>
+                            <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;" >
+                                <%= productlists.Description %>
+                            </p>
+                  <p class="card-text"></p>
+                </div>
               </div>
             </div>
-            </div>
-  
             
-
-      </div>
+        <% }); %>
+  </div>
       <!-- /.row -->
+      
 
     </div>
     <!-- /.container -->
 
     <!-- Footer -->
-    <footer class="py-5 bg-dark" style ="position: absolute; bottom: 0; width: 100%;">
+    <footer class="py-5 bg-dark" style ="position: relative; bottom: 0; width: 100%; top: 127px;">
       <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
       </div>
@@ -133,7 +178,25 @@
 
     
     <!-- Bootstrap core JavaScript -->
-    <script>
+      <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script type="text/javascript" src="/public/stylesheets/slick/slick.min.js"></script>
+
+        <script type="text/javascript">
+          
+            $('.your-class').slick({
+                infinite: true,
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                autoplay: true,
+                autoplaySpeed: 2000,
+            });
+
+            $('.specific').click(function () {
+                var record_num = $(this).closest("div").data('id');
+                location.href = "/products-gallery/view/"+record_num;
+            });
+
       function formatDate(date) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),
@@ -145,7 +208,7 @@
 
         return [day, month, year].join('-');
     }
-    document.getElementById('datetimeformatting').innerHTML =  formatDate("<%= productspecific.created%>") ;
+    document.getElementById('datetimeformatting').innerHTML =  formatDate("<%= productspecific.createdAt%>") ;
 </script>
     <% include ../partials/JavascriptPRODUCT %>
 

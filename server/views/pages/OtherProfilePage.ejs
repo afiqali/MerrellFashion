@@ -88,7 +88,6 @@
                         <br>
                         <strong>Email</strong>: <%= user.email %>
                         <br>
-                        <a href="/logout" class="btn btn-default">Logout</a>
                         <hr>
                     </p>
                     <h4 class="card-title">Your Items</h4>
@@ -101,7 +100,7 @@
                                   <div class="card h-100" data-id ="<%= productlists.Itemid%>" >
                                   <img src="/publicPRODUCT/images/<%= productlists.imageName %>" class="figure-img img-fluid img-rounded specific" alt="<%= productlists.imageName %>"  style="max-width: 100%; height:250px; margin:15px">
                                   <% if (productlists.status == 'c') { %>
-                                  <div style="position: absolute; bottom: 47.8%; right: 4.4%;" class="btn btn-danger">Item Sold</div>
+                                  <div style="    position: absolute; bottom: 40.3%; right: 4.4%;" class="btn btn-danger">Item Sold</div>
                                   <% } %>
                                     <div class="card-body" style="min-height:164px; max-height: 164px">
                                             <p class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 95%; font-size: 24px" >
@@ -117,11 +116,6 @@
                                                     <%= productlists.Description %>
                                                 </p>
                                       <p class="card-text"></p>
-                                    </div>
-                                    <div class="card-footer" data-id="<%= productlists.Itemid %>">
-                                        <input type="button" class="btn btn-primary editBtn" value="Edit">
-                                        <input type="button" class="btn btn-danger deleteBtn"  value="Delete">
-                  
                                     </div>
                                   </div>
                                 </div>
@@ -168,7 +162,7 @@
       
             $('.specific').click(function () {
                 var record_num = $(this).closest("div").data('id');
-                location.href = "<%-urlPath %>/view/"+record_num;
+                location.href = "/products-gallery/view/"+record_num;
             });
         
             $('.deleteBtn').click(function () {
