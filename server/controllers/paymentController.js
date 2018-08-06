@@ -3,9 +3,15 @@ var Order = require("../models/paymentModel");
 var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
 
 var mailgun = require("mailgun-js");
-var api_key = 'key-f9e1218d9d61e236cf3bab4b516957ef';
-var DOMAIN = 'sandboxb1e0c3fd6b374111a3def48c49f58bf4.mailgun.org';
+var api_key = '5d9ced5ebfe6f36790964f6139557799-7efe8d73-8ea4ea11';
+var DOMAIN = 'sandbox79212d07453c444693154ccafe772376.mailgun.org';
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+
+var accountSid = 'AC6ced1d481c8e1d8ec33c4f0da613e3e8'; // Your Account SID from www.twilio.com/console
+var authToken = '5554f393e7cf77b1496cb9f2de0d61e2';   // Your Auth Token from www.twilio.com/console
+
+var twilio = require('twilio');
+var client = new twilio(accountSid, authToken);
 
 var itemModel = require("../models/productlist");
 var myDatabase = require('./database');
@@ -91,6 +97,25 @@ exports.create = function (req, res) {
             }
 
         })
+
+        client.messages.create({
+            body: 'Hello from Node',
+            to: '+92211065',  // Text this number
+            from: '+92211065' // From a valid Twilio number
+        })
+        .then((message) => console.log(message.sid));
+
+        var data = {
+            from: 'Excited User <sandbox79212d07453c444693154ccafe772376.mailgun.org>',
+            to: 'pewpewpew1321@gmail.com',
+            subject: 'Hello',
+            text: 'Testing some Mailgun awesomness!'
+          };
+          
+          mailgun.messages().send(data, function (error, body) {
+            console.log(body);
+          });
+
         // var url;
         url = '/receipt/' + itemID.toString() + '/' + payment_id;
         res.redirect(url);
@@ -157,6 +182,17 @@ exports.doStripe = function (req,res) {
                     }
         
                 })
+                var data = {
+                    from: 'Excited User <sandbox79212d07453c444693154ccafe772376.mailgun.org>',
+                    to: 'pewpewpew1321@gmail.com',
+                    subject: 'Hello',
+                    text: 'Testing some Mailgun awesomness!'
+                  };
+                  
+                  mailgun.messages().send(data, function (error, body) {
+                    console.log(body);
+                  });
+        
                 url = '/receipt/' + itemID.toString() + '/' + charge.id;
                 res.redirect(url);
             })
