@@ -114,7 +114,7 @@ exports.offerDetails = function(req,res) {
                     urlPath: req.protocol + "://" + req.get("host") + req.url
                 })
             } else {
-                res.status(404).send('<h1 >Oops!</h1>' +
+                res.status(404).send('<h1 >Oops, You are not Supposed to be here.</h1>' +
              '<br/> <a href="'+ req.protocol + "://" + req.get("host") + '"> << Return to homepage</a>');
             }
         }).catch((err) => {

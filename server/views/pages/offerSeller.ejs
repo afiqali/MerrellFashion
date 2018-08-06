@@ -50,14 +50,15 @@
       <thread>
         <tr>
           <th>Item</th>
-          <th>Offer</th>
+          <th>Seller Name</th>
+          <th>Offer Amount</th>
           <th>Buyer Name</th>
           <th>Status</th>
           <th>Date</th>
         </tr>
         <% if(itemList.length <= 0) {%>
           <td class="text-center">
-              <h1 >Nobody wants your shit</h5>
+              <h1 >No one has given you an offer</h5>
           </td>
         <% }else {%>
           <% for(var i=0; i < itemList.length; i++){ %>
@@ -78,7 +79,7 @@
                 <%= itemList[i].offerType %>
               </td>
               <td>
-                  <%= itemList[i].Date %>
+                <%= itemList[i].Date %>
               </td>
               <td>
                 <% if (itemList[i].offerType == "offer") { %>
