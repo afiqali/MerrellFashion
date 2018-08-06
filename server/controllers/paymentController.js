@@ -2,10 +2,7 @@
 var Order = require("../models/paymentModel");
 var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
 
-var mailgun = require("mailgun-js");
-var api_key = '0d6fa9ff10930d6dc61bb31250b91422-7efe8d73-b681ae43';
-var DOMAIN = 'sandbox0b40f66fa4094d1da12f65c9246b5fdd.mailgun.org';
-var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+
 
 var accountSid = 'AC6ced1d481c8e1d8ec33c4f0da613e3e8'; // Your Account SID from www.twilio.com/console
 var authToken = '5554f393e7cf77b1496cb9f2de0d61e2';   // Your Auth Token from www.twilio.com/console
