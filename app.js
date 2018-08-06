@@ -103,12 +103,13 @@ app.post('/login', passport.authenticate('local-login', {
 
 // Route for signup
 app.get('/signup', auth.notLoggedIn, auth.signup);
-app.post('/signup', passport.authenticate('local-signup', {
+app.post('/signup', upload.single('image'), passport.authenticate('local-signup', {
     //Success go to Profile Page / Fail go to Signup page
     successRedirect: '/profile',
     failureRedirect: '/signup',
     failureFlash: true
-}));
+    })
+);
 
 // Route for logout
 app.get('/logout', function (req, res) {
@@ -118,7 +119,7 @@ app.get('/logout', function (req, res) {
 
 // Route for account
 app.get('/account', auth.isLoggedIn, account.displayAccount);
-app.post('/account', account.editAccount);
+app.post('/account', upload.single('image'), account.editAccount);
 
 // Route for Change password
 app.get('/changepassword', auth.isLoggedIn, account.getPassword);
@@ -195,6 +196,7 @@ app.get("/OtherProfile/:ProfileOwner",list.hasAuthorization, list.OtherProfileIt
 // Setup Chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
+// Import models
 var ChatMsg = require('./server/models/chatMsg');
 var Users = require('./server/models/users');
 var itemModel = require("./server/models/productlist");

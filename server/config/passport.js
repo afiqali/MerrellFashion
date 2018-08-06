@@ -2,6 +2,23 @@
 var LocalStrategy = require('passport-local').Strategy;
 // load up the user model
 var User = require('../models/users');
+var fs = require('fs');
+var mime = require('mime');
+
+var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+
+// const Email = window.Email;
+
+// Email.send(
+//     this.state.email,                                                   // Sender's email 
+//     "jnjw55@gmail.com",                                                 // Authorized recipent's email
+//     this.hashed_ticket_num(),                                           // Email title
+//     document.getElementById("comment").value,                           // Email content
+//     "smtp.mailgun.org",                                                 // SMTP Hostname
+//     "postmaster@sandboxc589e5cbd93f4aaba4406ad7bd4d9fac.mailgun.org",   // Default SMTP Login
+//     "f477f4032a856807786bbf4c20296f09-80bfc9ce-79c3f885",               // Default Password 
+//     { token: "121f7987-95ff-435c-ad95-943ca513f8cb" }                   // SMTP credentials - security token (not sure if this works)
+// );
 
 module.exports = function (passport) {
     // passport init setup
@@ -36,7 +53,7 @@ module.exports = function (passport) {
             }
             // process asynchronous
             process.nextTick(function () {
-            
+
                 User.findOne({ where: { email: email } }).then((user) => {
                     // check errors and bring the mess  ages
                     if (!user)
@@ -75,31 +92,95 @@ module.exports = function (passport) {
                         if (user) {
                             return done(null, false, req.flash('signupMessage', 'Wohh! the email is already taken.'));
                         } else {
-                            // create the user
-                            var userData = {
-                                name: req.body.name,
-                                email: email,
-                                password: password,
-                                gender: req.body.gender,
-                                dob: req.body.dob,
-                                contactNumber: req.body.contactNumber,
-                                address: req.body.address
+                            // Upload image file 
+                            var src;
+                            var dest;
+                            var targetPath;
+                            var targetName;
+                            var tempPath = req.file.path;
+
+                            // get the mime type of the file
+                            var type = mime.lookup(req.file.mimetype);
+
+                            // get file extension
+                            var extension = req.file.path.split(/[. ]+/).pop();
+
+                            // check support file types
+                            if (IMAGE_TYPES.indexOf(type) == -1) {
+                                console.log("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
+                                return res.status(415).send('Supported image formats: jpeg, jpg, jpe, png. ');
                             }
 
-                            // save data
-                            User.create(userData).then((newUser, created) => {  // If user is created, true is returned (newUser), else false (!newUser). User may not be created due to incompatible info.
-                                if (!newUser) {                 
-                                    return done(null, false);
+                            // Set new path to images
+                            targetPath = './public/images/' + req.file.originalname;
+
+                            // using read stream API to read file
+                            src = fs.createReadStream(tempPath);
+
+                            // using a write stream API to write file
+                            dest = fs.createWriteStream(targetPath);
+                            src.pipe(dest);
+
+                            // Show error
+                            src.on('error', function (err) {
+                                if (err) {
+                                    return res.status(500).send({
+                                        message: error
+                                    });
                                 }
-                                if (newUser) {
-                                    return done(null, newUser);
+                            });
+
+                            // Save file process
+                            src.on('end', function () {
+                                // create a new instance of the Images model with request body
+                                var img = {
+                                    imageName: req.file.originalname,
                                 }
+
+                                // remove from temp folder
+                                fs.unlink(tempPath, function (err) {
+                                    if (err) {
+                                        return res.status(500).send('Something bad happened here')
+                                    }
+                                })
+
+                                var userData = {
+                                    name: req.body.name,
+                                    email: email,
+                                    password: password,
+                                    gender: req.body.gender,
+                                    dob: req.body.dob,
+                                    contactNumber: req.body.contactNumber,
+                                    address: req.body.address,
+                                    img: img.imageName
+                                }
+
+                                // Push new user to db
+                                User.create(userData).then((newUser, created) => {  // If user is created, true is returned (newUser), else false (!newUser). User may not be created due to incompatible info.
+                                    if (!newUser) {
+                                        return done(null, false);
+                                    }
+                                    if (newUser) {
+                                        // Email.send(
+                                        //     "jnjw55@gmail.com",
+                                        //     email,
+                                        //     "Email title",
+                                        //     "Email content",
+                                        //     "smtp.mailgun.org",
+                                        //     "postmaster@sandboxc589e5cbd93f4aaba4406ad7bd4d9fac.mailgun.org",  
+                                        //     "f477f4032a856807786bbf4c20296f09-80bfc9ce-79c3f885",
+                                        //     { token: "121f7987-95ff-435c-ad95-943ca513f8cb" } 
+                                        // )
+
+                                        return done(null, newUser);
+                                    }
+                                }).catch((err) => {
+                                    console.log("Error:", err);
+                                    return done(err, false, req.flash('signupMessage', 'Error!'))
+                                });
                             })
                         }
-                    }).catch((err) => {
-                        console.log("Error:", err);
-                        return done(err, false, req.flash('signupMessage', 'Error!'))
-                    });
+                    })
                 } else {
                     return done(null, req.user);
                 }
