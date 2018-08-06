@@ -25,12 +25,6 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/login">Sign in</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/signup">Sign up</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="/account">Account</a>
                         </li>
                         <li class="nav-item">
@@ -53,12 +47,12 @@
             </div>
         </nav>
     
-    <div class="container">
-        <h3>Item Details: <%=offerList.itemID%></h3>
-            Item Name:<p><%=offerList.itemName%></p>
-            Buyer Name:<p><%=offerList.buyerName%></p>
-            Original Price:<p>$ <%=itemList.price%> | Offered Price:$ <%= offerList.offerAmount %></p> <!--rmb to alert price!-->
-        <form action="/offerDetails/<%=offerList.transactionID%>" method="post">
+    <div class="container" style="align-self: center; margin-top:15%; border: 1px solid black">
+        <h3 style="text-align: center">Item Details: <%=offerList.itemID%></h3>
+        <p style="text-align: center">Item Name:<br><%=offerList.itemName%></p>
+        <p style="text-align: center">Buyer Name:<br><%=offerList.buyerName%></p>
+        <p style="text-align: center">Original Price:<br>$ <%=itemList.price%> | Offered Price:$ <%= offerList.offerAmount %></p> <!--rmb to alert price!-->
+        <form action="/offerDetails/<%=offerList.transactionID%>" method="post" style="text-align: center">
             <input type="submit" class="acceptBtn btn btn-success" value="Accept">
 
             <input type="button" class="deleteBtn btn btn-danger"  value="Reject">
@@ -68,7 +62,7 @@
     <script src='/javascripts/bootstrap.min.js'></script>
 
 
-    <footer class="py-5 bg-dark" style ="position: relative; bottom: 0; width: 100%;">
+    <footer class="py-5 bg-dark" style ="position: absolute; bottom: 0; width: 100%;">
             <div class="container">
               <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
             </div>
