@@ -75,18 +75,6 @@
               <div style="position: absolute; bottom: 16.6%; right: 0;;" class="btn btn-danger">Item Sold</div>
               <% } %>
             <div class="card-body">
-<<<<<<< HEAD
-              <h3 class="card-title"><%= productspecific.ItemName%></h3>
-              <h4>Price: $<%=productspecific.price%></h4>
-              <p class="card-text"><%= productspecific.Description%></p>
-              <p class="card-text"><%= productspecific.user%></p>
-              <span class="text-warning">&#9733; &#9733; &#9733; &#9733; &#9734;</span>
-              4.0 stars
-              <br>
-              <br>
-              <a href="/messages/<%= productspecific.Itemid%>/<%= productspecific.user_id%>/<%= user.id%>" class="btn btn-success">Chat now to make offer</a>
-            </div>
-=======
               <% if (user.id != productspecific.user_id) { %>
                 <p class="card-text" style="font-family:system-ui; font-size:20px ;color: #222222;"><i class="fas fa-portrait"></i>
                 Posted by: <a href="/OtherProfile/<%= productspecific.user_id %>"> <%= productspecific.name%></a></p>
@@ -100,7 +88,6 @@
             
             
           
->>>>>>> ad7b26b09f80678ff53db6d6eb5206a36ca45f60
           </div>
 
         </div>
