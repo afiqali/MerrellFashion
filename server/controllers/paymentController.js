@@ -2,11 +2,16 @@
 var Order = require("../models/paymentModel");
 var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
 
-var nodemailer = require('nodemailer');
 var mailgun = require("mailgun-js");
-var api_key = 'b6431047df46f8da7804de6a65b430d0-a5d1a068-98497ca8';
-var DOMAIN = 'sandboxb1e0c3fd6b374111a3def48c49f58bf4.mailgun.org';
+var api_key = '5d9ced5ebfe6f36790964f6139557799-7efe8d73-8ea4ea11';
+var DOMAIN = 'sandbox79212d07453c444693154ccafe772376.mailgun.org';
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+
+var accountSid = 'AC6ced1d481c8e1d8ec33c4f0da613e3e8'; // Your Account SID from www.twilio.com/console
+var authToken = '5554f393e7cf77b1496cb9f2de0d61e2';   // Your Auth Token from www.twilio.com/console
+
+var twilio = require('twilio');
+var client = new twilio(accountSid, authToken);
 
 var itemModel = require("../models/productlist");
 var myDatabase = require('./database');
@@ -16,28 +21,49 @@ var itemID;
 var payment_id;
 
 
-
 // Get specific record - GET
 exports.getItem = function(req,res) {
+
+    
     itemID = req.params.id;
     itemModel.findById(itemID).then(function (item) {
-        res.render('payment', {
+        if (item.status == 'c' || item.status == 'd') {
+            return res.redirect('/profile');
+        }
+        else if (req.user.id == item.user_id) {
+            return res.redirect('/profile');
+        }
+        else {        
+            res.render('payment', {
             title: 'Payment Page',
             user: req.user,
             item: item,
-            
             hostPath: req.protocol + "://" + req.get("host")
         });
+        }
+
     }).catch((err) => {
         return res.status(400).send({
                         message:err
         });
     });
 
+
 };
 
 // Create Order - POST
 exports.create = function (req, res) {
+    itemID = req.params.id;
+    itemModel.findById(itemID).then(function (item) {
+        if (item.status == 'c' || item.status == 'd') {
+            return res.redirect('/profile');
+        }
+    }).catch((err) => {
+        return res.status(400).send({
+                        message:err
+        });
+    });
+
     console.log("creating payment");
     payment_id = req.body.payment_id;
     console.log((req.body.item_id).toString())
@@ -49,7 +75,8 @@ exports.create = function (req, res) {
         user_id: req.user.id,
         totalAmount: parseFloat(req.body.totalAmount),
         status: req.body.status,
-        orderMethod: req.body.orderMethod
+        orderMethod: req.body.orderMethod,
+        collectionDate: req.body.dob2
     }
 
     Order.create(orderData).then((newOrder, created) => {
@@ -71,56 +98,23 @@ exports.create = function (req, res) {
 
         })
 
-    
-    //   // create reusable transporter object using the default SMTP transport
-    //   let transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     port: 25,
-    //     secure: false, // true for 465, false for other ports
-    //     auth: {
-    //         user: 'pewpewpew1321@gmail.com', // generated ethereal user
-    //         pass: 't0030620c'  // generated ethereal password
-    //     },
-    //     tls:{
-    //       rejectUnauthorized:false
-    //     }
-    //   });
-    
-    //   // setup email data with unicode symbols
-    //   let mailOptions = {
-    //       from: '"Nodemailer Contact" <pewpewpew1321@gmail.com>', // sender address
-    //       to: 'pewpewpew1321@gmail.com', // list of receivers
-    //       subject: 'Node Contact Request', // Subject line
-    //       text: 'Hello world?', // plain text body
-    //     //   html: output // html body
-    //   };
-    
-    //   // send mail with defined transport object
-    //   transporter.sendMail(mailOptions, (error, info) => {
-    //       if (error) {
-    //           return console.log(error);
-    //       }
-    //       console.log('Message sent: %s', info.messageId);   
-    //       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    
-    //       res.render('contact', {msg:'Email has been sent'});
-    //   });
+        client.messages.create({
+            body: 'Hello from Node',
+            to: '+92211065',  // Text this number
+            from: '+92211065' // From a valid Twilio number
+        })
+        .then((message) => console.log(message.sid));
 
-
-    var data = {
-        from: 'Merrell Fashion <pewpewpew1321@gmail.com>',
-        to: 'tqinyong@yahoo.com.sg',
-        subject: 'Hello',
-        html: '<h2> Payment ID: </h2>' + req.body.payment_id+
-              '<h4> Item ID: </h4>' + req.params.id +
-              '<h4> Total Amount: </h4>' + req.body.totalAmount +
-              '<h4> Status: </h4>' + req.body.status +
-              '<h4> Order Method: </h4>' +req.body.orderMethod
-        };
-
-    mailgun.messages().send(data, function (error, body) {
-    console.log(body);
-    });
+        var data = {
+            from: 'Excited User <sandbox79212d07453c444693154ccafe772376.mailgun.org>',
+            to: 'pewpewpew1321@gmail.com',
+            subject: 'Hello',
+            text: 'Testing some Mailgun awesomness!'
+          };
+          
+          mailgun.messages().send(data, function (error, body) {
+            console.log(body);
+          });
 
         // var url;
         url = '/receipt/' + itemID.toString() + '/' + payment_id;
@@ -132,6 +126,19 @@ exports.create = function (req, res) {
 
 // Do Stripe things - POST
 exports.doStripe = function (req,res) {
+        console.log(req.body.dob1)
+        itemID = req.params.id;
+        itemModel.findById(itemID).then(function (item) {
+            if (item.status == 'c' || item.status == 'd') {
+                return res.redirect('/profile');
+            }
+            
+
+        }).catch((err) => {
+            return res.status(400).send({
+                            message:err
+            });
+        });
         
         const token = req.body.stripeToken; // Using Express
         var amount1 = req.body.price1;
@@ -152,7 +159,8 @@ exports.doStripe = function (req,res) {
                 user_id: req.user.id,
                 totalAmount: req.body.price1,
                 status: req.body.status1,
-                orderMethod: charge.source.brand
+                orderMethod: charge.source.brand,
+                collectionDate: req.body.dob1
             }
         
             Order.create(stripeData).then((newOrder, created) => {
@@ -174,58 +182,19 @@ exports.doStripe = function (req,res) {
                     }
         
                 })
-
-    //   // create reusable transporter object using the default SMTP transport
-    //   let transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     port: 25,
-    //     secure: false, // true for 465, false for other ports
-    //     auth: {
-    //         user: 'pewpewpew1321@gmail.com', // generated ethereal user
-    //         pass: 't0030620c'  // generated ethereal password
-    //     },
-    //     tls:{
-    //       rejectUnauthorized:false
-    //     }
-    //   });
-    
-    //   // setup email data with unicode symbols
-    //   let mailOptions = {
-    //       from: '"Nodemailer Contact" <pewpewpew1321@gmail.com>', // sender address
-    //       to: 'pewpewpew1321@gmail.com', // list of receivers
-    //       subject: 'Node Contact Request', // Subject line
-    //       text: 'Hello world?', // plain text body
-    //     //   html: output // html body
-    //   };
-    
-    //   // send mail with defined transport object
-    //   transporter.sendMail(mailOptions, (error, info) => {
-    //       if (error) {
-    //           return console.log(error);
-    //       }
-    //       console.log('Message sent: %s', info.messageId);   
-    //       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    
-    //       res.render('contact', {msg:'Email has been sent'});
-    //   });
-
-    var data = {
-        from: 'Merrell Fashion <pewpewpew1321@gmail.com>',
-        to: 'tqinyong@yahoo.com.sg',
-        subject: 'Hello',
-        html: '<h2> Payment ID: </h2> ' + charge.id +
-              '<h4> Item ID: </h4> ' + req.params.id +
-              '<h4> Total Amount: </h4> ' + req.body.price1 +
-              '<h4> Status: </h4> ' + req.body.status1 +
-              '<h4> Order Method: </h4> ' + charge.source.brand
-        };
-    
-        mailgun.messages().send(data, function (error, body) {
-        console.log(body);
-        });
-
-        url = '/receipt/' + itemID.toString() + '/' + charge.id;
-        res.redirect(url);
+                var data = {
+                    from: 'Excited User <sandbox79212d07453c444693154ccafe772376.mailgun.org>',
+                    to: 'pewpewpew1321@gmail.com',
+                    subject: 'Hello',
+                    text: 'Testing some Mailgun awesomness!'
+                  };
+                  
+                  mailgun.messages().send(data, function (error, body) {
+                    console.log(body);
+                  });
+        
+                url = '/receipt/' + itemID.toString() + '/' + charge.id;
+                res.redirect(url);
             })
         }).catch((err) => {
             return res.status(400).send({

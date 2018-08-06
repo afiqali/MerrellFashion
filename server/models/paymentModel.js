@@ -50,6 +50,11 @@ const Order = sequelize.define('Order', {
         allowNull: false,
         defaultValue: 'NETS',
         trim: true
+    },
+    collectionDate: {
+        type: Sequelize.STRING,
+        allowNull:false,
+        defaultValue:"help"
     }
 
     // item_id: {

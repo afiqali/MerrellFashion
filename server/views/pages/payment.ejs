@@ -136,6 +136,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://www.paypalobjects.com/api/checkout.js"></script>
         <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            
+
+        </script>
 
         
         <% include ../partials/stylesheet %>
@@ -161,7 +165,7 @@
                         <div class="col-50">
                           <h3>Billing Address and Details </h3>
                           <div style="padding-left:20px;">
-                          <h5><i class="fa fa-user"></i> Name:  <%= user.name %></h5> 
+                          <h5><i class="fa fa-user"></i> Name:    <%= user.name %></h5> 
                           <h5><i class="fa fa-envelope"></i> Email: <%= user.email %></h5> 
                           <h5><i class="fa fa-address-card-o"></i> Pick-Up Address: <%= user.address %></h5> 
                         </div>
@@ -188,6 +192,13 @@
                       </div>
                       <hr>
                       <br>
+
+                      <div style="margin: auto 0; text-align: center">
+                            <label for="dob">Collection Date: </label>
+                            <input  type="date" id="dob" name="dob" onchange="changedDate();" required>
+                        </div>
+
+                        <br>
                       <div id="paypal-button-container" class="container-fluid" style="margin:auto; ">
                         <div id="paypal-button" >
                         </div>
@@ -200,28 +211,29 @@
         
 
         <!-- Stripe Form -->
-        <div class="container" style="padding:0px;border-radius:10px" >
-        <form action="/payment/stripe/<%=item.Itemid%>" method="POST" id="stripeForm">
-                <script
-                    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                    data-key="pk_test_GasPdW35Y0J14wRCw9fzeDtI"
-                    data-amount=" <%= (parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2)))*100%> "
-                    data-name="<%= user.name %>"
-                    data-description="Item bought: <%= item.ItemName %>"
-                    data-image="/publicPRODUCT/images/<%= item.imageName %>"
-                    data-locale="auto"
-                    data-currency="sgd"
-                    id="doStripe">
-                </script>
-                <input id="price1" name="price1" type="hidden" value="<%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%>">
-                <input id="status1" name="status1" type="hidden" value="VERIFIED">
-                <input id="item_id1" name="item_id1" type="hidden" value"<%= item.Itemid %>">
-        </form>
-        <br>
-        <p style="font-size: 11px;text-align: center"> * We accept these cards * </p>
-        <img src="/images/cards.png" style="height:5em;width:25em;text-align:center" id="cards">
+            <div class="container" style="padding:0px;border-radius:10px" >
+            <form action="/payment/stripe/<%=item.Itemid%>" method="POST" id="stripeForm">
+                    <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_GasPdW35Y0J14wRCw9fzeDtI"
+                        data-amount=" <%= (parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2)))*100%> "
+                        data-name="<%= user.name %>"
+                        data-description="Item bought: <%= item.ItemName %>"
+                        data-image="/publicPRODUCT/images/<%= item.imageName %>"
+                        data-locale="auto"
+                        data-currency="sgd"
+                        id="doStripe">
+                    </script>
+                    <input id="price1" name="price1" type="hidden" value="<%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%>">
+                    <input id="status1" name="status1" type="hidden" value="VERIFIED">
+                    <input id="item_id1" name="item_id1" type="hidden" value"<%= item.Itemid %>">
+                    <input  type="hidden" id="dob1" name="dob1">
+            </form>
+            <br>
+            <p style="font-size: 11px;text-align: center"> * We accept these cards * </p>
+            <img src="/images/cards.png" style="height:5em;width:25em;text-align:center" id="cards">
+        </div>
 
-    </div>
     </div>
 
 
@@ -249,39 +261,53 @@
                 </div>
         </div>
 
-        
-        <form action="/payment/paypal/<%=item.Itemid%>" method="POST" id="pay" >
-            <div class="modal-body">
 
-                <fieldset class="form-group">
-                    <input id="payer_id" name="payer_id" type="hidden">
-                </fieldset> 
-                <fieldset class="form-group">
-                    <input type="hidden" id="totalAmount" name="totalAmount">
+            <form action="/payment/paypal/<%=item.Itemid%>" method="POST" id="pay" >
+                <div class="modal-body">
+
+                    <fieldset class="form-group">
+                        <input id="payer_id" name="payer_id" type="hidden">
+                    </fieldset> 
+                    <fieldset class="form-group">
+                        <input type="hidden" id="totalAmount" name="totalAmount">
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <input type="hidden" id="payment_id" name="payment_id">
+                    </fieldset>
+                    
+                    <fieldset class="form-group">
+                        <input id="item_id" name="item_id" type="hidden" value="<%= item.Itemid %>">
+                    </fieldset> 
+                    <fieldset class="form-group">
+                        <input id="status" type="hidden" name="status">
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <input id="orderMethod" type="hidden" name="orderMethod">
+                    </fieldset>
+                    <fieldset class="form-group">
+                         <input  type="hidden" id="dob2" name="dob2">
                 </fieldset>
-                <fieldset class="form-group">
-                    <input type="hidden" id="payment_id" name="payment_id">
-                </fieldset>
-                
-                <fieldset class="form-group">
-                    <input id="item_id" name="item_id" type="hidden" value="<%= item.Itemid %>">
-                </fieldset> 
-                <fieldset class="form-group">
-                    <input id="status" type="hidden" name="status">
-                </fieldset>
-                <fieldset class="form-group">
-                    <input id="orderMethod" type="hidden" name="orderMethod">
-                </fieldset>
-                <!-- <fieldset class="form-group">
-                    <label for="delieveryFee">Delivery fee</label>
-                    <textarea id="delieveryFee" name="delieveryFee" rows="8" cols="40" class="form-control" placeholder="Delivery Fee" required=""></textarea>
-                </fieldset> -->
-            </div>
-        </form>
+                    <!-- <fieldset class="form-group">
+                        <label for="delieveryFee">Delivery fee</label>
+                        <textarea id="delieveryFee" name="delieveryFee" rows="8" cols="40" class="form-control" placeholder="Delivery Fee" required=""></textarea>
+                    </fieldset> -->
+                </div>
+            </form>
+
+
+
         <script>
+                function changedDate() {
+                    var dob = $('#dob').val();
+                    $('#dob1').val(dob);
+                    $('#dob2').val(dob);
+                }
+
+
+                
                 // stripe shit
                 var pricee = parseFloat(document.getElementById('pricee').innerText);
-                console.log(pricee);
+                // console.log(pricee);
                 // $("#paypal-button").click(function () {
                 //     $.ajax({
                 //         url: 'http://localhost:3000/paypal/:id',
