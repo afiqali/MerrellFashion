@@ -173,6 +173,14 @@ app.get("/products-gallery/Sort/Recent", list.hasAuthorization, list.SortRecent)
 
 //Setup routes for product editing
 app.get("/profile/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/OtherProfile/:id/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/Sort/PriceHigh/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/Sort/PriceLow/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/Sort/Recent/edit/:id",list.hasAuthorization,list.editRecord);
+app.get("/products-gallery/Sort/:min/:max/edit/:id",list.hasAuthorization, list.editRecord);
+app.get('/products-gallery/search/:search/edit/:id',list.hasAuthorization, list.editRecord);
+app.get('/products-gallery/Sort/PriceRange=:min-:max/edit/:id',list.hasAuthorization, list.editRecord);
 app.post("/edit/:id",list.hasAuthorization, upload.single('image'), list.updatetest);
 
 //Setup routes for product delete

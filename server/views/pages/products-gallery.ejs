@@ -202,9 +202,9 @@
 
                     <h6>Sort</h6>
                     <div class="list-group">
-                            <a href="/products-gallery/Sort/PriceHigh" class="list-group-item list-group-item-action">Price - High To Low</a>
-                            <a href="/products-gallery/Sort/PriceLow" class="list-group-item list-group-item-action">Price - Low To High</a>
-                            <a href="/products-gallery/Sort/Recent" class="list-group-item list-group-item-action">Most Recent</a>
+                        <a href="/products-gallery/Sort/PriceHigh" class="list-group-item list-group-item-action">Price - High To Low</a>
+                        <a href="/products-gallery/Sort/PriceLow" class="list-group-item list-group-item-action">Price - Low To High</a>
+                        <a href="/products-gallery/Sort/Recent" class="list-group-item list-group-item-action">Most Recent</a>
                     </div>
                     <br>
                     <h6>Price Range</h6>
@@ -225,12 +225,12 @@
                     <div class="row" >
                         <% productlists.forEach(function(productlists){ %>
                             <div class="col-lg-4 col-md-6 mb-4"  data-id="<%= productlists.Itemid %>" >
-                                <div class="card h-100 hovershadow specific" data-id="<%= productlists.Itemid%>">
-                                    <img src="/publicPRODUCT/images/<%= productlists.imageName %>" class="figure-img img-fluid img-rounded " alt="<%= productlists.imageName %>"
+                                <div class="card h-100 hovershadow" data-id="<%= productlists.Itemid%>">
+                                    <img src="/publicPRODUCT/images/<%= productlists.imageName %>" class="figure-img img-fluid img-rounded specific" alt="<%= productlists.imageName %>"
                                         style="max-width: 100%; height:250px;">
                                     <div class="card-body" style="min-height:164px; max-height:100%">
                                         <p class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 95%; font-size: 24px" >
-                                            <a href="<%-urlPath %>/view/<%= productlists.Itemid%>" %>>
+                                            <a href="<%-urlPath %>/view/<%= productlists.Itemid%>" %></a>
                                                 <%= productlists.ItemName %>
                                             </a>
                                         </p>
@@ -302,6 +302,11 @@
                     $('.specific').click(function () {
                         var record_num = $(this).closest("div").data('id');
                         location.href = "<%-urlPath %>/view/" + record_num;
+                    });
+
+                    $('.editBtn').click(function () {
+                        var record_num = $(this).closest("div").data('id');
+                        location.href = "<%-urlPath %>/edit/"+record_num;
                     });
 
                     $('.deleteBtn').click(function () {
