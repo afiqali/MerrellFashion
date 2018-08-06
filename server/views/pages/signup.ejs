@@ -22,7 +22,7 @@
                 </div>
                 <% } %>
 
-                    <form class="form-signin" action="/signup" method="post">
+                    <form class="form-signin" action="/signup" method="post" enctype="multipart/form-data">
                         <h2 class="form-signin-heading">Please Sign up</h2>
 
                         <div class="form-group">
@@ -67,6 +67,12 @@
                             <input type="text" id="address" name="address" class="form-control" required>
                         </div>
 
+                        <div class="form-group">
+                            <label for="file" class="file">Profile picture</label>
+                            <input type="file" id="image" name="image" class="form-control">
+                            <span class="file-custom"></span>
+                        </div>
+
                         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign Up</button>
                     </form>
         </div>
@@ -75,6 +81,8 @@
         
         <% include ../partials/javascript %>
 
+        <scirpt>
+        </scirpt>
 </body>
 
 </html>

@@ -357,7 +357,7 @@ exports.profileItems = function (req, res) {
         res.render('profile', {
             title: 'Profile Page', 
             user : req.user, 
-            avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true),
+            avatar: req.user.img,
             productlists: productlists,
             urlPath: req.protocol + "://" + req.get("host") + req.url
         });

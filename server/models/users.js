@@ -31,6 +31,9 @@ const Users = sequelize.define('Users', {
     address: {
         type: Sequelize.STRING
     },
+    img: {
+        type: Sequelize.STRING
+    }
     // profilePicture: {
     //     type: Sequelize.STRING
     // }
@@ -46,7 +49,8 @@ Users.sync({ force: false, logging: console.log }).then(() => {
         password: '1234',
         gender: "Male",
         contactNumber: 91234567,
-        address: "1 Holly Road Singapore 123456"
+        address: "1 Holly Road Singapore 123456",
+        img: "face.jpg"
         // format for DATEONLY?
     });
 

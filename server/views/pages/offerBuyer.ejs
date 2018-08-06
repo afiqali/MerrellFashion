@@ -4,7 +4,7 @@
   <title>
     <%= title %>
   </title>
-  <% include ../partials/stylesheet %>
+  <% include ../partials/stylesheetPRODUCT %>
   <% include ../partials/javascript %>
 </head>
 <style>
@@ -16,7 +16,41 @@
 </style>
 
 <body>
-  <% include ../partials/header %>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Merrell Fashion</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account">Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products-gallery">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/messages"> Chat </a>
+                    </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="/offerSeller">Offer Inbox</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
   <div class="container">
     <h1>Offers (Buyer)</h1>
     <table class="table">
@@ -56,7 +90,7 @@
               <td>
                 <% if(itemList[i].offerStatus == "active" && itemList[i].offerType == "accepted" ) { %>
                   <button class="payment">
-                      <a class="payment" href="http://localhost:3000/payment/<%= itemList[i].itemID%>">Make Offer</a>
+                      <a class="payment" href="http://localhost:3000/payment/<%= itemList[i].itemID%>">Make Payment</a>
                   </button>
                 <% } %>
               </td>
@@ -66,12 +100,19 @@
       </thread>
     </table>
   </div>
-  <% include ../partials/footer %>
+
+  <footer class="py-5 bg-dark" style ="position: absolute; bottom: 0; width: 100%;">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+
 </body>
 <script>
     $('.viewBtn').click(function () {
         var record_num = $(this).closest("tr").data('id');
-        location.href = "messages/" + record_num;
+        location.href = "messages/" + record_num ;
     })
 </script>
 
