@@ -2,8 +2,10 @@
 <html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <head>
+<meta charset="UTF-8">
 <script src="/javascripts/socket.io.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <% include ../partials/javascript %>
 <% include ../partials/stylesheet %>
 </head>
@@ -28,7 +30,7 @@ img {
     padding: 10px;
 }
 .chat {
-    max-width: 800px;
+    max-width: 1200px;
     background: #F2F5F8;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -96,11 +98,13 @@ img {
 }
 .fa-file-o, .fa-file-image-o {
     font-size: 16px;
-    color: gray;
     cursor: pointer;
 }
 #send {
     float: right;
+}
+.bgimg {
+    background-image: url('/publicPRODUCT/images/wallpap.jpg');
 }
 </style>
 <body>
@@ -127,35 +131,45 @@ img {
 
     <div class="chat" id="border">
         <div class="chat-header clearfix">
-            <img class="profilepic" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
             <div class="chat-about">
-                <div class="chat-with">Chat with <%= user.name %></div>
+                <div class="chat-with">Logged in as - <%= user.name %></div>
             </div>
-            <div class="dropdown">
+            <!-- <div class="dropdown">
                 <button onclick="myFunction()" class="dropbtn">...</button>
                   <div id="myDropdown" class="dropdown-content">
                     <a href="#">Report User</a>
                     <a href="#">Leave a Feedback</a>
                   </div>
-                </div>
+            </div> -->
         </div>
-        <div id="chatroom">
+        <div id="chatroom" class="bgimg">
             <div id="messages">
-                    <%data.forEach(function(msg){%>
-                       <h4><%=msg.name%></h4>  <p> <%=msg.message%> </p>
-                    <%})%>
+                <%data.forEach(function(msg){%>
+                    <% if (user.name == msg.name){%>
+                    <p style="display: block; position: relative; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1.5rem; padding-right: 1.5rem;
+                    background: #5bc0de; color:#ffffff; border-bottom-right-radius: 1rem; border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; margin-bottom: 0rem; margin-top: 1rem;
+                    margin-left: 1rem; clear: both; max-width: 45rem; font-size: 1rem; float: right; margin-right: 1.5rem;"><%=msg.message%></p> 
+                    <% } else { %>
+                    <p style="display: block; position: relative; float: left; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1.5rem; padding-right: 1.5rem; 
+                    background:#ffffff; color:black; border-bottom-left-radius: 1rem; border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; margin-bottom: 0rem; margin-top: 1rem; 
+                    margin-left: 1rem; clear: both; max-width: 45rem; font-size: 1rem;"><%=msg.message%></p>
+                    <%}%>
+                <%})%>
             </div>
         </div>
         <div class="chat-message clearfix">
-                <div class="chat-message-type" img>
-                        <button id="interested" class="btn btn-primary" style="margin-right:1%">I'm Interested</button><button id="available" class="btn btn-primary" style="margin-right:1%">Is This Still Available?</button>
-                        <button id="thankyou" class="btn btn-primary" style="margin-right:1%">Thank You</button><button id="welcome" class="btn btn-primary" style="margin-right:1%">You're Welcome</button>
+                <div class="chat-message-type">
+                        <button id="interested" type="button" class="btn btn-info" style="margin-right:1%; margin-top:1%">I'm Interested</button>
+                        <button id="queries" type="button" class="btn btn-info" style="margin-right:1%; margin-top:1%">Any Queries?</button>
+                        <button id="available" type="button" class="btn btn-info" class="btn btn-default" style="margin-right:1%; margin-top:1%">Is It Still Available?</button>
+                        <button id="thankyou" type="button" class="btn btn-info" class="btn btn-primary" style="margin-right:1%; margin-top:1%">Thank You</button>
+                        <button id="welcome" type="button" class="btn btn-info" class="btn btn-primary" style="margin-right:1%; margin-top:1%">You're Welcome</button>
                         <br>
                         <br>
-                        <textarea id="message" class="form-control" placeholder="Type your message here..." rows="3"></textarea>
+                        <textarea id="message" style="overflow:hidden" class="form-control" placeholder="Type your message here..."></textarea>
+                        
                         <br>
-                        <button class="fa fa-file-o"></button>
-                        <button class="fa fa-file-image-o"></button>
+                        <!-- <button><i class="fa fa-file-image-o"></i></button> -->
                         <button id="send" class="btn btn-success">Send</button>
                         <br>
                         <br>
@@ -169,6 +183,11 @@ img {
     $(() => {
         $("#send").click(()=>{
             var message = { name: "<%= user.name %>", message: $("#message").val()}
+            postMessage(message)
+            scrollDown();
+        })
+        $("#queries").click(()=>{
+            var message = { name: "<%= user.name %>", message: $("#queries").html()}
             postMessage(message)
             scrollDown();
         })
@@ -200,12 +219,22 @@ img {
     function addMessage(msg){
         $("#messages").append(`<h4> ${msg.name} </h4> <p> ${msg.message} </p>`)
         scrollDown();
+        document.getElementById('message').value='';
     }
 
     function postMessage(message) {
-        $.post('<%-url%>', message)
+        $.post('<%-urlPath%>', message)
         scrollDown();
+        document.getElementById('message').value='';
     }
+
+    var input = document.getElementById("message");
+    input.addEventListener("keyup", function(event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+    document.getElementById("send").click();
+    }
+    });
 
     function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");

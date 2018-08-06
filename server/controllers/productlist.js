@@ -140,6 +140,19 @@ exports.editRecord = function(req, res) {
 exports.specificlist = function(req, res) {
     var currentuser = req.user.id;
     var Itemspecific = req.params.id;
+<<<<<<< HEAD
+    productlist.findById(Itemspecific).then(function (ItemDetails) {
+        res.render ('productpage', {
+            title: "Specific Record Of Product",
+            productspecific: ItemDetails,
+            hostPath: req.protocol + "://" + req.get("host"),
+            urlPath: req.protocol + "://" + req.get("host") + req.url,
+            user: req.user
+        });
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+=======
     sequelize.query("select p.imageName, p.price, p.Description, p.ItemName, p.status, p.category, p.Itemid, p.user_id, p.createdAt, u.name from productlists p join Users u on p.user_id = u.id where p.Itemid ='" + Itemspecific + "'"
     , { model: productlist }).then((RawItemDetails) => { 
         var ItemDetails = RawItemDetails[0]['dataValues'];
@@ -157,6 +170,7 @@ exports.specificlist = function(req, res) {
             return res.status(400).send({
                 message: err
             });
+>>>>>>> ad7b26b09f80678ff53db6d6eb5206a36ca45f60
         });
 
         })
