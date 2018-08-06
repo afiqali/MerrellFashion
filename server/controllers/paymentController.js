@@ -100,8 +100,8 @@ exports.create = function (req, res) {
 
         client.messages.create({
             body: 'Hello from Node',
-            to: '+92211065',  // Text this number
-            from: '+92211065' // From a valid Twilio number
+            to: '+6592211065',  // Text this number
+            from: '+16193042412' // From a valid Twilio number
         })
         .then((message) => console.log(message.sid));
 
