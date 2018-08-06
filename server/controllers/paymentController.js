@@ -3,8 +3,7 @@ var Order = require("../models/paymentModel");
 var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
 
 var mailgun = require("mailgun-js");
-var api_key = '5d9ced5ebfe6f36790964f6139557799-7efe8d73-8ea4ea11';
-var DOMAIN = 'sandbox79212d07453c444693154ccafe772376.mailgun.org';
+
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
 var accountSid = 'AC6ced1d481c8e1d8ec33c4f0da613e3e8'; // Your Account SID from www.twilio.com/console
@@ -106,8 +105,8 @@ exports.create = function (req, res) {
         .then((message) => console.log(message.sid));
 
         var data = {
-            from: 'Excited User <sandbox79212d07453c444693154ccafe772376.mailgun.org>',
-            to: 'pewpewpew1321@gmail.com',
+            from: 'Excited User <merrellfashionbizz@gmail.com>',
+            to: 'tqinyong@yahoo.com.sg',
             subject: 'Hello',
             text: 'Testing some Mailgun awesomness!'
           };
@@ -182,9 +181,17 @@ exports.doStripe = function (req,res) {
                     }
         
                 })
+
+                client.messages.create({
+                    body: 'Hello from Node',
+                    to: '+6592211065',  // Text this number
+                    from: '+16193042412' // From a valid Twilio number
+                })
+                .then((message) => console.log(message.sid));
+
                 var data = {
-                    from: 'Excited User <sandbox79212d07453c444693154ccafe772376.mailgun.org>',
-                    to: 'pewpewpew1321@gmail.com',
+                    from: 'Excited User <smerrellfashionbizz@gmail.com>',
+                    to: 'tqinyong@yahoo.com.sg',
                     subject: 'Hello',
                     text: 'Testing some Mailgun awesomness!'
                   };

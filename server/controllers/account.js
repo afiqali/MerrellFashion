@@ -108,6 +108,8 @@ exports.displayOrder = function (req, res) {
     sequelize.query(`select * from orderStatuses where user_id=${req.user.id}`, { model: orderStatus })
     .then((status) => {
         console.log(status)
+        console.log(status1)
+        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
         var status1 = status[0]['dataValues']['status']
         var text;
         var circle;
@@ -117,10 +119,10 @@ exports.displayOrder = function (req, res) {
                 circle = status1;
                 break;
             case 2:
-                text = "On";
+                circle = status1;
                 break;
             default:
-                text = "No value found";
+                circle ="";
         }
         
         res.render('trackOrder', {
