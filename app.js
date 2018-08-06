@@ -164,19 +164,19 @@ app.post('/products', list.hasAuthorization, upload.single('image'), list.upload
 app.get('/products-gallery', list.show);
 
 //Setup routes for filtering item listing
-app.get('/products-gallery/search/:search', list.searchfunction);
-app.get('/products-gallery/:category', list.showCategory);
-app.get('/products-gallery/Sort/PriceHigh', list.SortHighToLow);
-app.get('/products-gallery/Sort/PriceLow', list.SortLowToHigh);
-app.get("/products-gallery/Sort/PriceRange=:min-:max", list.SortPriceRange);
-app.get("/products-gallery/Sort/Recent", list.SortRecent);
+app.get('/products-gallery/search/:search', list.hasAuthorization, list.searchfunction);
+app.get('/products-gallery/:category',list.hasAuthorization, list.showCategory);
+app.get('/products-gallery/Sort/PriceHigh', list.hasAuthorization, list.SortHighToLow);
+app.get('/products-gallery/Sort/PriceLow', list.hasAuthorization, list.SortLowToHigh);
+app.get("/products-gallery/Sort/PriceRange=:min-:max", list.hasAuthorization, list.SortPriceRange);
+app.get("/products-gallery/Sort/Recent", list.hasAuthorization, list.SortRecent);
 
 //Setup routes for product editing
 app.get("/profile/edit/:id",list.hasAuthorization, list.editRecord);
 app.post("/edit/:id",list.hasAuthorization, upload.single('image'), list.updatetest);
 
 //Setup routes for product delete
-app.delete("/profile/:id",list.hasAuthorization, list.delete);
+app.delete("/profile/:id", list.hasAuthorization, list.delete);
 app.delete("/products-gallery/:id",list.hasAuthorization, list.delete);
 app.delete("/products-gallery/Sort/PriceHigh/:id",list.hasAuthorization, list.delete);
 app.delete("/products-gallery/Sort/PriceLow/:id",list.hasAuthorization, list.delete);
