@@ -6,16 +6,11 @@ const sequelize =new Sequelize({
     dialectModulePath: 'tedious',
     dialectOptions: {
       driver: 'SQL Server Native Client 11.0',
-      instanceName: 'SQLEXPRESS03'
+      instanceName: 'SQLEXPRESS'
     },
     host: 'localhost',
     username: 'p4',
-<<<<<<< HEAD
     password: 'p4pw',
-
-=======
-    password: '1234',
->>>>>>> c3d45c900bbd34ab67c00e731238699f25a8d972
     database: 'p4db',
     pool: {
         min: 0,

@@ -19,12 +19,21 @@ const ChatMsg = sequelize.define('ChatMsg', {
         defaultValue: '',
         trim: true
     },
-    offerPrice: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        defaultValue: 0,
-        trim: true
-    }
+    // offerPrice: {
+    //     type: Sequelize.INTEGER,
+    //     allowNull: true,
+    //     defaultValue: 0,
+    //     trim: true
+    // }
+    userId:{
+        type: Sequelize.INTEGER
+    },
+    itemId: {
+        type: Sequelize.INTEGER
+    },
+    sellerId: {
+        type: Sequelize.INTEGER
+    },
 });
 
 // force: true will drop the table if it already exists

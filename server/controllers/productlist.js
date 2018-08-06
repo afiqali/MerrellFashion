@@ -155,11 +155,12 @@ exports.editRecord = function(req, res) {
 exports.specificlist = function(req, res) {
     var Itemspecific = req.params.id;
     productlist.findById(Itemspecific).then(function (ItemDetails) {
-        res.render('productpage', {
+        res.render ('productpage', {
             title: "Specific Record Of Product",
             productspecific: ItemDetails,
             hostPath: req.protocol + "://" + req.get("host"),
-            urlPath: req.protocol + "://" + req.get("host") + req.url
+            urlPath: req.protocol + "://" + req.get("host") + req.url,
+            user: req.user
         });
     }).catch((err) => {
         return res.status(400).send({

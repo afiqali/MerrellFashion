@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <% include ../partials/stylesheet %>
+    <% include ../partials/javascript %>
+</head>
+
+<body>
+    <% include ../partials/header %>
+    <div class="container">
+      <h2>Chat Room</h2>
+      <table class="table table-bordered" style="padding-top:100px">
+          <thread>
+            <tr>
+              <th>Item</th>
+              <th>Seller<th>
+            </tr>
+            <% for(var i=0; i < data.length; i++){ %>
+              <tr class="rowRecord" data-id="<%= data[i].itemId %>/<%= data[i].sellerId %>/<%= data[i].userId %>">
+                <td>
+                  <%= data[i].itemId %>
+                </td>
+                <td>
+                  <%= data[i].sellerId %>
+                </td>
+                <td width="100">
+                  <input type="button" class="chatBtn btn btn-primary" value="Chat">
+                </td>
+              </tr>
+              <% } %>
+          </thread>
+        </table>
+      </div>
+
+      <script>
+        $('.chatBtn').click(function () {
+            var record_num = $(this).closest("tr").data('id');
+            location.href = "<%- hostPath %>/messages/" + record_num;
+        })
+      </script>
+</body>
+
+</html>
