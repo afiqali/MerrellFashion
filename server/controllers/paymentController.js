@@ -18,9 +18,13 @@ var payment_id;
 // Get specific record - GET
 exports.getItem = function(req,res) {
 
+    
     itemID = req.params.id;
     itemModel.findById(itemID).then(function (item) {
         if (item.status == 'c' || item.status == 'd') {
+            return res.redirect('/profile');
+        }
+        else if (req.user.id == item.user_id) {
             return res.redirect('/profile');
         }
         else {        
