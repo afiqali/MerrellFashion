@@ -165,8 +165,9 @@
         $("#parent p").css("color", "lightgray")
 
         // Configure elements on order status received
-        $("#parent > div:nth-child("+"<%= circle %>"+") > i").replaceWith("<i class='fas fa-circle'></i>")   
-        $("#parent > div:nth-child("+"<%= circle %>"+") > p").css("color", "black")
-
+        "<% if (circle.length > 0) { %>"
+            $("#parent > div:nth-child("+"<%= circle %>"+") > i").replaceWith("<i class='fas fa-circle'></i>")   
+            $("#parent > div:nth-child("+"<%= circle %>"+") > p").css("color", "black")
+        "<% } %>"
     </script>
 </body> 
