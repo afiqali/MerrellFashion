@@ -26,7 +26,7 @@
             <h5 style=""><%= title %></h5>
         </div>
 
-        <% receipt.forEach(function(receipt){ %>
+        <% for(i=0;i<receipt.length;i++) { %>
         <div class="list-group">
 
             <a href="#" class="list-group-item">
@@ -38,13 +38,16 @@
                         </h4>
                         
                         <p class="list-group-item-text">
-                              Price: <%= item.price %>
+                            Name: <%= item[i].ItemName %>
                         </p>
                         <p class="list-group-item-text">
-                            Category: <%= item.category %>
+                              Price: S$<%= (receipt[i].totalAmount).toFixed(2) %>
                         </p>
                         <p class="list-group-item-text">
-                            Description: <%= item.Description %>
+                            Category: <%= item[i].category %>
+                        </p>
+                        <p class="list-group-item-text">
+                            Description: <%= item[i].Description %>
                         </p> <br>
                        
 
@@ -54,25 +57,30 @@
                             Your Receipt:
                         </h4>
                         <p class="list-group-item-text">
-                            Payment ID (Keep this for future reference):  <%= payment.payment_id %>
+                            Payment ID (Keep this for future reference):  <%= receipt[i].payment_id %>
                             </p>
                         <p class="list-group-item-text">
-                            Payer id: <%= payment.payer_id %>
+                            Payer id: <%= receipt[i].payer_id %>
                         </p>
                         <p class="list-group-item-text">
-                            Status: <%= payment.status %>
+                            
+                            <% if (receipt[i].status="c") {  %>
+                                Status: Payment Completed
+                            <% } %>
+                        </p>
+                        <p class="list-group-item-text">
+                            Order Method: <%= receipt[i].orderMethod %>
                         </p>
                         <p>
-                            Order Method: <%= payment.orderMethod %>
+                            Date: <%= receipt[i].orderDate %>
                         </p>
 
-                        <h5> Your payment has been made. Please proceed to place your order details.</h5>
 
                     </form>
                 </div>
             </a>
     </div>
-    <% }); %>
+    <% } %>
     <div class="responsive" style="display: block;margin:auto 0;position: relative;margin:2em;width:40%;" >
         <button class="btn btn-large btn-primary"style=""> <a href="http://localhost:3000/profile" style="color:white;text-decoration: none"> Back to Profile</a></button>
         </div>

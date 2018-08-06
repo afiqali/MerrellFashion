@@ -18,7 +18,46 @@
         }
         </style>
     </head>
+    <script>
+        // You shall not fucking pass 
+        // prevents payment again!
+        (function (global) { 
+            if(typeof (global) === "undefined") {
+                throw new Error("window is undefined");
+            }
 
+            var _hash = "!";
+            var noBackPlease = function () {
+                global.location.href += "#";
+
+                // making sure we have the fruit available for juice (^__^)
+                global.setTimeout(function () {
+                    global.location.href += "!";
+                }, 50);
+            };
+
+            global.onhashchange = function () {
+                if (global.location.hash !== _hash) {
+                    global.location.hash = _hash;
+                }
+            };
+
+            global.onload = function () {            
+                noBackPlease();
+
+                // disables backspace on page except on input fields and textarea..
+                document.body.onkeydown = function (e) {
+                    var elm = e.target.nodeName.toLowerCase();
+                    if (e.which === 8 && (elm !== 'input' && elm  !== 'textarea')) {
+                        e.preventDefault();
+                    }
+                    // stopping event bubbling up the DOM tree..
+                    e.stopPropagation();
+                };          
+            }
+            })(window);
+
+    </script>
     <body style="background-color: #FBFBF9">
 
             <div class="responsive" style="display: block;margin:auto 0;position: relative;margin:2em;width:40%">
@@ -37,7 +76,7 @@
                             Your Item:
                         </h4>
                         <p class="list-group-item-text">
-                              Price:  <%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%>
+                              Price:  <%= (parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))).toFixed(2)%>
                         </p>
                         <p class="list-group-item-text">
                             Category: <%= item.category %>

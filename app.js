@@ -92,14 +92,17 @@ app.use(flash());
 // Index Route
 app.get('/', index.show);
 
-app.get('/login', auth.signin);
+// Route for Login
+app.get('/login', auth.notLoggedIn, auth.signin);
 app.post('/login', passport.authenticate('local-login', {
     //Success go to Profile Page / Fail go to login page
     successRedirect: '/profile',
     failureRedirect: '/login',
     failureFlash: true
 }));
-app.get('/signup', auth.signup);
+
+// Route for signup
+app.get('/signup', auth.notLoggedIn, auth.signup);
 app.post('/signup', passport.authenticate('local-signup', {
     //Success go to Profile Page / Fail go to Signup page
     successRedirect: '/profile',
@@ -107,37 +110,54 @@ app.post('/signup', passport.authenticate('local-signup', {
     failureFlash: true
 }));
 
+// Route for logout
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
+
+// Route for account
+app.get('/account', auth.isLoggedIn, account.displayAccount);
+app.post('/account', account.editAccount);
+
+// Route for Change password
+app.get('/changepassword', auth.isLoggedIn, account.getPassword);
+app.post('/changepassword', account.editPassword);
+
+// Route for Track order
+app.get('/trackorder', auth.isLoggedIn, account.displayOrder)
+
+// Route for Track order
+app.get('/trxhistory', auth.isLoggedIn, listPayments.trxHistory)
+
 // Route for admin - display orders (get from payment)
 app.get('/display', auth.isLoggedIn, display.displayOrder);
 
 // Route for profile
 app.get('/profile', auth.isLoggedIn, list.profileItems);
 
-// Route for account
-app.get('/account', auth.isLoggedIn, account.displayAccount);
-app.post('/account', auth.isLoggedIn, account.editAccount);
+// Setup routes for comments
+app.get('/comments', comments.hasAuthorization, comments.list);
+app.post('/comments', comments.hasAuthorization, comments.create);
+app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete);
+
+// Setup routes for videos
+app.get('/videos', videos.hasAuthorization, videos.show);
+app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
 
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
-app.post('/payment/stripe/',  payment.doStripe);
-app.post('/payment/paypal/',  payment.create);
+app.post('/payment/stripe/:id',  payment.doStripe);
+app.post('/payment/paypal/:id',  payment.create);
 
 app.get('/listPayments', auth.isLoggedIn, listPayments.getItem);
 
 // Route for receipt
-app.get('/receipt/:id/:payment_id', receipt.getItem);
+app.get('/receipt/:id/:payment_id',auth.isLoggedIn, receipt.getItem);
 
-
-// Logout Page
-app.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-});
-
-// Change password
-app.get('/changepassword', auth.isLoggedIn, account.displayAccount
-);
-
+// Setup routes for Transactions
+app.get('/transactions', transactions.list);
+app.get('/')
 // Setup routes for offers
 app.get('/offerSeller', offers.sellerView);
 app.get('/offerBuyer', offers.buyerView);
@@ -146,8 +166,6 @@ app.get('/offerDetails/:id', offers.offerDetails);
 app.post('/offerDetails/:id', offers.acceptOffer);
 app.delete('/offerDetails/:id', offers.rejectOffer);
 app.get("/transactionAdmin", offers.transactionAdmin)
-
-// Setup chat
 
 // Setup routes for product listing general
 app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
@@ -177,6 +195,9 @@ app.get('/products-gallery/Sort/PriceHigh/view/:id', list.hasAuthorization, list
 app.get('/products-gallery/Sort/PriceLow/view/:id', list.hasAuthorization, list.specificlist);
 app.get("/products-gallery/Sort/:min/:max/view/:id", list.hasAuthorization, list.specificlist);
 app.get("/products-gallery/Sort/Recent/view/:id", list.hasAuthorization, list.specificlist);
+
+//Setup routes for view Other Profiles
+app.get("/OtherProfile/:ProfileOwner",list.hasAuthorization, list.OtherProfileItems);
 
 
 
