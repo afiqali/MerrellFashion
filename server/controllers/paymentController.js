@@ -2,7 +2,6 @@
 var Order = require("../models/paymentModel");
 var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
 
-var nodemailer = require('nodemailer');
 var mailgun = require("mailgun-js");
 var api_key = 'key-f9e1218d9d61e236cf3bab4b516957ef';
 var DOMAIN = 'sandboxb1e0c3fd6b374111a3def48c49f58bf4.mailgun.org';
