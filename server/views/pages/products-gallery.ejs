@@ -294,24 +294,6 @@
                         var record_num = $(this).closest("div").data('id');
                         location.href = "<%-urlPath %>/view/" + record_num;
                     });
-
-                    $('.deleteBtn').click(function () {
-                        var record_num = $(this).closest("div").data('id');
-                        $.ajax({
-                            url: '<%-urlPath%>/' + record_num,
-                            type: 'DELETE',
-                            success: function (result) {
-                                console.log(result.message);
-                                location.reload()
-                                // var itemToRemove = '.col-lg-4 col-md-6 mb-4[data-id=' + record_num + ']';
-                                // $(itemToRemove).remove();
-                            },
-                            error: function (result) {
-                                alert("Unable to delete item record.");
-                                console.log(result.message);
-                            }
-                        });
-                    });
                 </script>
 
 </body>

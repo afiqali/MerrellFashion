@@ -156,9 +156,11 @@ img {
     <br>
     <div class="panel panel-default">
         <div class="panel-heading"><h3 style="text-align: center">Messages</h3></div>
-        <div class="panel-body"><img alt="" align="left" src="/publicPRODUCT/images/<%= productlist.imageName %>">
-        <strong><h3><%= productlist.ItemName%></h3></strong>
-        <p><%= productlist.Description%></p></div>
+        <div class="panel-body">
+            <img alt="" align="left" src="/publicPRODUCT/images/<%= productlist.imageName %>">
+            <strong><h3><%= productlist.ItemName%></h3></strong>
+            <p><%= productlist.Description%></p>
+        </div>
         <form action="/messages/<%= productlist.Itemid%>" class="makeOffer" method="POST">
         <div class="moBtn">
         <div class="input-group u-horizontal-full aC-i">
@@ -170,9 +172,6 @@ img {
             <span>Make Offer</span>
             </button>
     </form>
-        <button id="makeOfferButton" class="btn btn-block b-r text-small b-r">
-            <span><a href="http://localhost:3000/payment/<%= productlist.Itemid%>" id="#offer">Make Offer</a></span>
-        </button>
     </div>
 
     <div class="chat" id="border">

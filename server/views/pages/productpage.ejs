@@ -122,7 +122,7 @@
                     <% if ( user.id == productspecific.user_id ){ %>
                       <a class="btn btn-secondary" style="min-width: 100%">Offer Button Disabled - Same User</a>
                     <% }else { %>
-                      <a href="/messages/<%= productspecific.Itemid%>/<%= productspecific.user_id%>/<%= user.id%>" class="btn btn-secondary" style="min-width: 100%">Chat now to make offer</a>
+                      <a href="/messages/<%= productspecific.Itemid%>/<%= productspecific.user_id%>/<%= user.id %>" class="btn btn-secondary" style="min-width: 100%">Chat now to make offer</a>
                     <% } %>
 
                   <% }else if (productspecific.status == 'c') { %>  

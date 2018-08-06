@@ -15,8 +15,6 @@ exports.show = function (req, res) {
     var currentuser = req.user.id
     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <>'" +currentuser+"'"
     , { model: productlist}).then((productlists)=> {
-        
-
         res.render('products-gallery', {
             title: 'Product For Sale',
             productlists: productlists,
@@ -359,7 +357,7 @@ exports.profileItems = function (req, res) {
         res.render('profile', {
             title: 'Profile Page', 
             user : req.user, 
-            avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true),
+            avatar: req.user.img,
             productlists: productlists,
             urlPath: req.protocol + "://" + req.get("host") + req.url
         });
