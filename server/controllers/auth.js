@@ -38,6 +38,7 @@ exports.notLoggedIn = function(req, res, next) {
 // Render Profile page & get gravatar icon
 exports.profile = function(req, res) {
     // List all Users and sort by Date
-    res.render('profile', { title: 'Profile Page', user : req.user, avatar: gravatar.url(req.user.email ,  {s: '100', r: 'x', d: 'retro'}, true) });
+    res.render('profile', { title: 'Profile Page', user : req.user, avatar: req.user.img });
 };
+
 

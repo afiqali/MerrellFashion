@@ -11,6 +11,7 @@
     <title>Product Details</title>
 
     <!-- Bootstrap core CSS -->
+    
     <% include ../partials/stylesheetPRODUCT %>
     <% include ../partials/stylesheetSlick %>
     <!-- Custom styles for this template -->
@@ -61,7 +62,7 @@
       </nav>
 
     <!-- Page Content -->
-    <div class="container">
+    <div class="container" style="padding-top:0">
 
       <div class="row">
 
@@ -69,7 +70,7 @@
         <div class="col-md-7" style="top:30px">
 
           <!-- Blog Post -->
-          <div class="card mb-4">
+          <div class="card mb-4" style="max-height:482px">
             <img class="card-img-top" src="/publicPRODUCT/images/<%= productspecific.imageName %>" alt="<%= productspecific.imageName %>" style="max-width: fit-content; align-self: center; height:400px">
             <% if (productspecific.status == 'c') { %>
               <div style="position: absolute; bottom: 16.6%; right: 0;;" class="btn btn-danger">Item Sold</div>
@@ -84,9 +85,6 @@
 
               <% } %>
                 </div>
-
-            
-            
           
           </div>
 

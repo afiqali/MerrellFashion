@@ -103,12 +103,13 @@ app.post('/login', passport.authenticate('local-login', {
 
 // Route for signup
 app.get('/signup', auth.notLoggedIn, auth.signup);
-app.post('/signup', passport.authenticate('local-signup', {
+app.post('/signup', upload.single('image'), passport.authenticate('local-signup', {
     //Success go to Profile Page / Fail go to Signup page
     successRedirect: '/profile',
     failureRedirect: '/signup',
     failureFlash: true
-}));
+    })
+);
 
 // Route for logout
 app.get('/logout', function (req, res) {
@@ -118,7 +119,7 @@ app.get('/logout', function (req, res) {
 
 // Route for account
 app.get('/account', auth.isLoggedIn, account.displayAccount);
-app.post('/account', account.editAccount);
+app.post('/account', upload.single('image'), account.editAccount);
 
 // Route for Change password
 app.get('/changepassword', auth.isLoggedIn, account.getPassword);
@@ -160,10 +161,10 @@ app.get("/transactionAdmin", offers.transactionAdmin)
 
 // Setup routes for product listing general
 app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
-app.get('/products-gallery', list.hasAuthorization, list.show);
+app.get('/products-gallery', list.show);
 
 //Setup routes for filtering item listing
-app.get('/products-gallery/search/:search', list.searchfunction);
+app.get('/products-gallery/search/:search', list.hasAuthorization, list.searchfunction);
 app.get('/products-gallery/:category',list.hasAuthorization, list.showCategory);
 app.get('/products-gallery/Sort/PriceHigh', list.hasAuthorization, list.SortHighToLow);
 app.get('/products-gallery/Sort/PriceLow', list.hasAuthorization, list.SortLowToHigh);
@@ -172,32 +173,45 @@ app.get("/products-gallery/Sort/Recent", list.hasAuthorization, list.SortRecent)
 
 //Setup routes for product editing
 app.get("/profile/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/OtherProfile/:id/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/Sort/PriceHigh/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/Sort/PriceLow/edit/:id",list.hasAuthorization, list.editRecord);
+app.get("/products-gallery/Sort/Recent/edit/:id",list.hasAuthorization,list.editRecord);
+app.get("/products-gallery/Sort/:min/:max/edit/:id",list.hasAuthorization, list.editRecord);
+app.get('/products-gallery/search/:search/edit/:id',list.hasAuthorization, list.editRecord);
+app.get('/products-gallery/Sort/PriceRange=:min-:max/edit/:id',list.hasAuthorization, list.editRecord);
 app.post("/edit/:id",list.hasAuthorization, upload.single('image'), list.updatetest);
 
 //Setup routes for product delete
-app.delete("/profile/:id",list.hasAuthorization, list.delete);
+app.delete("/profile/:id", list.hasAuthorization, list.delete);
+app.delete("/products-gallery/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/Sort/PriceHigh/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/Sort/PriceLow/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/Sort/Recent/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/Sort/:min/:max/:id",list.hasAuthorization, list.delete);
+app.delete('/products-gallery/search/:search/:id', list.delete);
+app.delete('/products-gallery/Sort/PriceRange=:min-:max/:id', list.delete);
 
 // Setup routes for specific product list
 app.get('/products-gallery/:category/view/:id', list.hasAuthorization, list.specificlist)
-app.get('/products-gallery/view/:id', list.specificlist);
-app.get('/products-gallery/search/:search/view/:id', list.specificlist);
-app.get('/profile/view/:id', list.specificlist);
+app.get('/products-gallery/view/:id',list.hasAuthorization, list.specificlist);
+app.get('/products-gallery/search/:search/view/:id',list.hasAuthorization, list.specificlist);
+app.get('/profile/view/:id',list.hasAuthorization, list.specificlist);
 app.get('/products-gallery/Sort/PriceHigh/view/:id', list.hasAuthorization, list.specificlist);
 app.get('/products-gallery/Sort/PriceLow/view/:id', list.hasAuthorization, list.specificlist);
-app.get("/products-gallery/Sort/:min/:max/view/:id", list.hasAuthorization, list.specificlist);
+app.get("/products-gallery/Sort/PriceRange=:min-:max/view/:id", list.hasAuthorization, list.specificlist);
 app.get("/products-gallery/Sort/Recent/view/:id", list.hasAuthorization, list.specificlist);
 
 //Setup routes for view Other Profiles
 app.get("/OtherProfile/:ProfileOwner",list.hasAuthorization, list.OtherProfileItems);
 
-
-
 // Setup Chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
+// Import models
 var ChatMsg = require('./server/models/chatMsg');
 var Users = require('./server/models/users');
-var itemModel = require("./server/models/productlist");
 var ProductDetails = require('./server/models/productlist');
 var myDatabase = require('./server/controllers/database');
 var sequelizeInstance = myDatabase.sequelizeInstance;
@@ -213,50 +227,6 @@ io.on('connection', function(socket) {
     });
 })
 
-// app.get('/messages/:id', function (req, res) {
-//     ChatMsg.findAll().then((chatMessages) => {
-//         Users.findById(req.user.id).then(function(user){
-//             ProductDetails.findById(req.params.id).then(function(productlist){
-//             // console.log(req.user)
-//             res.render('chatMsg', {
-//                 url: req.protocol + "://" + req.get("host") + req.url,
-//                 data: chatMessages,
-//                 user: user,
-//                 productlist: productlist
-//             });
-//         })
-//     })
-//     });
-// });
-// app.get('/messages', function (req, res) {
-//     ChatMsg.findAll().then((chatMessages) => {
-//         Users.findById(req.user.id).then(function(user){
-//             // console.log(req.user)
-//             res.render('chatMsg', {
-//                 url: req.protocol + "://" + req.get("host") + req.url,
-//                 data: chatMessages,
-//                 user: user,
-//                 productlist: ""
-//             });
-//     })
-//     });
-// });
-// app.post('/messages/:id', function (req, res) {
-//     Users.findById(req.user.id).then(function(user){
-//     var chatData = {
-//         name: user.name,
-//         message: req.body.message
-//     }
-//     //Save into database
-//     ChatMsg.create(chatData).then((newMessage) => {
-//         if (!newMessage) {
-//             sendStatus(500);
-//         }
-//         io.emit('message', req.body)
-//         res.sendStatus(200)
-//     })
-// });
-// });
 
 //Display Chat Room
 app.get('/messages', auth.isLoggedIn, function(req, res) {

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <% include ../partials/javascript %>
 <% include ../partials/stylesheet %>
+<% include ../partials/stylesheetPRODUCT %>
 </head>
 <style>
 img {
@@ -108,14 +109,58 @@ img {
 }
 </style>
 <body>
-<% include ../partials/header %>
+<!-- Navigation -->
+     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Merrell Fashion</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Sign in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Sign up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/account">Account</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/comments">Comments</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/videos">Videos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products-gallery">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/messages"> Chat </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 <div class="container">
     <br>
     <div class="panel panel-default">
         <div class="panel-heading"><h3 style="text-align: center">Messages</h3></div>
-        <div class="panel-body"><img alt="" align="left" src="/publicPRODUCT/images/<%= productlist.imageName %>">
-        <strong><h3><%= productlist.ItemName%></h3></strong>
-        <p><%= productlist.Description%></p></div>
+        <div class="panel-body">
+            <img alt="" align="left" src="/publicPRODUCT/images/<%= productlist.imageName %>">
+            <strong><h3><%= productlist.ItemName%></h3></strong>
+            <p><%= productlist.Description%></p>
+        </div>
         <form action="/messages/<%= productlist.Itemid%>" class="makeOffer" method="POST">
         <div class="moBtn">
         <div class="input-group u-horizontal-full aC-i">
@@ -178,6 +223,16 @@ img {
                 </div>
         </div>
 </div>
+<<<<<<< HEAD
+
+=======
+>>>>>>> 053df94ea5b4dfa48814f3bed96b8d16ce4ead08
+<footer class="py-5 bg-dark" style ="position: relative; bottom: 0; width: 100%; top: 334px;">
+        <div class="container">
+          <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+        </div>
+        <!-- /.container -->
+      </footer>
 <script>
     var socket = io()
     $(() => {
@@ -217,7 +272,15 @@ img {
     socket.on('message', addMessage)
 
     function addMessage(msg){
-        $("#messages").append(`<h4> ${msg.name} </h4> <p> ${msg.message} </p>`)
+        if (msg.name == '<%= user.name%>') {
+        $("#messages").append(`<p style="display: block; position: relative; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1.5rem; padding-right: 1.5rem;
+                    background: #5bc0de; color:#ffffff; border-bottom-right-radius: 1rem; border-top-left-radius: 1rem; border-bottom-left-radius: 1rem; margin-bottom: 0rem; margin-top: 1rem;
+                    margin-left: 1rem; clear: both; max-width: 45rem; font-size: 1rem; float: right; margin-right: 1.5rem;"> ${msg.message} </p>`)
+    } else {
+        $("#messages").append(`<p style="display: block; position: relative; float: left; padding-top: 1rem; padding-bottom: 1rem; padding-left: 1.5rem; padding-right: 1.5rem; 
+                    background:#ffffff; color:black; border-bottom-left-radius: 1rem; border-top-right-radius: 1rem; border-bottom-right-radius: 1rem; margin-bottom: 0rem; margin-top: 1rem; 
+                    margin-left: 1rem; clear: both; max-width: 45rem; font-size: 1rem;"> ${msg.message} </p>`)
+    }
         scrollDown();
         document.getElementById('message').value='';
     }
