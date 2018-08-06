@@ -145,7 +145,7 @@ app.post('/payment/paypal/:id',  payment.create);
 app.get('/listPayments', auth.isLoggedIn, listPayments.getItem);
 
 // Route for receipt
-app.get('/receipt/:id/:payment_id', receipt.getItem);
+app.get('/receipt/:id/:payment_id',auth.isLoggedIn, receipt.getItem);
 
 // Setup routes for comments
 app.get('/comments', comments.hasAuthorization, comments.list);

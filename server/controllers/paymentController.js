@@ -4,7 +4,7 @@ var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
 
 var nodemailer = require('nodemailer');
 var mailgun = require("mailgun-js");
-var api_key = 'b6431047df46f8da7804de6a65b430d0-a5d1a068-98497ca8';
+var api_key = 'key-f9e1218d9d61e236cf3bab4b516957ef';
 var DOMAIN = 'sandboxb1e0c3fd6b374111a3def48c49f58bf4.mailgun.org';
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
@@ -16,28 +16,45 @@ var itemID;
 var payment_id;
 
 
-
 // Get specific record - GET
 exports.getItem = function(req,res) {
+
     itemID = req.params.id;
     itemModel.findById(itemID).then(function (item) {
-        res.render('payment', {
+        if (item.status == 'c' || item.status == 'd') {
+            return res.redirect('/profile');
+        }
+        else {        
+            res.render('payment', {
             title: 'Payment Page',
             user: req.user,
             item: item,
-            
             hostPath: req.protocol + "://" + req.get("host")
         });
+        }
+
     }).catch((err) => {
         return res.status(400).send({
                         message:err
         });
     });
 
+
 };
 
 // Create Order - POST
 exports.create = function (req, res) {
+    itemID = req.params.id;
+    itemModel.findById(itemID).then(function (item) {
+        if (item.status == 'c' || item.status == 'd') {
+            return res.redirect('/profile');
+        }
+    }).catch((err) => {
+        return res.status(400).send({
+                        message:err
+        });
+    });
+
     console.log("creating payment");
     payment_id = req.body.payment_id;
     console.log((req.body.item_id).toString())
@@ -132,6 +149,18 @@ exports.create = function (req, res) {
 
 // Do Stripe things - POST
 exports.doStripe = function (req,res) {
+        itemID = req.params.id;
+        itemModel.findById(itemID).then(function (item) {
+            if (item.status == 'c' || item.status == 'd') {
+                return res.redirect('/profile');
+            }
+            
+
+        }).catch((err) => {
+            return res.status(400).send({
+                            message:err
+            });
+        });
         
         const token = req.body.stripeToken; // Using Express
         var amount1 = req.body.price1;
