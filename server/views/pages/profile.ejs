@@ -85,7 +85,7 @@
 
             <div class="card text-xs-center">
                 <br>
-                <img class="card-img-top" src="<%= avatar %>" alt="Card image cap" style="width:100px; margin-left:auto; margin-right:  auto;">
+                <img class="card-img-top" src="./public/images/<%= avatar %>" alt="Card image cap" style="width:100px; margin-left:auto; margin-right:  auto;">
             
                 <div class="card-block">
                     <h4 class="card-title">User Details</h4>
@@ -124,9 +124,14 @@
                                                 </p>
                                       <p class="card-text"></p>
                                     </div>
+                                    <% if (productlists.status == 'c') { %>
+                                    <div class="card-footer" data-id="<%= productlists.Itemid %>">
+                                        <input type="button" class="btn btn-danger deleteBtn"  value="Delete">
+                                    <% } else { %>
                                     <div class="card-footer" data-id="<%= productlists.Itemid %>">
                                         <input type="button" class="btn btn-primary editBtn" value="Edit">
                                         <input type="button" class="btn btn-danger deleteBtn"  value="Delete">
+                                     <% } %>
                   
                                     </div>
                                   </div>

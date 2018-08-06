@@ -58,6 +58,7 @@ productlist.sync({ force: false, logging: console.log}).then(() => {
     productlist.upsert({
         Itemid: 1,
         ItemName: "Blue dress",
+        imageName: "dress.jpg",
         user_id: 1,
         price: 10.50,
         Description: "Branded brand-new dress",

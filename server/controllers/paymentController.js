@@ -2,10 +2,15 @@
 var Order = require("../models/paymentModel");
 var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
 
-var mailgun = require("mailgun-js");
-var api_key = 'key-f9e1218d9d61e236cf3bab4b516957ef';
-var DOMAIN = 'sandboxb1e0c3fd6b374111a3def48c49f58bf4.mailgun.org';
-var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+// var mailgun = require("mailgun-js");
+
+// var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
+
+var accountSid = 'AC6ced1d481c8e1d8ec33c4f0da613e3e8'; // Your Account SID from www.twilio.com/console
+var authToken = '5554f393e7cf77b1496cb9f2de0d61e2';   // Your Auth Token from www.twilio.com/console
+
+var twilio = require('twilio');
+var client = new twilio(accountSid, authToken);
 
 var itemModel = require("../models/productlist");
 var myDatabase = require('./database');
@@ -91,6 +96,35 @@ exports.create = function (req, res) {
             }
 
         })
+
+        client.messages.create({
+            body: 'Payment ID: ' + req.body.payment_id +
+                  ' Payer ID: ' + req.body.payer_id +
+                  ' Amount Paid: ' + req.body.totalAmount +
+                  ' Status: ' + req.body.status +
+                  ' Order Method: ' + req.body.orderMethod +
+                  ' Collection Date: ' + req.body.dob2 ,
+            to: '+6592211065',  // Text this number
+            from: '+16193042412' // From a valid Twilio number
+        })
+        .then((message) => console.log(message.sid));
+
+        var data = {
+            from: 'Merrell Fashion - Payment Success! <merrellfashionbizz@gmail.com>',
+            to: 'tqinyong@yahoo.com.sg',
+            subject: 'Your Receipt',
+            html: '<h3> Payment ID: </h3>' + req.body.payment_id +
+                  '<h4> Payer ID: </h4>' + req.body.payer_id +
+                  '<h4> Amount Paid: </h4>' + req.body.totalAmount +
+                  '<h4> Status: </h4>' + req.body.status +
+                  '<h4> Order Method: </h4>' + req.body.orderMethod +
+                  '<h4> Collection Date: </h4>' + req.body.dob2 
+          };
+          
+          mailgun.messages().send(data, function (error, body) {
+            console.log(body);
+          });
+
         // var url;
         url = '/receipt/' + itemID.toString() + '/' + payment_id;
         res.redirect(url);
@@ -157,6 +191,35 @@ exports.doStripe = function (req,res) {
                     }
         
                 })
+
+                client.messages.create({
+                    body: ' Payment ID: ' + charge.id +
+                          ' Payer ID: ' + charge.source.id +
+                          ' Amount Paid: ' + req.body.price1 +
+                          ' Status: ' + req.body.status1 +
+                          ' Order Method: ' + charge.source.brand +
+                          ' Collection Date: ' + req.body.dob1 ,
+                    to: '+6592211065',  // Text this number
+                    from: '+16193042412' // From a valid Twilio number
+                })
+                .then((message) => console.log(message.sid));
+
+                var data = {
+                    from: 'Merrell Fashion - Payment Success! <merrellfashionbizz@gmail.com>',
+                    to: 'tqinyong@yahoo.com.sg',
+                    subject: 'Your Receipt',
+                    html: '<h3> Payment ID: </h3>' + charge.id +
+                          '<h4> Payer ID: </h4>' + charge.source.id +
+                          '<h4> Amount Paid: </h4>' + req.body.price1 +
+                          '<h4> Status: </h4>' + req.body.status1 +
+                          '<h4> Order Method: </h4>' + charge.source.brand +
+                          '<h4> Collection Date: </h4>' + req.body.dob1
+                  };
+                  
+                  mailgun.messages().send(data, function (error, body) {
+                    console.log(body);
+                  });
+        
                 url = '/receipt/' + itemID.toString() + '/' + charge.id;
                 res.redirect(url);
             })

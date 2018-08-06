@@ -103,12 +103,13 @@ app.post('/login', passport.authenticate('local-login', {
 
 // Route for signup
 app.get('/signup', auth.notLoggedIn, auth.signup);
-app.post('/signup', passport.authenticate('local-signup', {
+app.post('/signup', upload.single('image'), passport.authenticate('local-signup', {
     //Success go to Profile Page / Fail go to Signup page
     successRedirect: '/profile',
     failureRedirect: '/signup',
     failureFlash: true
-}));
+    })
+);
 
 // Route for logout
 app.get('/logout', function (req, res) {
@@ -118,7 +119,7 @@ app.get('/logout', function (req, res) {
 
 // Route for account
 app.get('/account', auth.isLoggedIn, account.displayAccount);
-app.post('/account', account.editAccount);
+app.post('/account', upload.single('image'), account.editAccount);
 
 // Route for Change password
 app.get('/changepassword', auth.isLoggedIn, account.getPassword);
@@ -190,14 +191,12 @@ app.get("/products-gallery/Sort/Recent/view/:id", list.hasAuthorization, list.sp
 //Setup routes for view Other Profiles
 app.get("/OtherProfile/:ProfileOwner",list.hasAuthorization, list.OtherProfileItems);
 
-
-
 // Setup Chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
+// Import models
 var ChatMsg = require('./server/models/chatMsg');
 var Users = require('./server/models/users');
-var itemModel = require("./server/models/productlist");
 var ProductDetails = require('./server/models/productlist');
 var myDatabase = require('./server/controllers/database');
 var sequelizeInstance = myDatabase.sequelizeInstance;
@@ -213,50 +212,6 @@ io.on('connection', function(socket) {
     });
 })
 
-// app.get('/messages/:id', function (req, res) {
-//     ChatMsg.findAll().then((chatMessages) => {
-//         Users.findById(req.user.id).then(function(user){
-//             ProductDetails.findById(req.params.id).then(function(productlist){
-//             // console.log(req.user)
-//             res.render('chatMsg', {
-//                 url: req.protocol + "://" + req.get("host") + req.url,
-//                 data: chatMessages,
-//                 user: user,
-//                 productlist: productlist
-//             });
-//         })
-//     })
-//     });
-// });
-// app.get('/messages', function (req, res) {
-//     ChatMsg.findAll().then((chatMessages) => {
-//         Users.findById(req.user.id).then(function(user){
-//             // console.log(req.user)
-//             res.render('chatMsg', {
-//                 url: req.protocol + "://" + req.get("host") + req.url,
-//                 data: chatMessages,
-//                 user: user,
-//                 productlist: ""
-//             });
-//     })
-//     });
-// });
-// app.post('/messages/:id', function (req, res) {
-//     Users.findById(req.user.id).then(function(user){
-//     var chatData = {
-//         name: user.name,
-//         message: req.body.message
-//     }
-//     //Save into database
-//     ChatMsg.create(chatData).then((newMessage) => {
-//         if (!newMessage) {
-//             sendStatus(500);
-//         }
-//         io.emit('message', req.body)
-//         res.sendStatus(200)
-//     })
-// });
-// });
 
 //Display Chat Room
 app.get('/messages', auth.isLoggedIn, function(req, res) {
