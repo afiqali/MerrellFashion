@@ -191,6 +191,13 @@
                       </div>
                       <hr>
                       <br>
+
+                      <div style="margin: auto 0; text-align: center">
+                            <label for="dob">Collection Date: </label>
+                            <input  type="date" id="dob" name="dob" onchange="changedDate();">
+                        </div>
+
+                        <br>
                       <div id="paypal-button-container" class="container-fluid" style="margin:auto; ">
                         <div id="paypal-button" >
                         </div>
@@ -219,6 +226,7 @@
                     <input id="price1" name="price1" type="hidden" value="<%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%>">
                     <input id="status1" name="status1" type="hidden" value="VERIFIED">
                     <input id="item_id1" name="item_id1" type="hidden" value"<%= item.Itemid %>">
+                    <input  type="hidden" id="dob1" name="dob1">
             </form>
             <br>
             <p style="font-size: 11px;text-align: center"> * We accept these cards * </p>
@@ -275,6 +283,9 @@
                     <fieldset class="form-group">
                         <input id="orderMethod" type="hidden" name="orderMethod">
                     </fieldset>
+                    <fieldset class="form-group">
+                         <input  type="hidden" id="dob2" name="dob2">
+                </fieldset>
                     <!-- <fieldset class="form-group">
                         <label for="delieveryFee">Delivery fee</label>
                         <textarea id="delieveryFee" name="delieveryFee" rows="8" cols="40" class="form-control" placeholder="Delivery Fee" required=""></textarea>
@@ -285,8 +296,14 @@
 
 
         <script>
-                
+                function changedDate() {
+                    var dob = $('#dob').val();
+                    $('#dob1').val(dob);
+                    $('#dob2').val(dob);
+                }
 
+
+                
                 // stripe shit
                 var pricee = parseFloat(document.getElementById('pricee').innerText);
                 // console.log(pricee);

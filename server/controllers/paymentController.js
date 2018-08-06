@@ -65,7 +65,8 @@ exports.create = function (req, res) {
         user_id: req.user.id,
         totalAmount: parseFloat(req.body.totalAmount),
         status: req.body.status,
-        orderMethod: req.body.orderMethod
+        orderMethod: req.body.orderMethod,
+        collectionDate: req.body.dob2
     }
 
     Order.create(orderData).then((newOrder, created) => {
@@ -96,6 +97,7 @@ exports.create = function (req, res) {
 
 // Do Stripe things - POST
 exports.doStripe = function (req,res) {
+        console.log(req.body.dob1)
         itemID = req.params.id;
         itemModel.findById(itemID).then(function (item) {
             if (item.status == 'c' || item.status == 'd') {
@@ -128,7 +130,8 @@ exports.doStripe = function (req,res) {
                 user_id: req.user.id,
                 totalAmount: req.body.price1,
                 status: req.body.status1,
-                orderMethod: charge.source.brand
+                orderMethod: charge.source.brand,
+                collectionDate: req.body.dob1
             }
         
             Order.create(stripeData).then((newOrder, created) => {
