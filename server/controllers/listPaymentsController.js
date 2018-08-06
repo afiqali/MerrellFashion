@@ -11,11 +11,33 @@ exports.getItem = function(req,res) {
     sequelize.query('SELECT * FROM Orders o INNER JOIN productlists p on o.Itemid = p.Itemid WHERE o.user_id =' + user_id  ,{model:Order}).then((receipt) =>{
         sequelize.query('SELECT * FROM Orders o INNER JOIN productlists p on o.Itemid = p.Itemid WHERE o.user_id =' + user_id  ,{model:itemModel}).then((item) =>{
             res.render('listPayments', {
-                title: 'Your Previous Payments.',
+                title: 'Your previous payments.',
                 user: req.user,
                 receipt: receipt,
                 item: item,
-                hostPath: req.protocol + "://" + req.get("host")
+                hostPath: req.protocol + "://" + req.get("host"),
+                message: req.flash("loginMessage")
+            })
+    }).catch((err) => {
+        return res.status(400).send({
+            message:err
+        });
+    });
+});
+};
+
+// Display all successful transactions in Account > Transaction history 
+exports.trxHistory = function(req,res) {
+    var user_id = req.user.id
+    sequelize.query('SELECT * FROM Orders o INNER JOIN productlists p on o.Itemid = p.Itemid WHERE o.user_id =' + user_id  ,{model:Order}).then((receipt) =>{
+        sequelize.query('SELECT * FROM Orders o INNER JOIN productlists p on o.Itemid = p.Itemid WHERE o.user_id =' + user_id  ,{model:itemModel}).then((item) =>{
+            res.render('trxHistory', {
+                title: 'Your previous payments.',
+                user: req.user,
+                receipt: receipt,
+                item: item,
+                hostPath: req.protocol + "://" + req.get("host"),
+                message: req.flash("loginMessage")
             })
     }).catch((err) => {
         return res.status(400).send({

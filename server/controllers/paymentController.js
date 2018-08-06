@@ -87,58 +87,6 @@ exports.create = function (req, res) {
             }
 
         })
-
-    
-    //   // create reusable transporter object using the default SMTP transport
-    //   let transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     port: 25,
-    //     secure: false, // true for 465, false for other ports
-    //     auth: {
-    //         user: 'pewpewpew1321@gmail.com', // generated ethereal user
-    //         pass: 't0030620c'  // generated ethereal password
-    //     },
-    //     tls:{
-    //       rejectUnauthorized:false
-    //     }
-    //   });
-    
-    //   // setup email data with unicode symbols
-    //   let mailOptions = {
-    //       from: '"Nodemailer Contact" <pewpewpew1321@gmail.com>', // sender address
-    //       to: 'pewpewpew1321@gmail.com', // list of receivers
-    //       subject: 'Node Contact Request', // Subject line
-    //       text: 'Hello world?', // plain text body
-    //     //   html: output // html body
-    //   };
-    
-    //   // send mail with defined transport object
-    //   transporter.sendMail(mailOptions, (error, info) => {
-    //       if (error) {
-    //           return console.log(error);
-    //       }
-    //       console.log('Message sent: %s', info.messageId);   
-    //       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    
-    //       res.render('contact', {msg:'Email has been sent'});
-    //   });
-
-
-    var data = {
-        from: 'Merrell Fashion <pewpewpew1321@gmail.com>',
-        to: 'tqinyong@yahoo.com.sg',
-        subject: 'Hello',
-        html: '<h2> Payment ID: </h2>' + req.body.payment_id+
-              '<h4> Item ID: </h4>' + req.params.id +
-              '<h4> Total Amount: </h4>' + req.body.totalAmount +
-              '<h4> Status: </h4>' + req.body.status +
-              '<h4> Order Method: </h4>' +req.body.orderMethod
-        };
-
-    mailgun.messages().send(data, function (error, body) {
-    console.log(body);
-    });
-
         // var url;
         url = '/receipt/' + itemID.toString() + '/' + payment_id;
         res.redirect(url);
@@ -203,58 +151,8 @@ exports.doStripe = function (req,res) {
                     }
         
                 })
-
-    //   // create reusable transporter object using the default SMTP transport
-    //   let transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     port: 25,
-    //     secure: false, // true for 465, false for other ports
-    //     auth: {
-    //         user: 'pewpewpew1321@gmail.com', // generated ethereal user
-    //         pass: 't0030620c'  // generated ethereal password
-    //     },
-    //     tls:{
-    //       rejectUnauthorized:false
-    //     }
-    //   });
-    
-    //   // setup email data with unicode symbols
-    //   let mailOptions = {
-    //       from: '"Nodemailer Contact" <pewpewpew1321@gmail.com>', // sender address
-    //       to: 'pewpewpew1321@gmail.com', // list of receivers
-    //       subject: 'Node Contact Request', // Subject line
-    //       text: 'Hello world?', // plain text body
-    //     //   html: output // html body
-    //   };
-    
-    //   // send mail with defined transport object
-    //   transporter.sendMail(mailOptions, (error, info) => {
-    //       if (error) {
-    //           return console.log(error);
-    //       }
-    //       console.log('Message sent: %s', info.messageId);   
-    //       console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    
-    //       res.render('contact', {msg:'Email has been sent'});
-    //   });
-
-    var data = {
-        from: 'Merrell Fashion <pewpewpew1321@gmail.com>',
-        to: 'tqinyong@yahoo.com.sg',
-        subject: 'Hello',
-        html: '<h2> Payment ID: </h2> ' + charge.id +
-              '<h4> Item ID: </h4> ' + req.params.id +
-              '<h4> Total Amount: </h4> ' + req.body.price1 +
-              '<h4> Status: </h4> ' + req.body.status1 +
-              '<h4> Order Method: </h4> ' + charge.source.brand
-        };
-    
-        mailgun.messages().send(data, function (error, body) {
-        console.log(body);
-        });
-
-        url = '/receipt/' + itemID.toString() + '/' + charge.id;
-        res.redirect(url);
+                url = '/receipt/' + itemID.toString() + '/' + charge.id;
+                res.redirect(url);
             })
         }).catch((err) => {
             return res.status(400).send({

@@ -10,9 +10,6 @@ var bodyParser = require('body-parser');
 var multer = require('multer');
 var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 150000000000000, files:1} });
 
-// Import nodemailer
-var nodemailer = require('nodemailer');
-
 // Import home controller
 var index = require('./server/controllers/index');
 // Import login controller
@@ -95,12 +92,12 @@ app.use(passport.session());
 // flash messages
 app.use(flash());
 
-// Routes to pages
-// Route for Index
+// Application Routes
+// Index Route
 app.get('/', index.show);
 
 // Route for Login
-app.get('/login', auth.signin);
+app.get('/login', auth.notLoggedIn, auth.signin);
 app.post('/login', passport.authenticate('local-login', {
     //Success go to Profile Page / Fail go to login page
     successRedirect: '/profile',
@@ -109,7 +106,7 @@ app.post('/login', passport.authenticate('local-login', {
 }));
 
 // Route for signup
-app.get('/signup', auth.signup);
+app.get('/signup', auth.notLoggedIn, auth.signup);
 app.post('/signup', passport.authenticate('local-signup', {
     //Success go to Profile Page / Fail go to Signup page
     successRedirect: '/profile',
@@ -117,25 +114,40 @@ app.post('/signup', passport.authenticate('local-signup', {
     failureFlash: true
 }));
 
-// Logout Page
+// Route for logout
 app.get('/logout', function (req, res) {
     req.logout();
     res.redirect('/');
 });
 
-// Route for Admin - display orders (get from payment)
+// Route for account
+app.get('/account', auth.isLoggedIn, account.displayAccount);
+app.post('/account', account.editAccount);
+
+// Route for Change password
+app.get('/changepassword', auth.isLoggedIn, account.getPassword);
+app.post('/changepassword', account.editPassword);
+
+// Route for Track order
+app.get('/trackorder', auth.isLoggedIn, account.displayOrder)
+
+// Route for Track order
+app.get('/trxhistory', auth.isLoggedIn, listPayments.trxHistory)
+
+// Route for admin - display orders (get from payment)
 app.get('/display', auth.isLoggedIn, display.displayOrder);
 
 // Route for profile
 app.get('/profile', auth.isLoggedIn, list.profileItems);
 
-// Route for Account
-app.get('/account', auth.isLoggedIn, account.displayAccount);
-app.post('/account', auth.isLoggedIn, account.editAccount);
+// Setup routes for comments
+app.get('/comments', comments.hasAuthorization, comments.list);
+app.post('/comments', comments.hasAuthorization, comments.create);
+app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete);
 
-// Route for Change password
-app.get('/changepassword', auth.isLoggedIn, account.displayAccount
-);
+// Setup routes for videos
+app.get('/videos', videos.hasAuthorization, videos.show);
+app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
 
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
@@ -147,23 +159,11 @@ app.get('/listPayments', auth.isLoggedIn, listPayments.getItem);
 // Route for receipt
 app.get('/receipt/:id/:payment_id',auth.isLoggedIn, receipt.getItem);
 
-// Setup routes for comments
-app.get('/comments', comments.hasAuthorization, comments.list);
-app.post('/comments', comments.hasAuthorization, comments.create);
-app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete);
-
-// Setup routes for videos
-app.get('/videos', videos.hasAuthorization, videos.show);
-app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
-
 // Setup routes for Transactions
 app.get('/transactions', transactions.list);
 app.get('/')
-
 // Setup routes for offers
 app.post('/messages/:id', offers.makeOffer);
-
-// Setup chat
 
 // Setup routes for product listing general
 app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
@@ -288,5 +288,3 @@ app.set('port', serverPort);
 var server = httpServer.listen(app.get('port'), function () {
     console.log('http server listening on port ' + server.address().port);
 });
-
-
