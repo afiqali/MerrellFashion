@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <% include ../partials/stylesheet %>
+  <% include ../partials/javascript %>
+</head>
+<style>
+  .payment {
+    text-decoration: none;
+    color: white;
+    background-color: teal;
+  }
+</style>
+
+<body>
+  <% include ../partials/header %>
+  <div class="container">
+    <h1>Offers (Buyer)</h1>
+    <table class="table">
+      <thread>
+        <tr>
+          <th>Item</th>
+          <th>Offer</th>
+          <th>Seller Name</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+        <% if(itemList.length <= 0) {%>
+          <td class="text-center">
+              <h1 >You offered no shit</h5>
+          </td>
+        <% }else {%>
+          <% for(var i=0; i < itemList.length; i++){ %>
+            <tr data-id="<%= itemList[i].itemID %>">
+              <td>
+                <%= itemList[i].itemName %>
+              </td>
+              <td>
+                <%= itemList[i].offerAmount %>
+              </td>
+              <td>
+                <%= itemList[i].sellerName %>
+              </td>
+              <td>
+                <%= itemList[i].offerType %>
+              </td>
+              <td>
+                  <%= itemList[i].Date %>
+              </td>
+              <td>
+                <input type="button" class="viewBtn btn-primary"  value="Return to Chat">
+              </td>
+              <td>
+                <% if(itemList[i].offerStatus == "active" && itemList[i].offerType == "accepted" ) { %>
+                  <button class="payment">
+                      <a class="payment" href="http://localhost:3000/payment/<%= itemList[i].itemID%>">Make Offer</a>
+                  </button>
+                <% } %>
+              </td>
+            </tr>
+            <% } %>
+        <% } %>
+      </thread>
+    </table>
+  </div>
+  <% include ../partials/footer %>
+</body>
+<script>
+    $('.viewBtn').click(function () {
+        var record_num = $(this).closest("tr").data('id');
+        location.href = "messages/" + record_num;
+    })
+</script>
+
+</html>

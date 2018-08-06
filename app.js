@@ -14,10 +14,6 @@ var upload = multer({ dest:'./public/uploads/', limits: {fileSize: 1500000000000
 var index = require('./server/controllers/index');
 // Import login controller
 var auth = require('./server/controllers/auth');
-// Import comments controller
-var comments = require('./server/controllers/comments');
-// Import videos controller
-var videos = require('./server/controllers/videos');
 //Import Listing controller
 var list = require('./server/controllers/productlist');
 // Import payment controller
@@ -142,21 +138,14 @@ app.get('/logout', function (req, res) {
 app.get('/changepassword', auth.isLoggedIn, account.displayAccount
 );
 
-
-// Setup routes for comments
-app.get('/comments', comments.hasAuthorization, comments.list);
-app.post('/comments', comments.hasAuthorization, comments.create);
-app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete);
-
-// Setup routes for videos
-app.get('/videos', videos.hasAuthorization, videos.show);
-app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
-
-// Setup routes for Transactions
-app.get('/transactions', transactions.list);
-app.get('/')
 // Setup routes for offers
+app.get('/offerSeller', offers.sellerView);
+app.get('/offerBuyer', offers.buyerView);
 app.post('/messages/:id', offers.makeOffer);
+app.get('/offerDetails/:id', offers.offerDetails);
+app.post('/offerDetails/:id', offers.acceptOffer);
+app.delete('/offerDetails/:id', offers.rejectOffer);
+app.get("/transactionAdmin", offers.transactionAdmin)
 
 // Setup chat
 

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <% include ../partials/stylesheet %>
+  <% include ../partials/javascript %>
+</head>
+
+<body>
+  <% include ../partials/header %>
+  <div class="container">
+    <table class="table">
+      <thread>
+        <tr>
+          <th>transactionID</th>
+          <th>itemID</th>
+          <th>itemName</th>
+          <th>offerAmount</th>
+          <th>sellerID</th>
+          <th>sellerName</th>
+          <th>buyerID</th>
+          <th>buyerName</th>
+          <th>offerType</th>
+          <th>offerStatus</th>
+          <th>Date</th>
+        </tr>
+        <% for(var i=0; i < offerList.length; i++){ %>
+          <tr class="rowRecord" data-id="<%= offerList[i].id %>">
+            <td>
+              <%= offerList[i].transactionID %>
+            </td>
+            <td>
+                <%= offerList[i].itemID %>
+              </td>
+              <td>
+                <%= offerList[i].itemName %>
+              </td>
+              <td>
+                <%= offerList[i].offerAmount %>
+              </td>
+              <td>
+                <%= offerList[i].sellerID %>
+              </td>
+              <td>
+                <%= offerList[i].sellerName %>
+              </td>
+              <td>
+                <%= offerList[i].buyerID %>
+              </td>
+              <td>
+                <%= offerList[i].buyerName %>
+              </td>
+              <td>
+                <%= offerList[i].offerType %>
+              </td>
+              <td>
+                <%= offerList[i].offerStatus %>
+              </td>
+              <td>
+                <%= offerList[i].Date %>
+              </td>
+          </tr>
+          <% } %>
+      </thread>
+    </table>
+  </div>
+  <% include ../partials/footer %>
+</body>
+
+</html>
