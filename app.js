@@ -190,14 +190,11 @@ app.get("/products-gallery/Sort/Recent/view/:id", list.hasAuthorization, list.sp
 //Setup routes for view Other Profiles
 app.get("/OtherProfile/:ProfileOwner",list.hasAuthorization, list.OtherProfileItems);
 
-
-
 // Setup Chat
 var io = require('socket.io')(httpServer);
 var chatConnections = 0;
 var ChatMsg = require('./server/models/chatMsg');
 var Users = require('./server/models/users');
-var itemModel = require("./server/models/productlist");
 var ProductDetails = require('./server/models/productlist');
 var myDatabase = require('./server/controllers/database');
 var sequelizeInstance = myDatabase.sequelizeInstance;
@@ -213,51 +210,6 @@ io.on('connection', function(socket) {
     });
 })
 
-<<<<<<< HEAD
-// app.get('/messages/:id', function (req, res) {
-//     ChatMsg.findAll().then((chatMessages) => {
-//         Users.findById(req.user.id).then(function(user){
-//             ProductDetails.findById(req.params.id).then(function(productlist){
-//             // console.log(req.user)
-//             res.render('chatMsg', {
-//                 url: req.protocol + "://" + req.get("host") + req.url,
-//                 data: chatMessages,
-//                 user: user,
-//                 productlist: productlist
-//             });
-//         })
-//     })
-//     });
-// });
-// app.get('/messages', function (req, res) {
-//     ChatMsg.findAll().then((chatMessages) => {
-//         Users.findById(req.user.id).then(function(user){
-//             // console.log(req.user)
-//             res.render('chatMsg', {
-//                 url: req.protocol + "://" + req.get("host") + req.url,
-//                 data: chatMessages,
-//                 user: user,
-//                 productlist: ""
-//             });
-//     })
-//     });
-// });
-// app.post('/messages/:id', function (req, res) {
-//     Users.findById(req.user.id).then(function(user){
-//     var chatData = {
-//         name: user.name,
-//         message: req.body.message
-//     }
-//     //Save into database
-//     ChatMsg.create(chatData).then((newMessage) => {
-//         if (!newMessage) {
-//             sendStatus(500);
-//         }
-//         io.emit('message', req.body)
-//         res.sendStatus(200)
-//     })
-// });
-// });
 
 //Display Chat Room
 app.get('/messages', auth.isLoggedIn, function(req, res) {
@@ -298,33 +250,6 @@ app.get('/messages/:itemId/:sellerId/:userId', auth.isLoggedIn, function (req, r
                     productlist: productlist
                 })
             })
-=======
-app.get('/messages/:id', function (req, res) {
-    ChatMsg.findAll().then((chatMessages) => {
-        Users.findById(req.user.id).then(function(user){
-            ProductDetails.findById(req.params.id).then(function(productlist){
-            // console.log(req.user)
-            res.render('chatMsg', {
-                url: req.protocol + "://" + req.get("host") + req.url,
-                data: chatMessages,
-                user: user,
-                productlist: productlist
-            });
-            })
-        })
-    })
-});
-
-app.get('/messages', function (req, res) {
-    ChatMsg.findAll().then((chatMessages) => {
-        Users.findById(req.user.id).then(function(user){
-            // console.log(req.user)
-            res.render('chatMsg', {
-                url: req.protocol + "://" + req.get("host") + req.url,
-                data: chatMessages,
-                user: user,
-                productlist: ""
->>>>>>> ad7b26b09f80678ff53db6d6eb5206a36ca45f60
             });
         })
     } else {
