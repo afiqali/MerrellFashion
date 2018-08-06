@@ -136,15 +136,6 @@ app.get('/display', auth.isLoggedIn, display.displayOrder);
 // Route for profile
 app.get('/profile', auth.isLoggedIn, list.profileItems);
 
-// Setup routes for comments
-app.get('/comments', comments.hasAuthorization, comments.list);
-app.post('/comments', comments.hasAuthorization, comments.create);
-app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete);
-
-// Setup routes for videos
-app.get('/videos', videos.hasAuthorization, videos.show);
-app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
-
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
 app.post('/payment/stripe/:id',  payment.doStripe);
