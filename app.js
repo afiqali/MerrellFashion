@@ -213,7 +213,6 @@ io.on('connection', function(socket) {
     });
 })
 
-<<<<<<< HEAD
 // app.get('/messages/:id', function (req, res) {
 //     ChatMsg.findAll().then((chatMessages) => {
 //         Users.findById(req.user.id).then(function(user){
@@ -298,33 +297,6 @@ app.get('/messages/:itemId/:sellerId/:userId', auth.isLoggedIn, function (req, r
                     productlist: productlist
                 })
             })
-=======
-app.get('/messages/:id', function (req, res) {
-    ChatMsg.findAll().then((chatMessages) => {
-        Users.findById(req.user.id).then(function(user){
-            ProductDetails.findById(req.params.id).then(function(productlist){
-            // console.log(req.user)
-            res.render('chatMsg', {
-                url: req.protocol + "://" + req.get("host") + req.url,
-                data: chatMessages,
-                user: user,
-                productlist: productlist
-            });
-            })
-        })
-    })
-});
-
-app.get('/messages', function (req, res) {
-    ChatMsg.findAll().then((chatMessages) => {
-        Users.findById(req.user.id).then(function(user){
-            // console.log(req.user)
-            res.render('chatMsg', {
-                url: req.protocol + "://" + req.get("host") + req.url,
-                data: chatMessages,
-                user: user,
-                productlist: ""
->>>>>>> ad7b26b09f80678ff53db6d6eb5206a36ca45f60
             });
         })
     } else {
