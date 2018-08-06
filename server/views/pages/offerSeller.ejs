@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    <%= title %>
+  </title>
+  <% include ../partials/stylesheet %>
+  <% include ../partials/javascript %>
+</head>
+
+<body>
+  <% include ../partials/header %>
+  <div class="container">
+    <h1>Offers (Seller)</h1>
+    <table class="table">
+      <thread>
+        <tr>
+          <th>Item</th>
+          <th>Offer</th>
+          <th>Buyer Name</th>
+          <th>Status</th>
+          <th>Date</th>
+        </tr>
+        <% if(itemList.length <= 0) {%>
+          <td class="text-center">
+              <h1 >Nobody wants your shit</h5>
+          </td>
+        <% }else {%>
+          <% for(var i=0; i < itemList.length; i++){ %>
+            <tr data-id="<%= itemList[i].transactionID %>">
+              <td>
+                <%= itemList[i].itemID %>
+              </td>
+              <td>
+                <%= itemList[i].itemName %>
+              </td>
+              <td>
+                <%= itemList[i].offerAmount %>
+              </td>
+              <td>
+                <%= itemList[i].buyerName %>
+              </td>
+              <td>
+                <%= itemList[i].offerType %>
+              </td>
+              <td>
+                  <%= itemList[i].Date %>
+              </td>
+              <td>
+                <% if (itemList[i].offerType == "offer") { %>
+                    <input type="button" class="viewBtn btn-primary"  value="View Details">
+                <% } %>
+            </td>
+            </tr>
+            <% } %>
+        <% } %>
+      </thread>
+    </table>
+  </div>
+  <% include ../partials/footer %>
+  <script>
+    $('.viewBtn').click(function () {
+        var record_num = $(this).closest("tr").data('id');
+        location.href = "offerDetails/" + record_num;
+    })
+</script>
+</body>
+
+</html>

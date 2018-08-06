@@ -7,13 +7,6 @@ exports.list = function(req,res) {
     transactionModel.find({
         attributes: ['id', 'user_id', 'item_id', 'status', 'date_created']
     }).then(function (transactions) {
-        transactions.forEach(item => {
-            var date = item.date_created;
-            date = date.toISOString();
-            item.adate = date;
-            console.log(date);
-            console.log(item.date_created);
-        });
         res.render('transactions', {
             title: "Transaction History",
             itemList: transactions,

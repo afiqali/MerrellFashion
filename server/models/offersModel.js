@@ -8,19 +8,49 @@ const offers = sequelize.define('offers', {
         autoIncrement: true,
         primaryKey: true
     },
-    userID: {
-        type: Sequelize.STRING,
-        allowNULL: false,
+    itemID: {
+        type: Sequelize.INTEGER,
+        defaultValue: '',
+        allowNull: false
     },
-    acceptOffer: {
-        type: Sequelize.BOOLEAN,
-        allowNULL: false,
-        defaultValue: false
+    itemName: {
+        type: Sequelize.STRING,
     },
     offerAmount: {
         type: Sequelize.DECIMAL(10,2),
+        defaultValue: '',
         allowNULL: false
     },
+    sellerID: {
+        type: Sequelize.STRING,
+        defaultValue: '',
+        allowNULL: false
+    },
+    sellerName: {
+        type: Sequelize.STRING
+    },
+    buyerID: {
+        type: Sequelize.STRING,
+        defaultValue: '',
+        allowNULL: false,
+    },
+    buyerName: {
+        type: Sequelize.STRING
+    },
+    offerType: {
+        type: Sequelize.STRING,
+        defaultValue: '',
+        allowNULL: false
+    },
+    offerStatus: {
+        type: Sequelize.STRING,
+        allowNULL: false,
+        defaultValue: "Active"
+    },
+    Date: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
+    }
 });
 
 offers.sync({ force: false, logging: console.log}).then(() => {

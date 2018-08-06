@@ -1,109 +1,340 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
+        #confirm {
+            margin: auto;
+            display: flex;
 
+        }
+
+        #stripeForm {
+            padding: 0px;
+            margin: 0 auto;
+            position: relative;
+            text-align: center;
+            display: block;
+        }
+        #cards {
+            display: block;
+            margin: 0 auto;
+            text-align:center;
+
+        }
+        #paypal-button {
+            padding: auto;
+            margin:0 auto;
+            position: relative;
+            text-align: center;
+            display: block;
+        }
+        #paypal-button-container {
+            width: 100%;
+            padding:0px;
+            margin:0 auto;
+            position: relative;
+            display:block;
+        }
+        .row {
+        display: -ms-flexbox; /* IE10 */
+        display: flex;
+        -ms-flex-wrap: wrap; /* IE10 */
+        flex-wrap: wrap;
+        margin: 0 -16px;
+        }
+
+        .col-25 {
+        -ms-flex: 25%; /* IE10 */
+        flex: 25%;
+        }
+
+        .col-50 {
+        -ms-flex: 50%; /* IE10 */
+        flex: 50%;
+        }
+
+        .col-75 {
+        -ms-flex: 75%; /* IE10 */
+        flex: 75%;
+        }
+
+        .col-25,
+        .col-50,
+        .col-75 {
+        padding: 0 16px;
+        }
+
+        .container {
+        background-color: #f2f2f2;
+        padding: 5px 20px 15px 20px;
+
+        }
+
+        .container-fluid {
+            
+        }
+
+        input[type=text] {
+        width: 100%;
+        margin-bottom: 20px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        }
+
+        label {
+        margin-bottom: 10px;
+        display: block;
+        }
+
+        .icon-container {
+        margin-bottom: 20px;
+        padding: 7px 0;
+        font-size: 24px;
+        }
+
+        .btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        width: 100%;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 17px;
+        }
+
+        .btn:hover {
+        background-color: #45a049;
+        }
+
+        span.price {
+        float: right;
+        color: grey;
+        }
+
+                .responsive {
+            width: 25%;
+            height: auto;
+            border-radius:10px;
+        }
+
+        /* Responsive layout - when the screen is less than 800px wide, make the two columns stack on top of each other instead of next to each other (and change the direction - make the "cart" column go on top) */
+        @media (max-width: 800px) {
+        .row {
+            flex-direction: column-reverse;
+        }
+        .col-25 {
+            margin-bottom: 20px;
+        }
+
+        }
+        </style>
         <!-- Hi i'm paypal and welcome to jackass -->
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+
+        </script>
+
         
         <% include ../partials/stylesheet %>
     </head>
 
-    <body>
-        <% include ../partials/header %>
+    <body style="background-color: #FBFBF9">
 
-        <div class="container">
-            <h1><%= title %></h1>
+        
+        <div class="responsive" style="display: block;margin:auto 0;position: relative;margin:2em;width:40%">
+            <h1 ><a href="http://localhost:3000/products-gallery/" style="text-decoration: none"> Merrell Fashion </a></h1>
+            <h5 style=""><%= title %></h5>
         </div>
 
 
-
-                <form action="/payment/:id" method="post" id="pay">
-
-
-                    <div class="modal-body">
-
-                        <fieldset class="form-group">
-                            <input id="payer_id" name="payer_id" type="hidden">
-                        </fieldset> 
-                        <fieldset class="form-group">
-                            <input type="hidden" id="totalAmount" name="totalAmount">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input type="hidden" id="payment_id" name="payment_id">
-                        </fieldset>
-
-                        <fieldset class="form-group">
-                            <input id="status" type="hidden" name="status">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <input id="orderMethod" type="hidden" name="orderMethod">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="delieveryFee">Delivery fee</label>
-                            <textarea id="delieveryFee" name="delieveryFee" rows="8" cols="40" class="form-control" placeholder="Delivery Fee" required=""></textarea>
-                        </fieldset>
-
-                    </div>
-                    
-                    <!-- <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save changes</button>
-                    </div> -->
-                </form>
-            <!-- </div>
-        </div>
-        </div> -->
-
-
-        <div class="list-group">
-
-                    <a href="#" class="list-group-item">
-                        <div class="Payments">
-                            <form action="/payment" method="delete">
-                                <h4 class="list-group-item-heading" id="price">
-                                    <%= item.price %>
-            
-                                </h4>
-                                
-                                <p class="list-group-item-text">
-                                    <%= item.category %>
-                                </p>
-                                <small class="text-muted">Status:
-                                    <%= item.description %>
-                                </small>
-                                <p>
-                                    <%= item.user_id %>
-                                </p>
-                            </form>
+        <div class="container"style="border-radius: 10px;border-color: #ccc;border-style:dashed;">
+        <!-- Paypal Form -->
+        <div class="row" >
+                <div class="col-75"style="">
+                  <div class="container" >
+                    <form >
+              
+                      <div class="row">
+                        <div class="col-50">
+                          <h3>Billing Address and Details </h3>
+                          <div style="padding-left:20px;">
+                          <h5><i class="fa fa-user"></i> Name:    <%= user.name %></h5> 
+                          <h5><i class="fa fa-envelope"></i> Email: <%= user.email %></h5> 
+                          <h5><i class="fa fa-address-card-o"></i> Pick-Up Address: <%= user.address %></h5> 
                         </div>
-                    </a>
+                        </div>
+                        <br><br>
+              
+                        <div class="col-50">
+                          <h3>Item</h3>
+                          <div style="padding-left:20px;">
+                          <h5>Item: <%= item.ItemName %></h5>
+                          <h5>Price: S$<%= item.price.toFixed(2) %></h5>
+                          <h5>Category: <%= item.category %></h5> 
+                          <p style="display:none;visibility: hidden" id="price"> <%= item.price %></p>  
+                          </div>                
+                        </div>
+                      </div>
+                      <br>
+                      <hr>
+                      <div style="text-align: center">
+                          <h6> Subtotal : S$<%= item.price.toFixed(2) %> </h6>
+                          <h6> GST (7%) : S$<%= (item.price*0.07).toFixed(2)%></h6>
+                          <h6> Delivery Tax (10%) : S$<%= (item.price*0.1).toFixed(2)%></h6>
+                          <h5><strong> Total : <u>S$<%= (parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))).toFixed(2)%></u> </strong></h5>
+                      </div>
+                      <hr>
+                      <br>
 
-            </div>
+                      <div style="margin: auto 0; text-align: center">
+                            <label for="dob">Collection Date: </label>
+                            <input  type="date" id="dob" name="dob" onchange="changedDate();" required>
+                        </div>
 
-            <div id="paypal-button" style="margin:10px;display:inline">
+                        <br>
+                      <div id="paypal-button-container" class="container-fluid" style="margin:auto; ">
+                        <div id="paypal-button" >
+                        </div>
+                      </div>
+                    </form>
+                    
+                  </div>
+                </div>
+              </div>
+        
 
-            </div>
-
-        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPayment" style="margin:10px;display:inline">
-                Create Order
-        </button> -->
-
-        <div id="paypal-button-container"></div>
-
-        <div id="confirm" class="hidden">
-            <div>Ship to:</div>
-            <div><span id="recipient"></span>, <span id="line1"></span>, <span id="city"></span></div>
-            <div><span id="state"></span>, <span id="zip"></span>, <span id="country"></span></div>
-
-            <button id="confirmButton">Complete Payment</button>
+        <!-- Stripe Form -->
+            <div class="container" style="padding:0px;border-radius:10px" >
+            <form action="/payment/stripe/<%=item.Itemid%>" method="POST" id="stripeForm">
+                    <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_GasPdW35Y0J14wRCw9fzeDtI"
+                        data-amount=" <%= (parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2)))*100%> "
+                        data-name="<%= user.name %>"
+                        data-description="Item bought: <%= item.ItemName %>"
+                        data-image="/publicPRODUCT/images/<%= item.imageName %>"
+                        data-locale="auto"
+                        data-currency="sgd"
+                        id="doStripe">
+                    </script>
+                    <input id="price1" name="price1" type="hidden" value="<%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%>">
+                    <input id="status1" name="status1" type="hidden" value="VERIFIED">
+                    <input id="item_id1" name="item_id1" type="hidden" value"<%= item.Itemid %>">
+                    <input  type="hidden" id="dob1" name="dob1">
+            </form>
+            <br>
+            <p style="font-size: 11px;text-align: center"> * We accept these cards * </p>
+            <img src="/images/cards.png" style="height:5em;width:25em;text-align:center" id="cards">
         </div>
+
+    </div>
+
+
+        <div class="container" style="visibility:hidden">
+                <div class="row" style="visibility:hidden">
+
+                        <div class="col-50">
+                          <h3>Billing Address and Details </h3>
+                          <div style="padding-left:20px;">
+                          <h5><i class="fa fa-user"></i> Name:  <%= user.name %></h5> 
+                          <h5><i class="fa fa-envelope"></i> Email: <%= user.email %></h5> 
+                          <h5><i class="fa fa-address-card-o"></i> Address: <%= user.address %></h5> 
+                        </div>
+                        </div>
+              
+                        <div class="col-50">
+                          <h3>Item</h3>
+                          <div style="padding-left:20px;">
+                          <h5>Item: <%= item.ItemName %></h5>
+                          <h5>Price: <%= item.price %></h5>
+                          <h5>Category: <%= item.category %></h5> 
+                          <p style="display:none;visibility: hidden" id="pricee"> <%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%></p>  
+                          </div>                
+                        </div>
+                </div>
+        </div>
+
+
+            <form action="/payment/paypal/<%=item.Itemid%>" method="POST" id="pay" >
+                <div class="modal-body">
+
+                    <fieldset class="form-group">
+                        <input id="payer_id" name="payer_id" type="hidden">
+                    </fieldset> 
+                    <fieldset class="form-group">
+                        <input type="hidden" id="totalAmount" name="totalAmount">
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <input type="hidden" id="payment_id" name="payment_id">
+                    </fieldset>
+                    
+                    <fieldset class="form-group">
+                        <input id="item_id" name="item_id" type="hidden" value="<%= item.Itemid %>">
+                    </fieldset> 
+                    <fieldset class="form-group">
+                        <input id="status" type="hidden" name="status">
+                    </fieldset>
+                    <fieldset class="form-group">
+                        <input id="orderMethod" type="hidden" name="orderMethod">
+                    </fieldset>
+                    <fieldset class="form-group">
+                         <input  type="hidden" id="dob2" name="dob2">
+                </fieldset>
+                    <!-- <fieldset class="form-group">
+                        <label for="delieveryFee">Delivery fee</label>
+                        <textarea id="delieveryFee" name="delieveryFee" rows="8" cols="40" class="form-control" placeholder="Delivery Fee" required=""></textarea>
+                    </fieldset> -->
+                </div>
+            </form>
+
 
 
         <script>
+                function changedDate() {
+                    var dob = $('#dob').val();
+                    $('#dob1').val(dob);
+                    $('#dob2').val(dob);
+                }
 
-                var price = document.getElementById('price').innerText;
+
+                
+                // stripe shit
+                var pricee = parseFloat(document.getElementById('pricee').innerText);
+                // console.log(pricee);
+                // $("#paypal-button").click(function () {
+                //     $.ajax({
+                //         url: 'http://localhost:3000/paypal/:id',
+                //         type: 'POST',
+                //     });
+                //     $("#pay").submit(function() {
+                //         $.ajax({
+                //         url: 'http://localhost:3000/paypal/:id',
+                //         type: 'POST',
+                //     });
+                //     })
+                // });
+
+                // $("#stripeForm").click(function () {
+                //     $.ajax({
+                //         url: 'http://localhost:3000/stripe/:id',
+                //         type: 'POST',
+                //     });
+                //     $("#pay").submit(function() {
+                //         $.ajax({
+                //         url: 'http://localhost:3000/paypal/:id',
+                //         type: 'POST',
+                //     });
+                //     })
+                // });
+
+                // paypal shit
+                
                 paypal.Button.render({
 
                   env: 'sandbox', // Or 'production',
@@ -127,7 +358,7 @@
                         payment: {
                             transactions: [
                                 {
-                                    amount: { total: price, currency: 'USD' }
+                                    amount: { total: pricee, currency: 'SGD' }
                                 }
                             ]
                         }
@@ -138,26 +369,16 @@
                  onAuthorize: function(data, actions) {
 
                     // Get the payment details
-
-                    
-
                     return actions.payment.get().then(function(data) {
-
 
                         // Display the payment details and a confirmation button
 
                         var shipping = data.payer.payer_info.shipping_address;
     
-                        document.querySelector('#recipient').innerText = shipping.recipient_name;
-                        document.querySelector('#line1').innerText     = shipping.line1;
-                        document.querySelector('#city').innerText      = shipping.city;
-                        document.querySelector('#state').innerText     = shipping.state
-                        document.querySelector('#zip').innerText       = shipping.postal_code;
-                        document.querySelector('#country').innerText   = shipping.country_code;
+
                         
 
                         document.querySelector('#paypal-button-container').style.display = 'none';
-                        document.querySelector('#confirm').style.display = 'block';
                         
                         var paymentDetails = data.payer;
                         var payerDetails = data.payer.payer_info;
@@ -167,7 +388,6 @@
                         var payer_id = payerDetails.payer_id;
                         // alert(payer_id);
                         $('#payer_id').val(payer_id);
-
 
                         var payment_method = paymentDetails.payment_method;
                         // alert(payment_method);
@@ -181,31 +401,16 @@
                         $('#status').val(status);
 
 
-                        var amount = parseInt(transaction[0].amount.total);
+
                         // alert(amount);
-                        $('#totalAmount').val(amount);
-   
+                        $('#totalAmount').val(pricee);
 
-                        
-
-                        // Listen for click on confirm button
-
-                        document.querySelector('#confirmButton').addEventListener('click', function() {
-
-                            // Disable the button and show a loading message
-
-                            document.querySelector('#confirm').innerText = 'Loading...';
-                            document.querySelector('#confirm').disabled = true;
-
-                            // Execute the payment
-
-                            return actions.payment.execute().then(function() {
-                                document.querySelector('#confirm').style.display = 'none';
+                        return actions.payment.execute().then(function() {
                                 // submit form automatically
                                 $('#pay').submit();
-                        
-                            });
                         });
+   
+
                     });
                     
                 },
@@ -220,13 +425,11 @@
                     /*
                      * An error occurred during the transaction
                      */
-                    alert('There is an error. You did not email the nigerian prince for approval!')
+                    alert(err)
                   }
                 }, '#paypal-button');
 
               </script>
-
-            <% include ../partials/footer %>
             <% include ../partials/javascript %>
     </body>
 </html>

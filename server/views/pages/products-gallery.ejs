@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
+<head>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,50 +9,98 @@
     <meta name="author" content="">
 
     <title>Shop Homepage - Start Bootstrap Template</title>
-    <% include ../partials/stylesheetPRODUCT %>
-    <!-- Custom styles for this template -->
-    <link href="/publicPRODUCT/stylesheets/shop-homepage.css" rel="stylesheet">
-    
-  </head>
+    <style>
+        .hovershadow:hover {
+            box-shadow: 0 0 11.5px rgba(24, 23, 23, 0.2); 
+            
+        }
 
-  <body>
+        .hovershadow {
+            transition: box-shadow .3s;
+        }
+
+        form[codename=searchbox] button {
+            float: right;
+            width: 20%;
+            padding: 10px;
+            background: #2196F3;
+            color: white;
+            font-size: 16px;
+            border: 1px solid grey;
+            border-left: none;
+            cursor: pointer;
+        }
+
+        input[codename=search] {
+            width: 80%;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: white;
+            background-image: url('searchicon.png');
+            background-position: 10px 10px;
+            background-repeat: no-repeat;
+            padding: 10px;
+        }
+    </style>
+    <% include ../partials/stylesheetPRODUCT %>
+        <!-- Custom styles for this template -->
+        <link href="/publicPRODUCT/stylesheets/shop-homepage.css" rel="stylesheet">
+
+</head>
+
+<body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand" href="#">Start Bootstrap</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home
-                <span class="sr-only">(current)</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Services</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
-            </li>
-          </ul>
+        <div class="container">
+            <a class="navbar-brand" href="/">Merrell Fashion</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home
+                            <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Sign in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup">Sign up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/videos">Videos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products-gallery">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/messages"> Chat </a>
+                    </li>
+                    <li>
+                        <div class="col-lg-6">
+                            <button type="button" class="btn btn-secondary pull-right" data-toggle="modal" data-target="#createProduct">
+                                New Product
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
-      </div>
     </nav>
 
     <div class="container">
         <div class="row">
-            <div class="col-lg-6">
-                <h4 class="text-muted">Product Page</h4>
-            </div>
-            <div class="col-lg-6">
-                <button type="button" class="btn btn-secondary pull-right" data-toggle="modal" data-target="#createProduct" >
-                    New Product
-                </button>
+            <div class="col-lg-6" >
+                <h4 class="text-muted" style="padding-left:15px">Product Page</h4>
             </div>
         </div>
         <!-- Modal -->
@@ -61,8 +109,8 @@
                 <div class="modal-content">
                     <form action="/products" method="post" enctype="multipart/form-data">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+                            <button type="button"class="btn btn-default" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><i class="fas fa-times"></i></span>
                             </button>
                             <h4 class="modal-title" id="myModalLabel">Create New Product Listing</h4>
                         </div>
@@ -75,168 +123,197 @@
 
                             <fieldset class="form-group">
                                 <label for="price">Pricing</label>
-                                <input type="text" id="price" name="price" class="form-control" placeholder="price" required="">
+                                <input type="number" min="0" step="any" id="price" name="price" class="form-control" placeholder="price" required="">
                             </fieldset>
 
                             <fieldset class="form-group">
                                 <label for="Description">Item Description</label>
-                                <textarea id="Description" name="Description" rows="8" cols="40" class="form-control" placeholder="Item Description" required=""></textarea>
+                                <textarea id="Description" name="Description" rows="5" cols="40" class="form-control" placeholder="Item Description" required=""></textarea>
                             </fieldset>
-                            
-                            <div class="radiobuttons-container">
-                                <fieldset class="form-group" required ="">
-                                    <label for="Dress" class="mdl-radio mdl-js-radio">
-                                        <input id="Dress" class="mdl-radio__button" type="radio" name="category" value="Dress" /> 
-                                        <span class="mdl-radio__label">Dress</span>
-                                    </label>
-                
-                                    <label for="High Heels" class="mdl-radio mdl-js-radio">
-                                        <input id="High Heels" class="mdl-radio__button" type="radio" name="category" value="High Heels" />
-                                        <span class="mdl-radio__label">High Heels</span>
-                                    </label>
-                
-                                    <label for="Skirt" class="mdl-radio mdl-js-radio">
-                                        <input id="Skirt" class="mdl-radio__button" type="radio" name="category" value="Skirt" />
-                                        <span class="mdl-radio__label">Skirt</span>
-                                    </label>
-                
-                                    <label for="Tops" class="mdl-radio mdl-js-radio">
-                                        <input id="Tops" class="mdl-radio__button" type="radio" name="category" value="Tops" />
-                                        <span class="mdl-radio__label">Tops</span>
-                                    </label>
-                
-                                    <label for="Jeans" class="mdl-radio mdl-js-radio">
-                                        <input id="Jeans" class="mdl-radio__button" type="radio" name="category" value="Jeans" />
-                                        <span class="mdl-radio__label">Jeans</span>
-                                    </label>
-                
-                                    <label for="Cardigans" class="mdl-radio mdl-js-radio">
-                                        <input id="Cardigans" class="mdl-radio__button" type="radio" name="category" value="Cardigans" />
-                                        <span class="mdl-radio__label">Cardigans</span>
-                                    </label>
-                                    </fieldset>
-                
-                                </div>
-                                <!-- .radiobuttons-container -->
-                                
-                          <label class="file" style="width: 100%">
-                              <input type="file" id="image" name="image">
-                              <span class="file-custom"></span>
-                          </label>
-                      </div>
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                          <button type="submit" class="btn btn-primary">Save changes</button>
-                      </div>
-                  </form>
-              </div>
-          </div>
-    </div>
 
-    <!-- Page Content -->
-    <div class="container">
+                            <fieldset class="form-group">
+                                <label for="PickUpLocation">Item Pick Up Location</label>
+                                <textarea id="PickUpLocation" name="PickUpLocation" rows="3" cols="40" class="form-control" placeholder="Postal code and address required"
+                                    required=""></textarea>
+                            </fieldset>
 
-      <div class="row">
+                            <fieldset class="form-group">
+                                <label for="CategoryList">Item Category:</label>
+                                <input list="CategoryList" name="category" required="" placeholder="Search here And Pick One From Below" class="form-control"
+                                    pattern="Dress|High Heels|Skirt|Tops|Jeans|Cardigans" title='Please pick from one of the choices given'>
+                                <datalist id="CategoryList">
+                                    <option value="Dress">Dress</option>
+                                    <option value="High Heels">High Heels</option>
+                                    <option value="Skirt">Skirt</option>
+                                    <option value="Tops">Tops</option>
+                                    <option value="Jeans">Jeans</option>
+                                    <option value="Cardigans">Cardigans</option>
+                                </datalist>
+                            </fieldset>
+                        </div>
+                        <!-- .radiobuttons-container -->
 
-        <div class="col-lg-3">
 
-          <h1 class="my-4">Shop Name</h1>
-          <div class="list-group">
-            <a href="/product-dresses" class="list-group-item">Dresses</a>
-            <a href="/product-HighHeels" class="list-group-item">High Heels</a>
-            <a href="/products-gallery" class="list-group-item">No filter</a>
-          </div>
+                        <label class="file" style="width: 100%">
+                            <input type="file" id="image" name="image" required="" class="form-control" style="width: 490px;height: auto;margin-left: 4px;">
+                            <span class="file-custom"></span>
+                        </label>
+                        
 
-        </div>
-        <!-- /.col-lg-3 -->
-
-        <div class="col-lg-9">
-          <div class="row">
-            <% productlists.forEach(function(productlists){ %>
-              <% if (productlists.visible == '1') { %>
-                <div class="col-lg-4 col-md-6 mb-4" data-id="<%= productlists.Itemid %>">
-                  <div class="card h-100" data-id ="<%= productlists.Itemid%>" >
-                  <img src="/publicPRODUCT/images/<%= productlists.imageName %>" class="figure-img img-fluid img-rounded specific" alt="<%= productlists.imageName %>">
-                    <div class="card-body">
-                      <h4 class="card-title">
-                        <a href="#"><%= productlists.ItemName %></a>
-                      </h4>
-                      <h5>Price: $<%= productlists.price %> 
-                        <br>
-                        Category: <%= productlists.category %>
-                      </h5>
-                      <p class="card-text"></p>
-                    </div>
-                    <div class="card-footer">
-                      <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
-                    </div>
-                    <div data-id="<%= productlists.Itemid %>">
-                    <input type="button" class="editBtn" value="Edit">
-                    </div>  
-                    <div data-id="<%= productlists.Itemid %>">
-                    <input type="button" class="deleteBtn"  value="Delete">
-                    </div>
-                  </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
                 </div>
-              <% } %>
-            <% }); %>
+            </div>
+        </div>
 
-            
+        <!-- Page Content -->
+        <div class="container">
 
-          </div>
-          <!-- /.row -->
+            <div class="row">
+
+                <div class="col-lg-3" style="padding-bottom: 70px; height: 671px;">
+
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="searchfunct" placeholder="Search...." aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary searching" id="search" type="button"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="width:100%">
+                          Categories
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width:100%">
+                          <a class="dropdown-item" href="/products-gallery/Dress">Dress</a>
+                          <a class="dropdown-item" href="/products-gallery/High Heels">High Heels</a>
+                          <a class="dropdown-item" href="/products-gallery/Jeans">Jeans</a>
+                          <a class="dropdown-item" href="/products-gallery/Cardigans">Cardigans</a>
+                          <a class="dropdown-item" href="/products-gallery/Skirt">Skirts</a>
+                          <a class="dropdown-item" href="/products-gallery/Tops">Tops</a>
+                          <a class="dropdown-item" href="/products-gallery">No filter</a>
+                        </div>
+                      </div>
+                      <br>
+
+                    <h6>Sort</h6>
+                    <div class="list-group">
+                            <a href="/products-gallery/Sort/PriceHigh" class="list-group-item list-group-item-action">Price - High To Low</a>
+                            <a href="/products-gallery/Sort/PriceLow" class="list-group-item list-group-item-action">Price - Low To High</a>
+                            <a href="/products-gallery/Sort/Recent" class="list-group-item list-group-item-action">Most Recent</a>
+                    </div>
+                    <br>
+                    <h6>Price Range</h6>
+                    <form class="input-group mb-6">
+                        
+                        <input type="number" class="form-control" min="0" step="any" id="Min" name="min" placeholder="Min" aria-describedby="basic-addon2" required="true" defaultvalue="0">
+                        <input type="number" class="form-control" min="0" step="any" id="Max" name="max" placeholder="Max" aria-describedby="basic-addon2" required="true">
+                        <div class="input-group-append">
+                             <button class="btn btn-outline-secondary pr" id="searchpr" type="button"><i class="fas fa-search"></i></button>
+                        </div>
+                    </form>
+                  
+                    
+                </div>
+                <!-- /.col-lg-3 -->
+
+                <div class="col-lg-9">
+                    <div class="row" >
+                        <% productlists.forEach(function(productlists){ %>
+                            <div class="col-lg-4 col-md-6 mb-4"  data-id="<%= productlists.Itemid %>" >
+                                <div class="card h-100 hovershadow specific" data-id="<%= productlists.Itemid%>">
+                                    <img src="/publicPRODUCT/images/<%= productlists.imageName %>" class="figure-img img-fluid img-rounded " alt="<%= productlists.imageName %>"
+                                        style="max-width: 100%; height:250px;">
+                                    <div class="card-body" style="min-height:164px; max-height:100%">
+                                        <p class="card-title" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 95%; font-size: 24px" >
+                                            <a href="<%-urlPath %>/view/<%= productlists.Itemid%>" %>>
+                                                <%= productlists.ItemName %>
+                                            </a>
+                                        </p>
+                                        <hr>
+                                        <p>
+                                            Price: $<%= productlists.price %> 
+                                        </p>
+                                        <p style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;" >
+                                            <%= productlists.Description %>
+                                        </p>
+                                        <p class="card-text"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <% }); %>
+
+                    </div>
+                    <!-- /.row -->
+
+                </div>
+                <!-- /.col-lg-9 -->
+
+            </div>
+            <!-- /.row -->
 
         </div>
-        <!-- /.col-lg-9 -->
+        </div>
+        <!-- /.container -->
+        <footer class="py-5 bg-dark" style="width :100%; position: relative; bottom: 0; margin: 0 auto;">
+                <div class="container" style="width :100%">
+                  <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+        </div>
+                <!-- /.container -->
+        </footer>
 
-      </div>
-      <!-- /.row -->
+        <!-- Bootstrap core JavaScript -->
+        <% include ../partials/JavascriptPRODUCT %>
+        <% include ../partials/javascript %>
 
-    </div>
-    <!-- /.container -->
+                <script>
 
-    <!-- Footer -->
-    <footer class="py-5 bg-dark">
-      <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
-      </div>
-      <!-- /.container -->
-    </footer>
+                    $('.searching').click(function () {
+                        var searchh = document.getElementById("searchfunct").value;
+                        var searchconfirm = searchh.replace(/[&\/\\#,+()$~%.'":*?<>{};]/g, '');
+                        location.href = "/products-gallery/search/" + searchconfirm;
 
-    <!-- Bootstrap core JavaScript -->
-    <% include ../partials/JavascriptPRODUCT %>
-    <% include ../partials/javascript %>
+                    });
 
-    <script>
-      $('.editBtn').click(function () {
-        var record_num = $(this).closest("div").data('id');
-        location.href = "<%-urlPath %>/edit/"+record_num;
-      });
+                    $('.pr').click(function () {
+                        var min = document.getElementById("Min").value;
+                        var max = document.getElementById("Max").value;
+                        
+                        if (min == 0 || max == 0) {
+                            alert("Please enter a value for the price range");
+                        }else{  
+                            location.href = "/products-gallery/Sort/PriceRange="+min+"-"+max;
+                        }
 
-      $('.specific').click(function () {
-      var record_num = $(this).closest("div").data('id');
-      location.href = "<%-urlPath %>/view/"+record_num;
-      });
-  
-      $('.deleteBtn').click(function () {
-        var record_num = $(this).closest("div").data('id');
-        $.ajax({
-          url: '<%-urlPath%>/' + record_num,
-          type: 'DELETE',
-          success: function (result) {
-            console.log(result.message);
-            location.reload()
-            // var itemToRemove = '.col-lg-4 col-md-6 mb-4[data-id=' + record_num + ']';
-            // $(itemToRemove).remove();
-          },
-          error: function (result) {
-            alert("Unable to delete student record.");
-            console.log(result.message);
-          }
-        });
-      });
-    </script>
+                    });
 
-  </body>
+                    $('.specific').click(function () {
+                        var record_num = $(this).closest("div").data('id');
+                        location.href = "<%-urlPath %>/view/" + record_num;
+                    });
+
+                    $('.deleteBtn').click(function () {
+                        var record_num = $(this).closest("div").data('id');
+                        $.ajax({
+                            url: '<%-urlPath%>/' + record_num,
+                            type: 'DELETE',
+                            success: function (result) {
+                                console.log(result.message);
+                                location.reload()
+                                // var itemToRemove = '.col-lg-4 col-md-6 mb-4[data-id=' + record_num + ']';
+                                // $(itemToRemove).remove();
+                            },
+                            error: function (result) {
+                                alert("Unable to delete item record.");
+                                console.log(result.message);
+                            }
+                        });
+                    });
+                </script>
+
+</body>
 
 </html>

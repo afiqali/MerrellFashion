@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>
+        <%= title %>
+    </title>
+
+    <% include ../partials/stylesheetPRODUCT %>
+    <!-- Custom styles for this template -->
+    <link href="/public/stylesheets/logo-nav.css" rel="stylesheet">
+    <link href="/public/stylesheets/simple-sidebar.css" rel="stylesheet">
+</head>
+
+<body>
+    <% include ../partials/navbar %>
+
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="/account">
+                        My Account
+                    </a>
+                </li>
+                <li>
+                    <a href="/account">Profile</a>
+                </li>
+                <li>
+                    <a href="/trackorder">Order status</a>
+                </li>
+                <li class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" href="#collapse1">Payments</a>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            <ul class="list-group">
+                                <li class="list-group-item">Payment modes</li>
+                                <li class="list-group-item">Payment history</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a href="#">e-wallet</a>
+                </li>
+                <li class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" href="#collapse2">Settings</a>
+                        </div>
+                        <div id="collapse2" class="panel-collapse collapse">
+                            <ul class="list-group">
+                                <li class="list-group-item">Notification settings</li>
+                                <li class="list-group-item">Privacy settings</li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper container-fluid">
+            <div class="container-fluid">
+
+                <% if (message.length > 0) { %>
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <%= message %>.  
+                    </div>
+                <% } %>
+                
+                <div class="row" id="parent">
+                    <div class="col">
+                        <i class="far fa-circle"></i>
+                        <p>
+                            Negotiation
+                        <br>
+                            Status: 
+                        </p>
+                    </div>
+                    <div class="col">
+                        <i class="far fa-circle"></i>
+                        <p>
+                            Buyer paid
+                        <br>
+                            Buyer collection date: 
+                        </p>
+                    </div>
+                    <div class="col">
+                        <i class="far fa-circle"></i>
+                        <p>
+                            Seller acknowledged 
+                        <br>
+                            Seller collection date: 
+                        </p>
+                    </div>
+                    <div class="col">
+                        <i class="far fa-circle"></i>
+                        <p>
+                            Courier in transit to Seller
+                        </p>
+                    </div>
+                    <div class="col">
+                        <i class="far fa-circle"></i>
+                        <p>
+                            Courier collected item from Seller
+                        <br>
+                            Seller acknowledged
+                        </p>
+                    </div>
+                    <div class="col">
+                        <i class="far fa-circle"></i>
+                        <p>
+                            Courier in transit to Buyer
+                        </p>
+                    </div>
+                    <div class="col">
+                        <i class="far fa-circle"></i>
+                        <p>
+                            Courier delivered item to Buyer
+                        <br>
+                            Buyer acknowledged
+                        </p>
+                    </div>
+                    <div class="col">
+                        <i class="far fa-circle"></i>
+                        <p>
+                            Exchange and Refund period (1 week)
+                        <br>
+                            Status: 
+                        </p>
+                    </div>
+                    <div class="col">
+                        <i class="far fa-circle"></i>
+                        <p>
+                            Payment released to Seller
+                        </p>
+                    </div>
+                </div>
+
+                <i class="fas fa-circle"></i>
+
+            </div>
+        </div>
+    </div>
+
+    <% include ../partials/footer2 %>
+
+    <% include ../partials/javascript %>
+
+    <script>
+        // Grey out all text
+        $("#parent p").css("color", "lightgray")
+
+        // Configure elements on order status received
+        $("#parent > div:nth-child("+"<%= circle %>"+") > i").replaceWith("<i class='fas fa-circle'></i>")   
+        $("#parent > div:nth-child("+"<%= circle %>"+") > p").css("color", "black")
+
+    </script>
+</body> 

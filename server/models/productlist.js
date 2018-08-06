@@ -11,7 +11,7 @@ const productlist = sequelize.define('productlist', {
     },
     created: {
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        defaultValue: sequelize.now
     },
     ItemName: {
         type: Sequelize.STRING,
@@ -37,9 +37,9 @@ const productlist = sequelize.define('productlist', {
     category: {
         type: Sequelize.STRING
     },
-    visible: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: true
+    status: {
+        type: Sequelize.STRING,
+        defaultValue: 'a'
     },
     Description: {
         type: Sequelize.STRING,
@@ -48,14 +48,21 @@ const productlist = sequelize.define('productlist', {
     PickUpLocation: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: "Nanyang Polytechnic"
-    }
+    },
 });
 
 // force: true will drop the table if it already exists
 productlist.sync({ force: false, logging: console.log}).then(() => {
     // Table created
     console.log("product table synced");
+    productlist.upsert({
+        Itemid: 1,
+        ItemName: "Blue dress",
+        user_id: 1,
+        price: 10.50,
+        Description: "Branded brand-new dress",
+        PickUpLocation: "1 Holly Road Singapore 123456"
+    });
 });
 
 module.exports = sequelize.model('productlist', productlist);

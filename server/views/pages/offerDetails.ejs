@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <link rel='stylesheet' href='/stylesheets/bootstrap.min.css'>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src='/javascripts/jquery.min.js'></script>
+    <script src='/javascripts/bootstrap.min.js'></script>
+</head>
+
+<body>
+    <div class="container">
+        <h3>Item Details: <%=offerList.itemID%></h3>
+            Item Name:<p><%=offerList.itemName%></p>
+            Buyer Name:<p><%=offerList.buyerName%></p>
+            Original Price:<p>$ <%=itemList.price%> | Offered Price:$ <%= offerList.offerAmount %></p> <!--rmb to alert price!-->
+        <form action="/offerDetails/<%=offerList.transactionID%>" method="post">
+            <input type="submit" class="acceptBtn btn btn-success" value="Accept">
+
+            <input type="button" class="deleteBtn btn btn-danger"  value="Reject">
+        </form>
+    </div>
+</body>
+
+<script>
+    // function checkForm() {
+    //     if (confirm("Are you sure?")) {
+    //         return true;
+    //     }
+    //     else {
+    //         return false;
+    //     }
+    // }
+    $('.deleteBtn').click(function () {
+          if (confirm("Reject this offer?")) {
+            $.ajax({
+                url: '<%-urlPath %>',
+                type: 'DELETE',
+                success: function (result) {
+                console.log(result.message);
+                window.location.replace("<%-hostPath%>/offerSeller");
+                },
+                error: function (result) {
+                alert("Unable to reject offer. Please try again.");
+                console.log(result.message);
+                }
+            });
+          }
+        });
+</script>
+
+</html>

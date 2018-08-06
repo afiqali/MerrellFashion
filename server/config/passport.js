@@ -22,8 +22,8 @@ module.exports = function (passport) {
     // using local strategy
     passport.use('local-login', new LocalStrategy({
         // change default username and password, to email and password
-        usernameField: 'email',            // tells passport set its usernameField to form input name/id="email"
-        passwordField: 'password',         // tells passport set its passwordField to form input name/id="password"
+        usernameField: 'email',            // tells passport set its usernameField to form input id="email"
+        passwordField: 'password',         // tells passport set its passwordField to form input id="password"
         passReqToCallback: true            // pass the HTML request to the callback - next function
     },
         function (req, email, password, done) {     // function (req, usernameField, passwordField, done)
