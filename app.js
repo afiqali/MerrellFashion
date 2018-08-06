@@ -176,6 +176,13 @@ app.post("/edit/:id",list.hasAuthorization, upload.single('image'), list.updatet
 
 //Setup routes for product delete
 app.delete("/profile/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/Sort/PriceHigh/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/Sort/PriceLow/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/Sort/Recent/:id",list.hasAuthorization, list.delete);
+app.delete("/products-gallery/Sort/:min/:max/:id",list.hasAuthorization, list.delete);
+app.delete('/products-gallery/search/:search/:id', list.delete);
+app.delete('/products-gallery/Sort/PriceRange=:min-:max/:id', list.delete);
 
 // Setup routes for specific product list
 app.get('/products-gallery/:category/view/:id', list.hasAuthorization, list.specificlist)
@@ -184,7 +191,7 @@ app.get('/products-gallery/search/:search/view/:id', list.specificlist);
 app.get('/profile/view/:id', list.specificlist);
 app.get('/products-gallery/Sort/PriceHigh/view/:id', list.hasAuthorization, list.specificlist);
 app.get('/products-gallery/Sort/PriceLow/view/:id', list.hasAuthorization, list.specificlist);
-app.get("/products-gallery/Sort/:min/:max/view/:id", list.hasAuthorization, list.specificlist);
+app.get("/products-gallery/Sort/PriceRange=:min-:max/view/:id", list.hasAuthorization, list.specificlist);
 app.get("/products-gallery/Sort/Recent/view/:id", list.hasAuthorization, list.specificlist);
 
 //Setup routes for view Other Profiles

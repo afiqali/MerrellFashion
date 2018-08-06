@@ -44,6 +44,7 @@
             padding: 10px;
         }
     </style>
+    
     <% include ../partials/stylesheetPRODUCT %>
         <!-- Custom styles for this template -->
         <link href="/publicPRODUCT/stylesheets/shop-homepage.css" rel="stylesheet">
@@ -97,7 +98,7 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container" style="padding-top: 0px;">
         <div class="row">
             <div class="col-lg-6" >
                 <h4 class="text-muted" style="padding-left:15px">Product Page</h4>
@@ -242,7 +243,15 @@
                                         </p>
                                         <p class="card-text"></p>
                                     </div>
+                                        <% if (user.name == 'admin'){ %>
+                                        <div class="card-footer" data-id="<%= productlists.Itemid %>">
+                                                <input type="button" class="btn btn-primary editBtn" value="Edit">
+                                                <input type="button" class="btn btn-danger deleteBtn"  value="Delete">
+                                        </div>
+                                        <% } else { %>
+                                        <% } %>
                                 </div>
+                                    
                             </div>
                             <% }); %>
 
@@ -258,7 +267,7 @@
         </div>
         </div>
         <!-- /.container -->
-        <footer class="py-5 bg-dark" style="width :100%; position: relative; bottom: 0; margin: 0 auto;">
+        <footer class="py-5 bg-dark" style="width: 100%; position: relative; bottom: 0; margin: 0 auto; top: 39.5px;">
                 <div class="container" style="width :100%">
                   <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
         </div>
@@ -293,6 +302,27 @@
                     $('.specific').click(function () {
                         var record_num = $(this).closest("div").data('id');
                         location.href = "<%-urlPath %>/view/" + record_num;
+                    });
+
+                    $('.deleteBtn').click(function () {
+                        var record_num = $(this).closest("div").data('id');
+                        
+                        if (confirm("Are you sure you want to delete this person's item?") ){
+                            $.ajax({
+                                url: '<%-urlPath%>/' + record_num,
+                                type: 'DELETE',
+                                success: function (result) {
+                                console.log(result.message);
+                                location.reload()
+                                },
+                                error: function (result) {
+                                alert("Unable to delete item record.");
+                                console.log(result.message);
+                                }
+                            })
+                        }else{
+                            location.href = "<%-urlPath%>"
+                        }
                     });
                 </script>
 

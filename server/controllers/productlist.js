@@ -15,8 +15,6 @@ exports.show = function (req, res) {
     var currentuser = req.user.id
     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id WHERE status = 'a' and i.user_id <>'" +currentuser+"'"
     , { model: productlist}).then((productlists)=> {
-        
-
         res.render('products-gallery', {
             title: 'Product For Sale',
             productlists: productlists,
@@ -373,6 +371,7 @@ exports.profileItems = function (req, res) {
 
 exports.OtherProfileItems = function (req, res) {
     ProfileOwner = req.params.ProfileOwner
+    CheckAdmin = req.user
     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id where i.user_id ='"+ProfileOwner+"' and status <> 'd' order by i.status"
     , { model: productlist}).then((productlists)=> {
         sequelize.query("select p.imageName, p.price, p.Description, p.ItemName, p.status, p.category, p.Itemid, p.user_id, p.createdAt, u.name, u.email from productlists p join Users u on p.user_id = u.id where p.user_id ='" + ProfileOwner + "'"
@@ -382,6 +381,7 @@ exports.OtherProfileItems = function (req, res) {
         res.render('OtherProfilePage', {
             title: 'Profile Page', 
             user : UserDetails, 
+            CheckAdmin: CheckAdmin,
             avatar: gravatar.url(UserDetails.email ,  {s: '100', r: 'x', d: 'retro'}, true),
             productlists: productlists,
             urlPath: req.protocol + "://" + req.get("host") + req.url
