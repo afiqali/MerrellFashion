@@ -34,7 +34,7 @@
           </td>
         <% }else {%>
           <% for(var i=0; i < itemList.length; i++){ %>
-            <tr data-id="<%= itemList[i].itemID %>">
+            <tr data-id="<%= itemList[i].itemID %>/<%= itemList[i].sellerID %>/<%= itemList[i].buyerID %>">
               <td>
                 <%= itemList[i].itemName %>
               </td>
