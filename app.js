@@ -160,15 +160,15 @@ app.get("/transactionAdmin", offers.transactionAdmin)
 
 // Setup routes for product listing general
 app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
-app.get('/products-gallery', list.hasAuthorization, list.show);
+app.get('/products-gallery', list.show);
 
 //Setup routes for filtering item listing
 app.get('/products-gallery/search/:search', list.searchfunction);
-app.get('/products-gallery/:category',list.hasAuthorization, list.showCategory);
-app.get('/products-gallery/Sort/PriceHigh', list.hasAuthorization, list.SortHighToLow);
-app.get('/products-gallery/Sort/PriceLow', list.hasAuthorization, list.SortLowToHigh);
-app.get("/products-gallery/Sort/PriceRange=:min-:max", list.hasAuthorization, list.SortPriceRange);
-app.get("/products-gallery/Sort/Recent", list.hasAuthorization, list.SortRecent);
+app.get('/products-gallery/:category', list.showCategory);
+app.get('/products-gallery/Sort/PriceHigh', list.SortHighToLow);
+app.get('/products-gallery/Sort/PriceLow', list.SortLowToHigh);
+app.get("/products-gallery/Sort/PriceRange=:min-:max", list.SortPriceRange);
+app.get("/products-gallery/Sort/Recent", list.SortRecent);
 
 //Setup routes for product editing
 app.get("/profile/edit/:id",list.hasAuthorization, list.editRecord);
@@ -186,9 +186,9 @@ app.delete('/products-gallery/Sort/PriceRange=:min-:max/:id', list.delete);
 
 // Setup routes for specific product list
 app.get('/products-gallery/:category/view/:id', list.hasAuthorization, list.specificlist)
-app.get('/products-gallery/view/:id', list.specificlist);
-app.get('/products-gallery/search/:search/view/:id', list.specificlist);
-app.get('/profile/view/:id', list.specificlist);
+app.get('/products-gallery/view/:id',list.hasAuthorization, list.specificlist);
+app.get('/products-gallery/search/:search/view/:id',list.hasAuthorization, list.specificlist);
+app.get('/profile/view/:id',list.hasAuthorization, list.specificlist);
 app.get('/products-gallery/Sort/PriceHigh/view/:id', list.hasAuthorization, list.specificlist);
 app.get('/products-gallery/Sort/PriceLow/view/:id', list.hasAuthorization, list.specificlist);
 app.get("/products-gallery/Sort/PriceRange=:min-:max/view/:id", list.hasAuthorization, list.specificlist);

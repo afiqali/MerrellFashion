@@ -100,7 +100,7 @@
                                   <div class="card h-100" data-id ="<%= productlists.Itemid%>" >
                                   <img src="/publicPRODUCT/images/<%= productlists.imageName %>" class="figure-img img-fluid img-rounded specific" alt="<%= productlists.imageName %>"  style="max-width: 100%; height:250px; margin:15px">
                                   <% if (productlists.status == 'c') { %>
-                                    <% if (CheckAdmin.name == 'admin') { %>
+                                    <% if (CheckAdmin.name === 'admin') { %>
                                         <div style=" position: absolute; bottom: 47.8%; right: 4.4%;" class="btn btn-danger">Item Sold</div>
                                     <% } else { %>
                                         <div style="position: absolute; bottom: 40.3%; right: 4.4%;" class="btn btn-danger">Item Sold</div>
@@ -121,7 +121,7 @@
                                                 </p>
                                       <p class="card-text"></p>
                                     </div>
-                                    <% if (CheckAdmin.name == 'admin'){ %>
+                                    <% if (CheckAdmin.name === 'admin'){ %>
                                         <div class="card-footer" data-id="<%= productlists.Itemid %>">
                                                 <input type="button" class="btn btn-primary editBtn" value="Edit">
                                                 <input type="button" class="btn btn-danger deleteBtn"  value="Delete">
