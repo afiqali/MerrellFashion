@@ -90,7 +90,7 @@ app.use(flash());
 
 // Application Routes
 // Index Route
-app.get('/', index.show);
+app.get('/', list.ViewHomepage);
 
 // Route for Login
 app.get('/login', auth.notLoggedIn, auth.signin);
@@ -161,7 +161,7 @@ app.get("/transactionAdmin", offers.transactionAdmin)
 
 // Setup routes for product listing general
 app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);
-app.get('/products-gallery', list.show);
+app.get('/products-gallery',list.hasAuthorization, list.show);
 
 //Setup routes for filtering item listing
 app.get('/products-gallery/search/:search', list.hasAuthorization, list.searchfunction);

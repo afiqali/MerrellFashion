@@ -65,35 +65,8 @@ img {
     font-weight: bold;
     font-size: 20px;
 }
-.dropbtn {
-    background-color: #F2F5F8;
-    color: black;
-    padding: 5px;
-    font-size: 20px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-}
-.dropdown {
-    float: right;
-    position: relative;
-}
-.dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    right: 0;
-    z-index: 1;
-}
-.dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
+
+
 .chat-message {
     padding: 10px;
 }
@@ -125,22 +98,10 @@ img {
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login">Sign in</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/signup">Sign up</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/account">Account</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/comments">Comments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/videos">Videos</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/products-gallery">Products</a>
@@ -185,13 +146,6 @@ img {
             <div class="chat-about">
                 <div class="chat-with">Logged in as - <%= user.name %></div>
             </div>
-            <!-- <div class="dropdown">
-                <button onclick="myFunction()" class="dropbtn">...</button>
-                  <div id="myDropdown" class="dropdown-content">
-                    <a href="#">Report User</a>
-                    <a href="#">Leave a Feedback</a>
-                  </div>
-            </div> -->
         </div>
         <div id="chatroom" class="bgimg">
             <div id="messages">
@@ -229,10 +183,6 @@ img {
                 </div>
         </div>
 </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> 053df94ea5b4dfa48814f3bed96b8d16ce4ead08
 <footer class="py-5 bg-dark" style ="position: relative; bottom: 0; width: 100%; top: 334px;">
         <div class="container">
           <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
@@ -305,22 +255,6 @@ img {
     }
     });
 
-    function myFunction() {
-    document.getElementById("myDropdown").classList.toggle("show");
-    }
-    window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
-
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-}
 function scrollDown() {
     var objDiv = document.getElementById("chatroom");
     objDiv.scrollTop = objDiv.scrollHeight  ;

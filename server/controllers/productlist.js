@@ -349,6 +349,25 @@ exports.searchfunction = function (req, res) {
     });
 };
 
+exports.ViewHomepage = function (req, res) {
+    
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id where i.status <> 'd' and i.status <> 'c' order by NEWID() limit 5"
+    , { model: productlist}).then((productlists)=> {
+
+        res.render('index', {
+            title: 'Home Page', 
+            user : req.user, 
+            productlists: productlists,
+            urlPath: req.protocol + "://" + req.get("host") + req.url
+        });
+
+    }).catch((err) => {
+        return res.status(400).send({
+            message: err
+        });
+    });
+};
+
 exports.profileItems = function (req, res) {
     currentuser = req.user.id
     sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id where i.user_id ='"+currentuser+"' and status <> 'd' order by i.status"
