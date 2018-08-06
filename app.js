@@ -138,14 +138,14 @@ app.get('/display', auth.isLoggedIn, display.displayOrder);
 app.get('/profile', auth.isLoggedIn, list.profileItems);
 
 // Route for payment
-app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
-app.post('/payment/stripe/:id',  payment.doStripe);
-app.post('/payment/paypal/:id',  payment.create);
+app.get('/payment/:id/:transactionID', auth.isLoggedIn, payment.getItem);
+app.post('/payment/stripe/:id/:transactionID',  payment.doStripe);
+app.post('/payment/paypal/:id/:transactionID',  payment.create);
 
 app.get('/listPayments', auth.isLoggedIn, listPayments.getItem);
 
 // Route for receipt
-app.get('/receipt/:id/:payment_id',auth.isLoggedIn, receipt.getItem);
+app.get('/receipt/:id/:payment_id/:transactionID',auth.isLoggedIn, receipt.getItem);
 
 // Setup routes for Transactions
 app.get('/transactions', transactions.list);

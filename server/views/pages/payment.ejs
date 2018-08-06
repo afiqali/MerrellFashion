@@ -139,6 +139,7 @@
         <script>
 
 
+
         </script>
 
         
@@ -176,31 +177,30 @@
                           <h3>Item</h3>
                           <div style="padding-left:20px;">
                           <h5>Item: <%= item.ItemName %></h5>
-                          <h5>Price: S$<%= item.price.toFixed(2) %></h5>
+                          <h5>Price: S$<%= offer.offerAmount.toFixed(2) %></h5>
                           <h5>Category: <%= item.category %></h5> 
-                          <p style="display:none;visibility: hidden" id="price"> <%= item.price %></p>  
+                          <p style="display:none;visibility: hidden" id="price"> <%= offer.offerAmount %></p>  
                           </div>                
                         </div>
                       </div>
                       <br>
                       <hr>
                       <div style="text-align: center">
-                          <h6> Subtotal : S$<%= item.price.toFixed(2) %> </h6>
-                          <h6> GST (7%) : S$<%= (item.price*0.07).toFixed(2)%></h6>
-                          <h6> Delivery Tax (10%) : S$<%= (item.price*0.1).toFixed(2)%></h6>
-                          <h5><strong> Total : <u>S$<%= (parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))).toFixed(2)%></u> </strong></h5>
+                          <h6> Subtotal : S$<%= offer.offerAmount.toFixed(2) %> </h6>
+                          <h6> GST (7%) : S$<%= (offer.offerAmount*0.07).toFixed(2)%></h6>
+                          <h6> Delivery Tax (10%) : S$<%= (offer.offerAmount*0.1).toFixed(2)%></h6>
+                          <h5><strong> Total : <u>S$<%= (parseFloat((offer.offerAmount*0.1).toFixed(2)) + parseFloat((offer.offerAmount*0.07).toFixed(2)) +  parseFloat(offer.offerAmount.toFixed(2))).toFixed(2)%></u> </strong></h5>
                       </div>
                       <hr>
                       <br>
 
                       <div style="margin: auto 0; text-align: center">
                             <label for="dob">Collection Date: </label>
-                            <input  type="date" id="dob" name="dob" onchange="changedDate();" min="2018-08-07" max="2018-08-30" required>
+                            <input  type="date" id="dob" name="dob" onchange="changedDate();" required>
                         </div>
-
                         <br>
                       <div id="paypal-button-container" class="container-fluid" style="margin:auto; ">
-                        <div id="paypal-button" >
+                        <div id="paypal-button">
                         </div>
                       </div>
                     </form>
@@ -212,19 +212,18 @@
 
         <!-- Stripe Form -->
             <div class="container" style="padding:0px;border-radius:10px" >
-            <form action="/payment/stripe/<%=item.Itemid%>" method="POST" id="stripeForm">
+            <form action="/payment/stripe/<%=item.Itemid%>/<%= offer.transactionID %>" method="POST" id="stripeForm">
                     <script
                         src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                         data-key="pk_test_GasPdW35Y0J14wRCw9fzeDtI"
-                        data-amount=" <%= (parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2)))*100%> "
+                        data-amount=" <%= Math.round(((parseFloat((offer.offerAmount*0.1).toFixed(2)) + parseFloat((offer.offerAmount*0.07).toFixed(2)) +  parseFloat(offer.offerAmount.toFixed(2)))*100).toFixed(0))%>  "
                         data-name="<%= user.name %>"
                         data-description="Item bought: <%= item.ItemName %>"
-                        data-image="/publicPRODUCT/images/<%= item.imageName %>"
                         data-locale="auto"
                         data-currency="sgd"
                         id="doStripe">
                     </script>
-                    <input id="price1" name="price1" type="hidden" value="<%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%>">
+                    <input id="price1" name="price1" type="hidden" value="<%= parseFloat((offer.offerAmount*0.1).toFixed(2)) + parseFloat((offer.offerAmount*0.07).toFixed(2)) +  parseFloat(offer.offerAmount.toFixed(2))%>">
                     <input id="status1" name="status1" type="hidden" value="VERIFIED">
                     <input id="item_id1" name="item_id1" type="hidden" value"<%= item.Itemid %>">
                     <input  type="hidden" id="dob1" name="dob1">
@@ -253,16 +252,16 @@
                           <h3>Item</h3>
                           <div style="padding-left:20px;">
                           <h5>Item: <%= item.ItemName %></h5>
-                          <h5>Price: <%= item.price %></h5>
+                          <h5>Price: <%= offer.offerAmount %></h5>
                           <h5>Category: <%= item.category %></h5> 
-                          <p style="display:none;visibility: hidden" id="pricee"> <%= parseFloat((item.price*0.1).toFixed(2)) + parseFloat((item.price*0.07).toFixed(2)) +  parseFloat(item.price.toFixed(2))%></p>  
+                          <p style="display:none;visibility: hidden" id="pricee"> <%= parseFloat((offer.offerAmount*0.1).toFixed(2)) + parseFloat((offer.offerAmount*0.07).toFixed(2)) +  parseFloat(offer.offerAmount.toFixed(2))%></p>  
                           </div>                
                         </div>
                 </div>
         </div>
 
 
-            <form action="/payment/paypal/<%=item.Itemid%>" method="POST" id="pay" >
+            <form action="/payment/paypal/<%=item.Itemid%>/<%= offer.transactionID %>" method="POST" id="pay" >
                 <div class="modal-body">
 
                     <fieldset class="form-group">
@@ -297,72 +296,54 @@
 
 
         <script>
-                // function minDate() {
-                //     var dateNow = Date.now();
-                //     return dateNow;
-                // }
-                // function maxDate() {
-                //     var dateNow = Date.now();
-                //     dateNow = dateNow.setMonth(dateNow.getMonth()+1)
-                //     return dateNow;
-                // }
+                var currentDate = new Date();
+                var currentYear = currentDate.getFullYear();
+                var currentMonth = currentDate.getMonth()+1;
+                var currentDay = currentDate.getDate();
+                if (currentMonth < 10 ) {
+                    currentMonth = currentMonth.toString();
+                    currentMonth = '0' + currentMonth;
+                }
+                if (currentDay < 10 ) {
+                    currentDay = currentDay.toString();
+                    currentDay = '0' + currentDay;
+                }
+                currentDate = currentYear + '-' + currentMonth + '-' + currentDay;
+                console.log(currentDate);
 
-                // function restrictDate() {
-                //     var dateNow = new Date();
-                //     alert(dateNow);
-                //     $('#dob').prop('min',dateNow);
-                //     $('#dob').prop('max', dateNow.setMonth(dateNow.getMonth()+1))
-                // }
-
-                // function restrictDate() {
-
-                    
+                // min date set
+                document.getElementById('dob').min = currentDate;
 
 
-                // }
+                var currentDate = new Date();
+                var currentYear = currentDate.getFullYear();
+                var currentMonth = currentDate.getMonth()+2;
+                var currentDay = currentDate.getDate();
+
+                if (currentMonth < 10 ) {
+                    currentMonth = currentMonth.toString();
+                    currentMonth = '0' + currentMonth;
+                }
+                if (currentDay < 10 ) {
+                    currentDay = currentDay.toString();
+                    currentDay = '0' + currentDay;
+                }
+                currentDate = currentYear + '-' + currentMonth + '-' + currentDay;
+                console.log(currentDate);
+                // min date set
+                document.getElementById('dob').max = currentDate;
 
 
 
-
+                
                 function changedDate() {
                     var dob = $('#dob').val();
                     $('#dob1').val(dob);
                     $('#dob2').val(dob);
                 }
-
-
-                
-                // stripe shit
                 var pricee = parseFloat(document.getElementById('pricee').innerText);
-                // console.log(pricee);
-                // $("#paypal-button").click(function () {
-                //     $.ajax({
-                //         url: 'http://localhost:3000/paypal/:id',
-                //         type: 'POST',
-                //     });
-                //     $("#pay").submit(function() {
-                //         $.ajax({
-                //         url: 'http://localhost:3000/paypal/:id',
-                //         type: 'POST',
-                //     });
-                //     })
-                // });
-
-                // $("#stripeForm").click(function () {
-                //     $.ajax({
-                //         url: 'http://localhost:3000/stripe/:id',
-                //         type: 'POST',
-                //     });
-                //     $("#pay").submit(function() {
-                //         $.ajax({
-                //         url: 'http://localhost:3000/paypal/:id',
-                //         type: 'POST',
-                //     });
-                //     })
-                // });
 
                 // paypal shit
-                
                 paypal.Button.render({
 
                   env: 'sandbox', // Or 'production',
@@ -427,8 +408,6 @@
                         var status = paymentDetails.status;
                         // alert(status);
                         $('#status').val(status);
-
-
 
                         // alert(amount);
                         $('#totalAmount').val(pricee);
