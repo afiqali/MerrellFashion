@@ -114,11 +114,11 @@ app.post('/signup', passport.authenticate('local-signup', {
     failureFlash: true
 }));
 
-// Route for admin - display orders (get from payment)
-app.get('/display', auth.isLoggedIn, display.displayOrder);
-
-// Route for profile
-app.get('/profile', auth.isLoggedIn, list.profileItems);
+// Route for logout
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('/');
+});
 
 // Route for account
 app.get('/account', auth.isLoggedIn, account.displayAccount);
@@ -127,6 +127,27 @@ app.post('/account', account.editAccount);
 // Route for Change password
 app.get('/changepassword', auth.isLoggedIn, account.getPassword);
 app.post('/changepassword', account.editPassword);
+
+// Route for Track order
+app.get('/trackorder', auth.isLoggedIn, account.displayOrder)
+
+// Route for Track order
+app.get('/trxhistory', auth.isLoggedIn, listPayments.trxHistory)
+
+// Route for admin - display orders (get from payment)
+app.get('/display', auth.isLoggedIn, display.displayOrder);
+
+// Route for profile
+app.get('/profile', auth.isLoggedIn, list.profileItems);
+
+// Setup routes for comments
+app.get('/comments', comments.hasAuthorization, comments.list);
+app.post('/comments', comments.hasAuthorization, comments.create);
+app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete);
+
+// Setup routes for videos
+app.get('/videos', videos.hasAuthorization, videos.show);
+app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
 
 // Route for payment
 app.get('/payment/:id', auth.isLoggedIn, payment.getItem);
@@ -138,34 +159,11 @@ app.get('/listPayments', auth.isLoggedIn, listPayments.getItem);
 // Route for receipt
 app.get('/receipt/:id/:payment_id', receipt.getItem);
 
-
-// Logout Page
-app.get('/logout', function (req, res) {
-    req.logout();
-    res.redirect('/');
-});
-
-// Change password
-app.get('/changepassword', auth.isLoggedIn, account.displayAccount
-);
-
-
-// Setup routes for comments
-app.get('/comments', comments.hasAuthorization, comments.list);
-app.post('/comments', comments.hasAuthorization, comments.create);
-app.delete('/comments/:comments_id', comments.hasAuthorization, comments.delete);
-
-// Setup routes for videos
-app.get('/videos', videos.hasAuthorization, videos.show);
-app.post('/videos', videos.hasAuthorization, upload.single('video'), videos.uploadVideo);
-
 // Setup routes for Transactions
 app.get('/transactions', transactions.list);
 app.get('/')
 // Setup routes for offers
 app.post('/messages/:id', offers.makeOffer);
-
-// Setup chat
 
 // Setup routes for product listing general
 app.post('/products', list.hasAuthorization, upload.single('image'), list.uploadImage);

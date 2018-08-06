@@ -1,4 +1,5 @@
 var User = require('../models/users');
+var orderStatus = require('../models/orderStatus');
 var myDatabase = require('./database');
 var sequelize = myDatabase.sequelize;
 var fs = require('fs');
@@ -22,23 +23,7 @@ exports.displayAccount = function (req, res) {
         });
 };
 
-exports.changePassword = function (req, res) {
-    var editUserData = {
-        op: req.body.op,
-        np: req.body.np,
-        cp: req.body.cp
-    }
-
-    sequelize.query(`select password from Users where id=${req.user.id}`, {model: User})
-    .then((password) => {
-    if (op == password) {
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa")
-    }
-})
-}
-
 exports.editAccount = function (req, res) {
-
     var editUserData = {
         name: req.body.name,
         email: req.body.email,
@@ -117,4 +102,38 @@ exports.editPassword = function (req, res) {
                 message: msg
             })
         })
+}
+
+exports.displayOrder = function (req, res) {
+    sequelize.query(`select * from orderStatuses where user_id=${req.user.id}`, { model: orderStatus })
+    .then((status) => {
+        console.log(status)
+        var status1 = status[0]['dataValues']['status']
+        var text;
+        var circle;
+
+        switch (status1) {
+            case 1:
+                circle = status1;
+                break;
+            case 2:
+                text = "On";
+                break;
+            default:
+                text = "No value found";
+        }
+        
+        res.render('trackOrder', {
+            title: "Track order",
+            message: req.flash("loginMessage"),
+            circle: circle
+        })
+    })
+}
+
+exports.displayTrxHistory = function (req, res) {
+    res.render('trxHistory', {
+        title: "Transaction history",
+        message: req.flash("loginMessage")
+    })
 }
