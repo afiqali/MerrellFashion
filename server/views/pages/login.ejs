@@ -7,21 +7,21 @@
 
     <% include ../partials/stylesheet %>
     <% include ../partials/stylesheetPRODUCT %>
-    <% include ../partials/stylesheetSlick %>
+
 </head>
 <body>
     <% include ../partials/navbar %>
 
     <div class="container">
         <% if (message.length > 0) { %>
-            <div class="alert alert-warning alert-dismissible fade in" role="alert">
+            <div class="alert alert-warning alert-dismissible" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <strong>Oops!</strong> <%= message %>.
             </div>
         <% } %>
-        
+     
         <form class="form-signin" action="/login" method="post">
             <h2 class="form-signin-heading">Please Log in</h2>
             
@@ -36,9 +36,12 @@
                 <input class="form-control" type="password" required id="password" name="password">
             </div>
 
+            <small>Forgot password? <a href="/resetpassword">Reset password</a></small>
+      
             <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
             <br>
-            <p>Don't have an account? <a href="/signup">Signup</a> ,it's free.</p>
+
+            <p>Don't have an account? <a href="/signup">Signup</a>, it's free.</p>
         </form>
     </div>
 

@@ -8,7 +8,6 @@
 
     <% include ../partials/stylesheet %>
     <% include ../partials/stylesheetPRODUCT %>
-    <% include ../partials/stylesheetSlick %>
 </head>
 
 <body>
@@ -16,9 +15,11 @@
 
         <div class="container">
             <% if (message.length > 0) { %>
-                <div class="alert alert-warning" role="alert">
-                    <strong>Warning!</strong>
-                    <%= message %>.
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>Warning!</strong> <%= message %>.
                 </div>
                 <% } %>
 
@@ -69,7 +70,7 @@
 
                         <div class="form-group">
                             <label for="file" class="file">Profile picture</label>
-                            <input type="file" id="image" name="image" class="form-control">
+                            <input required type="file" id="image" name="image" class="form-control">
                             <span class="file-custom"></span>
                         </div>
 

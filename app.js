@@ -23,7 +23,7 @@ const exphbs = require('express-handlebars');
 // Import Receipt Controller
 var receipt = require('./server/controllers/receiptController');
 // Import display (admin) controller
-var display = require('./server/controllers/display');
+var admin = require('./server/controllers/adminDisplay');
 // Import account controller
 var account = require('./server/controllers/account');
 // Import transactions controller
@@ -128,11 +128,20 @@ app.post('/changepassword', account.editPassword);
 // Route for Track order
 app.get('/trackorder', auth.isLoggedIn, account.displayOrder)
 
-// Route for Track order
+// Route for Trx History
 app.get('/trxhistory', auth.isLoggedIn, listPayments.trxHistory)
 
+// Route for Reset password
+// app.get('/resetpassword', account.getResetPassword);
+// app.post('/resetpassword', account.setResetPassword);
+// app.get('/resetpasswordlink/:email', account.resetPasswordLink);
+// app.post('/resetpasswordlink/:email', account.resetPasswordLink2);
+// app.get('/changepassword/:id')
+
 // Route for admin - display orders (get from payment)
-app.get('/display', auth.isLoggedIn, display.displayOrder);
+app.get('/admindisplay', auth.isLoggedIn, admin.display);
+app.post('/admindisplay', upload.single('image'), admin.edit);
+app.delete('/admindisplay/:User_id', admin.delete);
 
 // Route for profile
 app.get('/profile', auth.isLoggedIn, list.profileItems);
