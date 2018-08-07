@@ -91,7 +91,7 @@
               <td>
                 <% if(itemList[i].offerStatus == "active" && itemList[i].offerType == "accepted" ) { %>
                   <button class="payment">
-                      <a class="payment" href="http://localhost:3000/payment/<%= itemList[i].itemID%>">Make Payment</a>
+                      <a class="payment" href="http://localhost:3000/payment/<%= itemList[i].itemID%>/<%= itemList[i].transactionID %>">Make Payment</a>
                   </button>
                 <% } %>
               </td>

@@ -1,5 +1,7 @@
 // get Order model
 var Order = require("../models/paymentModel");
+var offersModel = require("../models/offersModel");
+
 var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
 
 
@@ -20,8 +22,8 @@ var payment_id;
 
 // Get specific record - GET
 exports.getItem = function(req,res) {
-
     
+    transactionID = req.params.transactionID;
     itemID = req.params.id;
     itemModel.findById(itemID).then(function (item) {
         if (item.status == 'c' || item.status == 'd') {
@@ -31,26 +33,29 @@ exports.getItem = function(req,res) {
             return res.redirect('/profile');
         }
         else {        
-            res.render('payment', {
-            title: 'Payment Page',
-            user: req.user,
-            item: item,
-            hostPath: req.protocol + "://" + req.get("host")
-        });
+            offersModel.findById(transactionID).then(function(offer) {
+                if(offer.offerStatus == "active" && offer.offerType == "accepted") {
+                    res.render('payment', {
+                        title: 'Payment Page',
+                        user: req.user,
+                        item: item,
+                        offer: offer,
+                        hostPath: req.protocol + "://" + req.get("host")
+                    });
+                } else { return res.redirect('/profile')}
+            })
         }
-
     }).catch((err) => {
         return res.status(400).send({
                         message:err
         });
     });
-
-
 };
 
 // Create Order - POST
 exports.create = function (req, res) {
     itemID = req.params.id;
+    transactionID = req.params.transactionID;
     itemModel.findById(itemID).then(function (item) {
         if (item.status == 'c' || item.status == 'd') {
             return res.redirect('/profile');
@@ -124,7 +129,7 @@ exports.create = function (req, res) {
         //   });
 
         // var url;
-        url = '/receipt/' + itemID.toString() + '/' + payment_id;
+        url = '/receipt/' + itemID.toString() + '/' + payment_id + '/' + transactionID;
         res.redirect(url);
     })
 
@@ -133,23 +138,24 @@ exports.create = function (req, res) {
 
 // Do Stripe things - POST
 exports.doStripe = function (req,res) {
-        console.log(req.body.dob1)
+        console.log(req.body.dob1);
         itemID = req.params.id;
+        transactionID = req.params.transactionID;
         itemModel.findById(itemID).then(function (item) {
             if (item.status == 'c' || item.status == 'd') {
                 return res.redirect('/profile');
             }
-            
-
         }).catch((err) => {
             return res.status(400).send({
                             message:err
             });
         });
-        
+
         const token = req.body.stripeToken; // Using Express
         var amount1 = req.body.price1;
-        amount1 = parseFloat(req.body.price1)*100;
+        console.log(amount1);
+        amount1 = (Math.round(parseFloat(req.body.price1)*100,0)).toFixed(0);
+        console.log(amount1);
         var charge = stripe.charges.create({
             amount: amount1,
             currency: 'sgd',
@@ -218,7 +224,7 @@ exports.doStripe = function (req,res) {
                 //     console.log(body);
                 //   });
         
-                url = '/receipt/' + itemID.toString() + '/' + charge.id;
+                url = '/receipt/' + itemID.toString() + '/' + charge.id + '/' + transactionID;
                 res.redirect(url);
             })
         }).catch((err) => {
