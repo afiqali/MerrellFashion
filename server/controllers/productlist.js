@@ -351,7 +351,7 @@ exports.searchfunction = function (req, res) {
 
 exports.ViewHomepage = function (req, res) {
     
-    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id where i.status <> 'd' and i.status <> 'c' order by NEWID() limit 5"
+    sequelize.query("select *, u.email AS [user_id] from productlists i join Users u on i.user_id = u.id where i.status <> 'd' and i.status <> 'c' order by NEWID()"
     , { model: productlist}).then((productlists)=> {
 
         res.render('index', {
