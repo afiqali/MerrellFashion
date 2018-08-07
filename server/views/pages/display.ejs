@@ -5,46 +5,114 @@
         <%= title %>
     </title>
 
-    <% include ../partials/stylesheet %>
-    <% include ../partials/javascript %>
+    <% include ../partials/stylesheetPRODUCT %>
 </head>
 
 <body>
-    <% include ../partials/header %>
+    <% include ../partials/navbar %>
 
-    <div class="list-group">
-        <% console.log(orders) %>
-        <% orders[0].forEach(function(orders){ %>
-        
-                <div class="Payments order-list">
-                        <h4 class="list-group-item-heading">
-                            <%= orders.totalAmount %>       
-                        </h4>
-                    
-                        <h4 class="list-group-item-heading">
-                            <%= orders.id %>           
-                        </h4>
+    <div class="container-fluid">
+        <h1>Users</h1>
+        <hr style="height:1px;border:none;color:#333;background-color:#333;" />
 
-                        <h4 class="list-group-item-heading">
-                                <%= orders.name %>           
-                        </h4>
+        <% users.forEach(function(user){ %>
+            <% var data = user['dataValues'] %>
 
-                        <p class="list-group-item-text">
-                            <%= orders.credit_card_id %>    <!-- Credit card number --> 
-                        </p>
-
-                        <small class="text-muted">
-                            <%= orders.status %>            <!-- Payment status -->
-                        </small>   
-
-                        <p>                     
-                            <%= orders.orderMethod %>       <!-- Payment method -->
-                        </p>
+    <form action="/admindisplay" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-sm-5 ">
+            <div class="form-group row">
+                <label for="userId" class="col-sm-2 col-form-label">   
+                    <h4>User Id: </h4>
+                </label>
+                <div class="col-sm-10">
+                    <input type="text" id="id" name="id" class="form-control" value=<%= data['id'] %>>
                 </div>
-            <% }); %> 
+            </div>
+
+            <div class="text-center">
+                <img class="rounded-circle" width="150" height="150" src="/public/images/<%= data['img'] %>" style="border-radius:50%" />
+            </div>
+
+            <div class="form-group text-center">
+                <label for="file" class="file">Profile picture
+                    <input type="file" id="image" name="image" class="form-control" value=<%= data['img'] %>>
+                    <span class="file-custom"></span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label for="inputName">Name</label>
+                <input type="text" required id="name" name="name" class="form-control" value=<%= data['name'] %>>
+            </div>
+        </div>
+
+        <div class="col-sm-5">
+            <div class="form-group">
+                <label for="inputEmail">Email address</label>
+                <input type="email" required pattern=".*[@].*[.].*" oninvalid="setCustomValidity('name@domain')" oninput="setCustomValidity('')" id="email" name="email" class="form-control" value=<%= data['email'] %>>
+            </div>
+
+            <div class="form-group">
+                <label for="inputGender">Gender</label>
+                <input class="form-control" list="gender" name="gender" value=<%= data['gender'] %>>
+                <datalist id="gender">
+                    <option value="Female">
+                    <option value="Male">
+                </datalist>
+            </div>
+
+            <div class="form-group">
+                <label for="inputBirthday">Birthday</label>
+                <input class="form-control" type="date" id="dob" name="dob" value=<%= data['dob']  %>>
+            </div>
+
+            <div class="form-group">
+                <label for="inputContactNum">Contact number</label>
+                <input type="text" required pattern="[98][0-9]{7}" oninvalid="setCustomValidity('8 digit number with \'9\'/\'8\' as the first digit')" oninput="setCustomValidity('')" id="contactNumber" name="contactNumber" class="form-control" value=<%= data['contactNumber'] %> >
+            </div>
+        
+            <div class="form-group">
+                <label for="inputAddress">Address</label>
+                <input type="text" id="address" name="address" class="form-control" required value=<%= data['address'] %>>
+            </div>
+        </div>
+
+        <div class="col-sm-2" data-id="<%= data['id'] %>">
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Edit</button>
+            <button type="button" class="btn btn-lg btn-danger deleteBtn btn-block">Delete</button>
+        </div>
     </div>
+    </form>
 
-    <% include ../partials/footer %>
+    <hr style="height:1px;border:none;color:#333;background-color:#333;" />
+    <% }) %>  
 
+    </div> 
+
+    <% include ../partials/footer2 %>
+
+    <% include ../partials/javascript %>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+       $('.deleteBtn').click(function () {
+            var record_num = $(this).closest("div").data('id');
+
+            if ( confirm("Are you sure you want to delete your item?") ) {
+                $.ajax({
+                    url: '<%= urlPath%>/' + record_num,         // Send ajax data to this url destination (no data to send here, using url params)
+                    type: 'DELETE',                             // HTTP method
+                    success: function (result) {                // Erorr: Call function upon successful sending
+                        location.reload()
+                    },
+                    error: function (result) {                  // Erorr: Call function upon failed sending
+                        location.reload()
+                    }
+                })
+            }
+        });
+    </script>
 </body>
 </html>

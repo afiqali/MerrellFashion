@@ -7,18 +7,12 @@ var mime = require('mime');
 
 var IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
-// const Email = window.Email;
+// Mailgun (Comment this out if pushing to open-source)
+var api_key = '0d6fa9ff10930d6dc61bb31250b91422-7efe8d73-b681ae43';
+var DOMAIN = 'sandbox0b40f66fa4094d1da12f65c9246b5fdd.mailgun.org';
 
-// Email.send(
-//     this.state.email,                                                   // Sender's email 
-//     "jnjw55@gmail.com",                                                 // Authorized recipent's email
-//     this.hashed_ticket_num(),                                           // Email title
-//     document.getElementById("comment").value,                           // Email content
-//     "smtp.mailgun.org",                                                 // SMTP Hostname
-//     "postmaster@sandboxc589e5cbd93f4aaba4406ad7bd4d9fac.mailgun.org",   // Default SMTP Login
-//     "f477f4032a856807786bbf4c20296f09-80bfc9ce-79c3f885",               // Default Password 
-//     { token: "121f7987-95ff-435c-ad95-943ca513f8cb" }                   // SMTP credentials - security token (not sure if this works)
-// );
+var mailgun = require("mailgun-js");
+var mailgun = require('mailgun-js')({ apiKey: api_key, domain: DOMAIN });
 
 module.exports = function (passport) {
     // passport init setup
@@ -55,12 +49,13 @@ module.exports = function (passport) {
             process.nextTick(function () {
 
                 User.findOne({ where: { email: email } }).then((user) => {
-                    // check errors and bring the mess  ages
+                    // check errors and bring the messages
                     if (!user)
                         return done(null, false, req.flash('loginMessage', 'No such user found.'));
+                    // Check if password exists in User db, using password (passwordField)
                     if (!isValidPassword(user.password, password))
                         return done(null, false, req.flash('loginMessage', 'Wrong password!'));
-                    // everything ok, get user
+                    // Everything ok, get matched user
                     else {
                         return done(null, user.get());
                     }
@@ -107,7 +102,6 @@ module.exports = function (passport) {
 
                             // check support file types
                             if (IMAGE_TYPES.indexOf(type) == -1) {
-                                console.log("ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ")
                                 return res.status(415).send('Supported image formats: jpeg, jpg, jpe, png. ');
                             }
 
@@ -161,16 +155,17 @@ module.exports = function (passport) {
                                         return done(null, false);
                                     }
                                     if (newUser) {
-                                        // Email.send(
-                                        //     "jnjw55@gmail.com",
-                                        //     email,
-                                        //     "Email title",
-                                        //     "Email content",
-                                        //     "smtp.mailgun.org",
-                                        //     "postmaster@sandboxc589e5cbd93f4aaba4406ad7bd4d9fac.mailgun.org",  
-                                        //     "f477f4032a856807786bbf4c20296f09-80bfc9ce-79c3f885",
-                                        //     { token: "121f7987-95ff-435c-ad95-943ca513f8cb" } 
-                                        // )
+                                        // Send verification email
+                                        var data = {
+                                            from: 'Merrell Fashion - Payment Success! <merrellfashionbizz@gmail.com>',
+                                            to: 'jnjw55@gmail.com',
+                                            subject: 'Merrell Fashion account verification',
+                                            html: '<h1>Please click the link to verify your new account: </h1>' + "<a href='http://localhost:3000/'>Link</a>"
+                                        };
+
+                                        mailgun.messages().send(data, function (error, body) {
+                                            console.log(body);
+                                        });
 
                                         return done(null, newUser);
                                     }
