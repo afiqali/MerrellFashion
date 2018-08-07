@@ -192,6 +192,7 @@ app.delete("/products-gallery/Sort/Recent/:id",list.hasAuthorization, list.delet
 app.delete("/products-gallery/Sort/:min/:max/:id",list.hasAuthorization, list.delete);
 app.delete('/products-gallery/search/:search/:id', list.delete);
 app.delete('/products-gallery/Sort/PriceRange=:min-:max/:id', list.delete);
+app.delete("/OtherProfile/:id/:id", list.hasAuthorization, list.delete);
 
 // Setup routes for specific product list
 app.get('/products-gallery/:category/view/:id', list.hasAuthorization, list.specificlist)
