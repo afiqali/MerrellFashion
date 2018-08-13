@@ -4,10 +4,16 @@ var offersModel = require("../models/offersModel");
 
 var stripe = require("stripe")("sk_test_RS2ZwJbELQPZS0aUxODCdZC9");
 
+// This mails the receipt to the user email (exposed api credentials - DONT PUSH TO GITHUB)
+// I forgot to say this lol
+var mailgun = require("mailgun-js");
+var api_key = '0d6fa9ff10930d6dc61bb31250b91422-7efe8d73-b681ae43';
+var DOMAIN = 'sandbox0b40f66fa4094d1da12f65c9246b5fdd.mailgun.org';
+var mailgun = require('mailgun-js')({apiKey: api_key, domain: DOMAIN});
 
-
-var accountSid = 'AC6ced1d481c8e1d8ec33c4f0da613e3e8'; // Your Account SID from www.twilio.com/console
-var authToken = '5554f393e7cf77b1496cb9f2de0d61e2';   // Your Auth Token from www.twilio.com/console
+// Sends receipt to user phone number (TRY NOT TO PUSH TO GITHUB)
+var accountSid = 'AC6ced1d481c8e1d8ec33c4f0da613e3e8'; 
+var authToken = '5554f393e7cf77b1496cb9f2de0d61e2';   
 
 var twilio = require('twilio');
 var client = new twilio(accountSid, authToken);
@@ -112,21 +118,21 @@ exports.create = function (req, res) {
         })
         .then((message) => console.log(message.sid));
 
-        // var data = {
-        //     from: 'Merrell Fashion - Payment Success! <merrellfashionbizz@gmail.com>',
-        //     to: 'tqinyong@yahoo.com.sg',
-        //     subject: 'Your Receipt',
-        //     html: '<h3> Payment ID: </h3>' + req.body.payment_id +
-        //           '<h4> Payer ID: </h4>' + req.body.payer_id +
-        //           '<h4> Amount Paid: </h4>' + req.body.totalAmount +
-        //           '<h4> Status: </h4>' + req.body.status +
-        //           '<h4> Order Method: </h4>' + req.body.orderMethod +
-        //           '<h4> Collection Date: </h4>' + req.body.dob2 
-        //   };
+        var data = {
+            from: 'Merrell Fashion - Payment Success! <merrellfashionbizz@gmail.com>',
+            to: 'tqinyong@yahoo.com.sg',
+            subject: 'Your Receipt',
+            html: '<h3> Payment ID: </h3>' + req.body.payment_id +
+                  '<h4> Payer ID: </h4>' + req.body.payer_id +
+                  '<h4> Amount Paid: </h4>' + req.body.totalAmount +
+                  '<h4> Status: </h4>' + req.body.status +
+                  '<h4> Order Method: </h4>' + req.body.orderMethod +
+                  '<h4> Collection Date: </h4>' + req.body.dob2 
+          };
           
-        //   mailgun.messages().send(data, function (error, body) {
-        //     console.log(body);
-        //   });
+          mailgun.messages().send(data, function (error, body) {
+            console.log(body);
+          });
 
         // var url;
         url = '/receipt/' + itemID.toString() + '/' + payment_id + '/' + transactionID;
@@ -208,21 +214,21 @@ exports.doStripe = function (req,res) {
                 })
                 .then((message) => console.log(message.sid));
 
-                // var data = {
-                //     from: 'Merrell Fashion - Payment Success! <merrellfashionbizz@gmail.com>',
-                //     to: 'tqinyong@yahoo.com.sg',
-                //     subject: 'Your Receipt',
-                //     html: '<h3> Payment ID: </h3>' + charge.id +
-                //           '<h4> Payer ID: </h4>' + charge.source.id +
-                //           '<h4> Amount Paid: </h4>' + req.body.price1 +
-                //           '<h4> Status: </h4>' + req.body.status1 +
-                //           '<h4> Order Method: </h4>' + charge.source.brand +
-                //           '<h4> Collection Date: </h4>' + req.body.dob1
-                //   };
+                var data = {
+                    from: 'Merrell Fashion - Payment Success! <merrellfashionbizz@gmail.com>',
+                    to: 'tqinyong@yahoo.com.sg',
+                    subject: 'Your Receipt',
+                    html: '<h3> Payment ID: </h3>' + charge.id +
+                          '<h4> Payer ID: </h4>' + charge.source.id +
+                          '<h4> Amount Paid: </h4>' + req.body.price1 +
+                          '<h4> Status: </h4>' + req.body.status1 +
+                          '<h4> Order Method: </h4>' + charge.source.brand +
+                          '<h4> Collection Date: </h4>' + req.body.dob1
+                  };
                   
-                //   mailgun.messages().send(data, function (error, body) {
-                //     console.log(body);
-                //   });
+                  mailgun.messages().send(data, function (error, body) {
+                    console.log(body);
+                  });
         
                 url = '/receipt/' + itemID.toString() + '/' + charge.id + '/' + transactionID;
                 res.redirect(url);
