@@ -34,6 +34,7 @@ exports.display = function (req, res) {
 
 exports.edit = function (req, res) {
     var editUserData = {
+        id: req.body.id,
         name: req.body.name,
         email: req.body.email,
         gender: req.body.gender,
@@ -94,24 +95,24 @@ exports.edit = function (req, res) {
             });
 
             // Update matched User db record one-by-one
-            User.update({ name: editUserData.name }, { where: { id: req.user.id } })
+            User.update({ name: editUserData.name }, { where: { id: editUserData.id } })
                 .then(
-                    User.update({ email: editUserData.email }, { where: { id: req.user.id } })
+                    User.update({ email: editUserData.email }, { where: { id: editUserData.id } })
                 )
                 .then(
-                    User.update({ gender: editUserData.gender }, { where: { id: req.user.id } })
+                    User.update({ gender: editUserData.gender }, { where: { id: editUserData.id } })
                 )
                 .then(
-                    User.update({ dob: editUserData.dob }, { where: { id: req.user.id } })
+                    User.update({ dob: editUserData.dob }, { where: { id: editUserData.id } })
                 )
                 .then(
-                    User.update({ contactNumber: editUserData.contactNumber }, { where: { id: req.user.id } })
+                    User.update({ contactNumber: editUserData.contactNumber }, { where: { id: editUserData.id } })
                 )
                 .then(
-                    User.update({ address: editUserData.address }, { where: { id: req.user.id } })
+                    User.update({ address: editUserData.address }, { where: { id: editUserData.id} })
                 )
                 .then(
-                    User.update({ img: img.imageName }, { where: { id: req.user.id } })
+                    User.update({ img: img.imageName }, { where: { id: editUserData.id } })
                 )
                 .then(
                     req.flash("Profile change", "Profile changed successfully"),
@@ -127,21 +128,21 @@ exports.edit = function (req, res) {
     }
     else {
         // Update matched User db record one-by-one
-        User.update({ name: editUserData.name }, { where: { id: req.user.id } })
+        User.update({ name: editUserData.name }, { where: { id: editUserData.id } })
             .then(
-                User.update({ email: editUserData.email }, { where: { id: req.user.id } })
+                User.update({ email: editUserData.email }, { where: { id: editUserData.id } })
             )
             .then(
-                User.update({ gender: editUserData.gender }, { where: { id: req.user.id } })
+                User.update({ gender: editUserData.gender }, { where: { id: editUserData.id } })
             )
             .then(
-                User.update({ dob: editUserData.dob }, { where: { id: req.user.id } })
+                User.update({ dob: editUserData.dob }, { where: { id: editUserData.id } })
             )
             .then(
-                User.update({ contactNumber: editUserData.contactNumber }, { where: { id: req.user.id } })
+                User.update({ contactNumber: editUserData.contactNumber }, { where: { id: editUserData.id } })
             )
             .then(
-                User.update({ address: editUserData.address }, { where: { id: req.user.id } })
+                User.update({ address: editUserData.address }, { where: { id: editUserData.id } })
             )
             .then(
                 req.flash("Profile change", "Profile changed successfully"),
